@@ -1,4 +1,6 @@
-# ShowMIDI
+# ShowMIDI - VST3/AU Development Fork
+
+In progress. 
 
 <p><img align="right" src="https://github.com/user-attachments/assets/ad3e7647-c768-4817-a8bf-6fa65707389f" width="160px" /><br /></p>
 
