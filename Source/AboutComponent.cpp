@@ -19,6 +19,7 @@
 
 #include "MidiDeviceComponent.h"
 #include "SidebarComponent.h"
+#include "utility/Scaling.h"
 
 namespace showmidi
 {
@@ -87,6 +88,6 @@ namespace showmidi
     
     void AboutComponent::updateDimensions()
     {
-        setSize(MidiDeviceComponent::getStandardWidth() - SidebarComponent::X_SETTINGS * 2, theme_.linePosition(8));
+        setSize(sm::scaled(254) - SidebarComponent::X_SETTINGS * 2, theme_.linePosition(8));
     }
 }

@@ -24,206 +24,207 @@
 #include "SettingsManager.h"
 #include "SidebarComponent.h"
 #include "UwynLookAndFeel.h"
+#include "utility/Scaling.h"
 
 namespace showmidi
 {
-    struct ShowMIDIPluginAudioProcessorEditor::Pimpl : public MultiTimer, public SettingsManager, public DeviceManager
+struct ShowMIDIPluginAudioProcessorEditor::Pimpl : public MultiTimer, public SettingsManager, public DeviceManager
+{
+    static constexpr int DEFAULT_EDITOR_HEIGHT = 600;
+    
+    enum Timers
     {
-        static constexpr int DEFAULT_EDITOR_HEIGHT = 600;
-        
-        enum Timers
-        {
-            RenderDevices = 1,
-            GrabKeyboardFocus
-        };
-        
-        Pimpl(ShowMIDIPluginAudioProcessorEditor* owner, ShowMIDIPluginAudioProcessor* p) :
-            owner_(owner),
-            audioProcessor_(p)
-        {
-            Desktop::getInstance().setDefaultLookAndFeel(&lookAndFeel_);
-            
-            midiDevice_ = std::make_unique<MidiDeviceComponent>(this, "ShowMIDI");
-            layout_ = std::make_unique<MainLayoutComponent>(this, this, MainLayoutType::layoutPlugin, midiDevice_.get());
-            
-            owner_->setResizable(true, true);
-            owner_->getConstrainer()->setMinimumWidth(layout_->getSidebarWidth() + MidiDeviceComponent::getStandardWidth() + Theme::SCROLLBAR_THICKNESS);
-            owner_->getConstrainer()->setMaximumWidth(owner_->getConstrainer()->getMaximumWidth());
-            owner_->getConstrainer()->setMinimumHeight(120);
-            
-            midiDevice_->setBounds(0, 0, MidiDeviceComponent::getStandardWidth(), DEFAULT_EDITOR_HEIGHT);
-
-            owner_->addAndMakeVisible(layout_.get());
-
-            owner_->setSize(layout_->getWidth(), DEFAULT_EDITOR_HEIGHT);
-            owner_->setWantsKeyboardFocus(true);
-            
-            // 30Hz
-            startTimer(RenderDevices, 1000 / 30);
-            
-            startTimer(GrabKeyboardFocus, 100);
-#if SHOW_TEST_DATA
-            togglePaused();
-#endif
-        }
-        
-        ~Pimpl()
-        {
-            stopTimer(RenderDevices);
-        }
-
-        void handleIncomingMidiMessage(const MidiMessage& msg)
-        {
-            midiDevice_->handleIncomingMidiMessage(msg);
-        }
-        
-        bool isPaused() override
-        {
-            return paused_;
-        }
-        
-        void togglePaused() override
-        {
-            setPaused(!paused_);
-            deviceListeners_.broadcastPauseChange(paused_);
-        }
-        
-        void resetChannelData() override
-        {
-            midiDevice_->resetChannelData();
-        }
-        
-        DeviceListeners& getDeviceListeners() override
-        {
-            return deviceListeners_;
-        }
-
-        void setPaused(bool paused)
-        {
-            paused_ = paused;
-            
-            midiDevice_->setPaused(paused);
-        }
-        
-        void timerCallback(int timerID) override
-        {
-            switch (timerID)
-            {
-                case RenderDevices:
-                {
-                    renderDevices();
-                    break;
-                }
-                    
-                case GrabKeyboardFocus:
-                {
-                    if (owner_->isVisible())
-                    {
-                        owner_->grabKeyboardFocus();
-                        stopTimer(GrabKeyboardFocus);
-                    }
-                    break;
-                }
-            }
-        }
-        
-        void renderDevices()
-        {
-            int height;
-            if (owner_->getParentComponent())
-            {
-                height = owner_->getParentHeight();
-            }
-            else
-            {
-                height = owner_->getHeight();
-            }
-            midiDevice_->render();
-            height = std::max(height, midiDevice_->getVisibleHeight());
-            midiDevice_->setSize(MidiDeviceComponent::getStandardWidth(), height);
-        }
-        
-        void paint(Graphics& g)
-        {
-            g.fillAll(audioProcessor_->getSettings().getTheme().colorSidebar);
-        }
-        
-        void resized(int height)
-        {
-            layout_->setBounds(0, 0, layout_->getWidth(), height);
-        }
-        
-        bool isPlugin() override
-        {
-            return true;
-        }
-        
-        Component* getTopLevelComponent() override
-        {
-#if JUCE_IOS
-            return owner_;
-#else
-            return nullptr;
-#endif
-        }
-
-        Settings& getSettings() override
-        {
-            return audioProcessor_->getSettings();
-        }
-        
-        void applySettings() override
-        {
-            owner_->repaint();
-        }
-
-        void storeSettings() override
-        {
-            audioProcessor_->getSettings().storeTheme();
-            owner_->repaint();
-        }
-        
-        MidiDevicesListeners& getMidiDevicesListeners() override
-        {
-            return midiDevicesListeners_;
-        }
-
-        UwynLookAndFeel lookAndFeel_;
-        
-        ShowMIDIPluginAudioProcessorEditor* const owner_;
-        ShowMIDIPluginAudioProcessor* const audioProcessor_;
-        
-        std::unique_ptr<MidiDeviceComponent> midiDevice_;
-        std::unique_ptr<MainLayoutComponent> layout_;
-        
-        MidiDevicesListeners midiDevicesListeners_;
-
-        bool paused_ { false };
-        DeviceListeners deviceListeners_;
-
-        JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Pimpl)
+        RenderDevices = 1,
+        GrabKeyboardFocus
     };
     
-    ShowMIDIPluginAudioProcessorEditor::ShowMIDIPluginAudioProcessorEditor(ShowMIDIPluginAudioProcessor* p) : AudioProcessorEditor(p), pimpl_(new Pimpl(this, p)) {
-    }
-
-    ShowMIDIPluginAudioProcessorEditor::~ShowMIDIPluginAudioProcessorEditor() = default;
-    
-    void ShowMIDIPluginAudioProcessorEditor::handleIncomingMidiMessage(const MidiMessage& m)   { pimpl_->handleIncomingMidiMessage(m); };
-
-    void ShowMIDIPluginAudioProcessorEditor::paint(Graphics& g)
+    Pimpl(ShowMIDIPluginAudioProcessorEditor* owner, ShowMIDIPluginAudioProcessor* p) :
+    owner_(owner),
+    audioProcessor_(p)
     {
-        if (pimpl_.get())
+        Desktop::getInstance().setDefaultLookAndFeel(&lookAndFeel_);
+        
+        midiDevice_ = std::make_unique<MidiDeviceComponent>(this, "ShowMIDI");
+        layout_ = std::make_unique<MainLayoutComponent>(this, this, MainLayoutType::layoutPlugin, midiDevice_.get());
+        
+        owner_->setResizable(true, true);
+        owner_->getConstrainer()->setMinimumWidth(layout_->getSidebarWidth() + midiDevice_->getStandardWidth() + Theme::SCROLLBAR_THICKNESS);
+        owner_->getConstrainer()->setMaximumWidth(owner_->getConstrainer()->getMaximumWidth());
+        owner_->getConstrainer()->setMinimumHeight(120);
+        
+        midiDevice_->setBounds(0, 0, midiDevice_->getStandardWidth(), DEFAULT_EDITOR_HEIGHT);
+        
+        owner_->addAndMakeVisible(layout_.get());
+        
+        owner_->setSize(layout_->getWidth(), DEFAULT_EDITOR_HEIGHT);
+        owner_->setWantsKeyboardFocus(true);
+        
+        // 30Hz
+        startTimer(RenderDevices, 1000 / 30);
+        
+        startTimer(GrabKeyboardFocus, 100);
+#if SHOW_TEST_DATA
+        togglePaused();
+#endif
+    }
+    
+    ~Pimpl()
+    {
+        stopTimer(RenderDevices);
+    }
+    
+    void handleIncomingMidiMessage(const MidiMessage& msg)
+    {
+        midiDevice_->handleIncomingMidiMessage(msg);
+    }
+    
+    bool isPaused() override
+    {
+        return paused_;
+    }
+    
+    void togglePaused() override
+    {
+        setPaused(!paused_);
+        deviceListeners_.broadcastPauseChange(paused_);
+    }
+    
+    void resetChannelData() override
+    {
+        midiDevice_->resetChannelData();
+    }
+    
+    DeviceListeners& getDeviceListeners() override
+    {
+        return deviceListeners_;
+    }
+    
+    void setPaused(bool paused)
+    {
+        paused_ = paused;
+        
+        midiDevice_->setPaused(paused);
+    }
+    
+    void timerCallback(int timerID) override
+    {
+        switch (timerID)
         {
-            pimpl_->paint(g);
+            case RenderDevices:
+            {
+                renderDevices();
+                break;
+            }
+                
+            case GrabKeyboardFocus:
+            {
+                if (owner_->isVisible())
+                {
+                    owner_->grabKeyboardFocus();
+                    stopTimer(GrabKeyboardFocus);
+                }
+                break;
+            }
         }
     }
     
-    void ShowMIDIPluginAudioProcessorEditor::resized()
+    void renderDevices()
     {
-        if (pimpl_.get() && isVisible() && getHeight() > 0)
+        int height;
+        if (owner_->getParentComponent())
         {
-            pimpl_->resized(getHeight());
+            height = owner_->getParentHeight();
         }
+        else
+        {
+            height = owner_->getHeight();
+        }
+        midiDevice_->render();
+        height = std::max(height, midiDevice_->getVisibleHeight());
+        midiDevice_->setSize(midiDevice_->getStandardWidth(), height);
     }
+    
+    void paint(Graphics& g)
+    {
+        g.fillAll(audioProcessor_->getSettings().getTheme().colorSidebar);
+    }
+    
+    void resized(int height)
+    {
+        layout_->setBounds(0, 0, layout_->getWidth(), height);
+    }
+    
+    bool isPlugin() override
+    {
+        return true;
+    }
+    
+    Component* getTopLevelComponent() override
+    {
+#if JUCE_IOS
+        return owner_;
+#else
+        return nullptr;
+#endif
+    }
+    
+    Settings& getSettings() override
+    {
+        return audioProcessor_->getSettings();
+    }
+    
+    void applySettings() override
+    {
+        owner_->repaint();
+    }
+    
+    void storeSettings() override
+    {
+        audioProcessor_->getSettings().storeTheme();
+        owner_->repaint();
+    }
+    
+    MidiDevicesListeners& getMidiDevicesListeners() override
+    {
+        return midiDevicesListeners_;
+    }
+    
+    UwynLookAndFeel lookAndFeel_;
+    
+    ShowMIDIPluginAudioProcessorEditor* const owner_;
+    ShowMIDIPluginAudioProcessor* const audioProcessor_;
+    
+    std::unique_ptr<MidiDeviceComponent> midiDevice_;
+    std::unique_ptr<MainLayoutComponent> layout_;
+    
+    MidiDevicesListeners midiDevicesListeners_;
+    
+    bool paused_ { false };
+    DeviceListeners deviceListeners_;
+    
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Pimpl)
+};
+
+ShowMIDIPluginAudioProcessorEditor::ShowMIDIPluginAudioProcessorEditor(ShowMIDIPluginAudioProcessor* p) : AudioProcessorEditor(p), pimpl_(new Pimpl(this, p)) {
+}
+
+ShowMIDIPluginAudioProcessorEditor::~ShowMIDIPluginAudioProcessorEditor() = default;
+
+void ShowMIDIPluginAudioProcessorEditor::handleIncomingMidiMessage(const MidiMessage& m)   { pimpl_->handleIncomingMidiMessage(m); };
+
+void ShowMIDIPluginAudioProcessorEditor::paint(Graphics& g)
+{
+    if (pimpl_.get())
+    {
+        pimpl_->paint(g);
+    }
+}
+
+void ShowMIDIPluginAudioProcessorEditor::resized()
+{
+    if (pimpl_.get() && isVisible() && getHeight() > 0)
+    {
+        pimpl_->resized(getHeight());
+    }
+}
 }
