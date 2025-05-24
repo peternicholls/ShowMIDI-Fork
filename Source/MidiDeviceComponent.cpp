@@ -1,3 +1,4 @@
+
 /*
  * This file is part of ShowMIDI.
  * Copyright (command) 2023 Uwyn LLC.  https://www.uwyn.com
@@ -16,9 +17,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * @file MidiDeviceComponent.cpp
+ * @brief Renders and manages the MIDI device display for ShowMIDI.
+ *
+ * Displays live MIDI channel activity, controls, and system messages in a single DPI-aware view.
+ */
+// TODO: Refactor header underline drawing into a helper function!
+
 #include "MidiDeviceComponent.h"
 #include "ChannelState.h"
 #include "utility/Scaling.h"
+#include "layout/Constants.h"
 
 namespace showmidi
 {
@@ -31,6 +41,48 @@ enum ParamType
 
 struct MidiDeviceComponent::Pimpl : public MidiInputCallback
 {
+    /** Layout constants aliases */
+    static constexpr int WIDTH_SEPARATOR = showmidi::layout::WIDTH_SEPARATOR;
+    static constexpr int X_MID = showmidi::layout::X_MID;
+    static constexpr int X_PORT = showmidi::layout::X_PORT;
+    static constexpr int Y_PORT = showmidi::layout::Y_PORT;
+    static constexpr int X_CLOCK = showmidi::layout::X_CLOCK;
+    static constexpr int Y_CLOCK = showmidi::layout::Y_CLOCK;
+    static constexpr int X_CLOCK_BPM = showmidi::layout::X_CLOCK_BPM;
+    static constexpr int Y_CLOCK_PADDING = showmidi::layout::Y_CLOCK_PADDING;
+    static constexpr int X_SYSEX = showmidi::layout::X_SYSEX;
+    static constexpr int Y_SYSEX = showmidi::layout::Y_SYSEX;
+    static constexpr int X_SYSEX_LENGTH = showmidi::layout::X_SYSEX_LENGTH;
+    static constexpr int Y_SYSEX_PADDING = showmidi::layout::Y_SYSEX_PADDING;
+    static constexpr int X_SYSEX_DATA = showmidi::layout::X_SYSEX_DATA;
+    static constexpr int X_SYSEX_DATA_WIDTH = showmidi::layout::X_SYSEX_DATA_WIDTH;
+    static constexpr int X_CHANNEL = showmidi::layout::X_CHANNEL;
+    static constexpr int X_CHANNEL_MPE = showmidi::layout::X_CHANNEL_MPE;
+    static constexpr int X_CHANNEL_MPE_TYPE = showmidi::layout::X_CHANNEL_MPE_TYPE;
+    static constexpr int Y_CHANNEL = showmidi::layout::Y_CHANNEL;
+    static constexpr int Y_CHANNEL_MARGIN = showmidi::layout::Y_CHANNEL_MARGIN;
+    static constexpr int Y_CHANNEL_PADDING = showmidi::layout::Y_CHANNEL_PADDING;
+    static constexpr int X_SEPARATOR = showmidi::layout::X_SEPARATOR;
+    static constexpr int Y_SEPARATOR = showmidi::layout::Y_SEPARATOR;
+    static constexpr int HEIGHT_SEPARATOR = showmidi::layout::HEIGHT_SEPARATOR;
+    static constexpr int HEIGHT_INDICATOR = showmidi::layout::HEIGHT_INDICATOR;
+    static constexpr int X_PRGM = showmidi::layout::X_PRGM;
+    static constexpr int X_PB = showmidi::layout::X_PB;
+    static constexpr int Y_PB = showmidi::layout::Y_PB;
+    static constexpr int X_PB_DATA = showmidi::layout::X_PB_DATA;
+    static constexpr int X_PARAM = showmidi::layout::X_PARAM;
+    static constexpr int Y_PARAM = showmidi::layout::Y_PARAM;
+    static constexpr int X_PARAM_DATA = showmidi::layout::X_PARAM_DATA;
+    static constexpr int X_NOTE = showmidi::layout::X_NOTE;
+    static constexpr int Y_NOTE = showmidi::layout::Y_NOTE;
+    static constexpr int X_ON_OFF = showmidi::layout::X_ON_OFF;
+    static constexpr int X_NOTE_DATA = showmidi::layout::X_NOTE_DATA;
+    static constexpr int X_PP = showmidi::layout::X_PP;
+    static constexpr int Y_PP = showmidi::layout::Y_PP;
+    static constexpr int X_PP_DATA = showmidi::layout::X_PP_DATA;
+    static constexpr int X_CC = showmidi::layout::X_CC;
+    static constexpr int Y_CC = showmidi::layout::Y_CC;
+    static constexpr int X_CC_DATA = showmidi::layout::X_CC_DATA;
     
     Pimpl(MidiDeviceComponent* owner, SettingsManager* manager, const String& name) :
     owner_(owner),
@@ -38,10 +90,6 @@ struct MidiDeviceComponent::Pimpl : public MidiInputCallback
     theme_(manager->getSettings().getTheme()),
     deviceInfo_({ name, ""})
     {
-        
-        STANDARD_WIDTH = sm::scaled(254);
-        WIDTH_SEPERATOR = STANDARD_WIDTH - sm::scaled(48);
-        DBG("DPI scale factor: " << sm::dpiScale());
     }
     
     Pimpl(MidiDeviceComponent* owner, SettingsManager* manager, const MidiDeviceInfo info) :
@@ -56,8 +104,6 @@ struct MidiDeviceComponent::Pimpl : public MidiInputCallback
             midi_input->start();
             midiIn_.swap(midi_input);
         }
-        STANDARD_WIDTH = sm::scaled(254);
-        WIDTH_SEPERATOR = STANDARD_WIDTH - sm::scaled(48);
 #if SHOW_TEST_DATA
         showTestData();
 #endif
@@ -162,6 +208,7 @@ struct MidiDeviceComponent::Pimpl : public MidiInputCallback
         midiIn_ = nullptr;
     }
     
+    /** Handles incoming MIDI messages and updates state. */
     void handleIncomingMidiMessage(MidiInput*, const MidiMessage& msg)
     {
         const auto t = Time::getCurrentTime();
@@ -474,6 +521,7 @@ struct MidiDeviceComponent::Pimpl : public MidiInputCallback
         return false;
     }
     
+    /** Collects value history for smooth graphing. */
     void collectHistory(ChannelMessage* message)
     {
         if (message->current_.time_.toMilliseconds() > 0)
@@ -501,63 +549,10 @@ struct MidiDeviceComponent::Pimpl : public MidiInputCallback
     static constexpr double BPM_MIN = 20.0;
     static constexpr double BPM_MAX = 360.0;
     
-    //        static constexpr int STANDARD_WIDTH = 254;
-    int STANDARD_WIDTH;
-    static constexpr int X_MID = 151;
-    
-    static constexpr int X_PORT = 48;
-    static constexpr int Y_PORT = 12;
-    
-    static constexpr int X_CLOCK = 23;
-    static constexpr int Y_CLOCK = 12;
-    static constexpr int X_CLOCK_BPM = 24;
-    static constexpr int Y_CLOCK_PADDING = 8;
-    
-    static constexpr int X_SYSEX = 23;
-    static constexpr int Y_SYSEX = 12;
-    static constexpr int X_SYSEX_LENGTH = 24;
-    static constexpr int Y_SYSEX_PADDING = 8;
-    static constexpr int X_SYSEX_DATA = 75;
-    static constexpr int X_SYSEX_DATA_WIDTH = 31;
     static constexpr int SYSEX_DATA_PER_ROW = 5;
     
-    static constexpr int X_CHANNEL = 23;
-    static constexpr int X_CHANNEL_MPE = 84;
-    static constexpr int X_CHANNEL_MPE_TYPE = 110;
-    static constexpr int Y_CHANNEL = 12;
-    static constexpr int Y_CHANNEL_MARGIN = 8;
-    
-    static constexpr int X_SEPERATOR = 1;
-    static constexpr int Y_SEPERATOR = 2;
-    //        static constexpr int WIDTH_SEPERATOR = STANDARD_WIDTH - 48;
-    int WIDTH_SEPERATOR;
-    static constexpr int HEIGHT_SEPERATOR = 1;
-    
-    static constexpr int X_PRGM = 24;
-    static constexpr int Y_CHANNEL_PADDING = 8;
-    
-    static constexpr int HEIGHT_INDICATOR = 1;
-    
-    static constexpr int X_PB = 84;
-    static constexpr int Y_PB = 7;
-    static constexpr int X_PB_DATA = 24;
-    
-    static constexpr int X_PARAM = 84;
-    static constexpr int Y_PARAM = 7;
-    static constexpr int X_PARAM_DATA = 24;
-    
-    static constexpr int X_NOTE = 48;
-    static constexpr int Y_NOTE = 7;
-    static constexpr int X_ON_OFF = 84;
-    static constexpr int X_NOTE_DATA = X_MID - 6;
-    
-    static constexpr int X_PP = 84;
-    static constexpr int Y_PP = 7;
-    static constexpr int X_PP_DATA = X_MID - 6;
-    
-    static constexpr int X_CC = X_MID + 6;
-    static constexpr int Y_CC = 7;
-    static constexpr int X_CC_DATA = 24;
+    int getStandardWidth() const { return sm::getStandardWidth(); }
+    int getWidthSeparator() const { return sm::getStandardWidth() - sm::scaled(WIDTH_SEPARATOR); }
     
     struct ChannelPaintState
     {
@@ -565,6 +560,7 @@ struct MidiDeviceComponent::Pimpl : public MidiInputCallback
         int offset_ { 0 };
     };
     
+    /** Main paint routine for the MIDI device view. */
     void paint(Graphics& g)
     {
         g.fillAll(theme_.colorBackground);
@@ -665,11 +661,6 @@ struct MidiDeviceComponent::Pimpl : public MidiInputCallback
         }
     }
     
-    int getStandardWidth() const
-    {
-        return STANDARD_WIDTH;
-    }
-    
     int getVisibleHeight() const
     {
         return lastHeight_;
@@ -690,10 +681,9 @@ struct MidiDeviceComponent::Pimpl : public MidiInputCallback
         
         state.offset_ += Y_CLOCK;
         
-        int clock_width = this->getStandardWidth() - X_PARAM - X_CLOCK_BPM;
+        int clock_width = getStandardWidth() - X_PARAM - X_CLOCK_BPM;
         
         // draw clock header
-        
         g.setColour(theme_.colorData);
         g.setFont(theme_.fontLabel());
         g.drawText(String("CLOCK"),
@@ -722,7 +712,6 @@ struct MidiDeviceComponent::Pimpl : public MidiInputCallback
         }
         
         // draw transport
-        
         if (show_transport)
         {
             if (show_start)
@@ -759,14 +748,14 @@ struct MidiDeviceComponent::Pimpl : public MidiInputCallback
         }
         
         // draw seperator
-        
         g.setColour(theme_.colorSeperator);
-        state.offset_ += Y_SEPERATOR;
-        g.drawRect(X_CHANNEL + X_SEPERATOR, state.offset_,
-                   this->WIDTH_SEPERATOR, HEIGHT_SEPERATOR);
-        state.offset_ += HEIGHT_SEPERATOR + Y_CLOCK_PADDING;
+        state.offset_ += Y_SEPARATOR;
+        g.drawRect(X_CHANNEL + X_SEPARATOR, state.offset_,
+                   getStandardWidth() - X_PARAM_DATA - X_CHANNEL, HEIGHT_SEPARATOR);
+        state.offset_ += HEIGHT_SEPARATOR + Y_CLOCK_PADDING;
     }
     
+    /** Paints Sysex section. */
     void paintSysex(Graphics& g, ChannelPaintState& state, Sysex& sysex)
     {
         state.offset_ += Y_SYSEX;
@@ -791,7 +780,6 @@ struct MidiDeviceComponent::Pimpl : public MidiInputCallback
         state.offset_ += theme_.labelHeight();
         
         // draw sysex data
-        
         g.setColour(theme_.colorData);
         g.setFont(theme_.fontLabel());
         
@@ -813,14 +801,14 @@ struct MidiDeviceComponent::Pimpl : public MidiInputCallback
         }
         
         // draw seperator
-        
         g.setColour(theme_.colorSeperator);
-        state.offset_ += Y_SEPERATOR;
-        g.drawRect(X_CHANNEL + X_SEPERATOR, state.offset_,
-                   this->WIDTH_SEPERATOR, HEIGHT_SEPERATOR);
-        state.offset_ += HEIGHT_SEPERATOR + Y_SYSEX_PADDING;
+        state.offset_ += Y_SEPARATOR;
+        g.drawRect(X_CHANNEL + X_SEPARATOR, state.offset_,
+                   getStandardWidth() - X_PARAM_DATA - X_CHANNEL, HEIGHT_SEPARATOR);
+        state.offset_ += HEIGHT_SEPARATOR + Y_SYSEX_PADDING;
     }
     
+    /** Paints channel header and separator. */
     void paintChannelHeader(Graphics& g, ChannelPaintState& state, ActiveChannel& channel)
     {
         g.setColour(theme_.colorData);
@@ -861,12 +849,13 @@ struct MidiDeviceComponent::Pimpl : public MidiInputCallback
         state.offset_ += theme_.labelHeight();
         
         g.setColour(theme_.colorSeperator);
-        state.offset_ += Y_SEPERATOR;
-        g.drawRect(X_CHANNEL + X_SEPERATOR, state.offset_,
-                   this->WIDTH_SEPERATOR, HEIGHT_SEPERATOR);
-        state.offset_ += HEIGHT_SEPERATOR + Y_CHANNEL_PADDING;
+        state.offset_ += Y_SEPARATOR;
+        g.drawRect(X_CHANNEL + X_SEPARATOR, state.offset_,
+                   getStandardWidth() - X_PARAM_DATA - X_CHANNEL, HEIGHT_SEPARATOR);
+        state.offset_ += HEIGHT_SEPARATOR + Y_CHANNEL_PADDING;
     }
     
+    /** Paints Program Change row. */
     void paintProgramChange(Graphics& g, ChannelPaintState& state, ActiveChannel& channel)
     {
         auto& program_change = channel.programChange_;
@@ -877,12 +866,13 @@ struct MidiDeviceComponent::Pimpl : public MidiInputCallback
             g.setColour(theme_.colorLabel);
             g.setFont(theme_.fontLabel());
             g.drawText(String("PRGM ") + output7Bit(program_change.current_.value_),
-                       0, state.offset_ - Y_CHANNEL_PADDING - Y_SEPERATOR - HEIGHT_SEPERATOR - theme_.labelHeight(),
+                       0, state.offset_ - Y_CHANNEL_PADDING - Y_SEPARATOR - HEIGHT_SEPARATOR - theme_.labelHeight(),
                        getStandardWidth() - X_PRGM, theme_.labelHeight(),
                        Justification::centredRight);
         }
     }
     
+    /** Paints Pitch Bend row and visualization. */
     int paintPitchBend(Graphics& g, ChannelPaintState& state, ActiveChannel& channel)
     {
         int y_offset = state.offset_;
@@ -905,7 +895,6 @@ struct MidiDeviceComponent::Pimpl : public MidiInputCallback
             int pb_width = getStandardWidth() - X_PB - X_PB_DATA;
             
             // draw the pitch bend text
-            
             g.setColour(pb_color);
             g.setFont(theme_.fontLabel());
             g.drawText("PB",
@@ -923,7 +912,6 @@ struct MidiDeviceComponent::Pimpl : public MidiInputCallback
             y_offset += theme_.labelHeight();
             
             // draw pitchbend indicator
-            
             paintVisualization(g, state, y_offset, pitch_bend, 0x2000, 0x3FFF,
                                true, theme_.colorPositive, theme_.colorNegative,
                                X_PB, y_offset,
@@ -934,6 +922,7 @@ struct MidiDeviceComponent::Pimpl : public MidiInputCallback
         return y_offset;
     }
     
+    /** Paints RPN, NRPN, or HRCC parameter rows and visualizations. */
     int paintParameters(Graphics& g, ChannelPaintState& state, ParamType type, Parameters& parameters)
     {
         int y_offset = state.offset_;
@@ -951,7 +940,6 @@ struct MidiDeviceComponent::Pimpl : public MidiInputCallback
                     int param_width = getStandardWidth() - X_PARAM - X_PARAM_DATA;
                     
                     // draw the parameter text
-                    
                     g.setColour(theme_.colorController);
                     g.setFont(theme_.fontLabel());
                     String name;
@@ -967,7 +955,6 @@ struct MidiDeviceComponent::Pimpl : public MidiInputCallback
                                Justification::centredLeft);
                     
                     // draw the parameter value
-                    
                     g.setColour(theme_.colorData);
                     g.setFont(theme_.fontData());
                     auto colourPositive = theme_.colorController;
@@ -1031,7 +1018,6 @@ struct MidiDeviceComponent::Pimpl : public MidiInputCallback
                     y_offset += theme_.labelHeight();
                     
                     // draw value indicator
-                    
                     paintVisualization(g, state, y_offset, param, 0x2000, 0x3FFF,
                                        bidirectional, colourPositive, colourNegative,
                                        X_PARAM, y_offset,
@@ -1043,6 +1029,7 @@ struct MidiDeviceComponent::Pimpl : public MidiInputCallback
         return y_offset;
     }
     
+    /** Paints Note On/Off and Poly Pressure rows. */
     int paintNotes(Graphics& g, ChannelPaintState& state, ActiveChannel& channel)
     {
         int y_offset = -1;
@@ -1104,7 +1091,6 @@ struct MidiDeviceComponent::Pimpl : public MidiInputCallback
                         y_offset += theme_.labelHeight();
                         
                         // draw velocity indicator
-                        
                         g.setColour(theme_.colorTrack);
                         g.fillRect(X_ON_OFF, y_offset,
                                    note_width, HEIGHT_INDICATOR);
@@ -1121,7 +1107,6 @@ struct MidiDeviceComponent::Pimpl : public MidiInputCallback
                     if (!polypressure_expired)
                     {
                         // draw polypressure text
-                        
                         if (!note_on_expired)
                         {
                             y_offset += Y_PP;
@@ -1145,7 +1130,6 @@ struct MidiDeviceComponent::Pimpl : public MidiInputCallback
                         y_offset += theme_.labelHeight();
                         
                         // draw polypressure indicator
-                        
                         paintVisualization(g, state, y_offset, note_on.polyPressure_, 0x40, 0x7f,
                                            false, note_color, note_color,
                                            X_PP, y_offset,
@@ -1164,7 +1148,6 @@ struct MidiDeviceComponent::Pimpl : public MidiInputCallback
                     y_offset += Y_NOTE;
                     
                     // draw note text
-                    
                     auto note_color = theme_.colorNegative;
                     
                     if (isExpired(state.time_, note_on.current_.time_))
@@ -1214,6 +1197,7 @@ struct MidiDeviceComponent::Pimpl : public MidiInputCallback
         return y_offset;
     }
     
+    /** Paints CC (control change) rows and visualizations. */
     int paintControlChanges(Graphics& g, ChannelPaintState& state, ActiveChannel& channel)
     {
         int y_offset = -1;
@@ -1239,6 +1223,7 @@ struct MidiDeviceComponent::Pimpl : public MidiInputCallback
         return y_offset;
     }
     
+    /** Paints a single CC or Pressure row. */
     void paintControlChangeEntry(Graphics& g, ChannelPaintState& state, int& yOffset, const String& label, ChannelMessage& message)
     {
         if (yOffset == -1)
@@ -1249,7 +1234,6 @@ struct MidiDeviceComponent::Pimpl : public MidiInputCallback
         yOffset += Y_CC;
         
         // write label text
-        
         int cc_width = getStandardWidth() - X_CC - X_CC_DATA;
         g.setColour(theme_.colorController);
         g.setFont(theme_.fontLabel());
@@ -1268,13 +1252,13 @@ struct MidiDeviceComponent::Pimpl : public MidiInputCallback
         yOffset += theme_.labelHeight();
         
         // draw value indicator
-        
         paintVisualization(g, state, yOffset, message, 0x40, 0x7f,
                            false, theme_.colorController, theme_.colorController,
                            X_CC, yOffset,
                            cc_width, HEIGHT_INDICATOR + (Y_CC + theme_.labelHeight() + HEIGHT_INDICATOR) * settingsManager_->getSettings().getControlGraphHeight());
     }
     
+    /** Paints mini-graph/bar for current value/history. */
     void paintVisualization(Graphics& g, ChannelPaintState& state, int& yOffset, ChannelMessage& message, int centerValue, int maxValue,
                             bool bidirectional, Colour colourPositive, Colour colourNegative, int graphLeft, int graphTop, int graphWidth, int graphHeight)
     {
@@ -1535,22 +1519,38 @@ struct MidiDeviceComponent::Pimpl : public MidiInputCallback
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Pimpl)
 };
 
+/**
+ * @class MidiDeviceComponent
+ * @brief UI component for a single MIDI device.
+ */
 
-
+/** Constructor for a virtual or named MIDI device. */
 MidiDeviceComponent::MidiDeviceComponent(SettingsManager* manager, const String& name) : pimpl_(new Pimpl(this, manager, name)) {}
+/** Constructor for a MIDI device with detailed info. */
 MidiDeviceComponent::MidiDeviceComponent(SettingsManager* manager, const MidiDeviceInfo& info) : pimpl_(new Pimpl(this, manager, info)) {}
+/** Destructor. */
 MidiDeviceComponent::~MidiDeviceComponent() = default;
 
+/** Returns standard device width, DPI-aware. */
 int MidiDeviceComponent::getStandardWidth() const   { return pimpl_->getStandardWidth(); }
+/** Returns visible height of this device's UI. */
 int MidiDeviceComponent::getVisibleHeight() const   { return pimpl_->getVisibleHeight(); }
 
+/** Repaints the device UI. */
 void MidiDeviceComponent::render()            { pimpl_->render(); }
+/** Paints the UI for this device. */
 void MidiDeviceComponent::paint(Graphics& g)  { pimpl_->paint(g); }
+/** Handles component resize. */
 void MidiDeviceComponent::resized()           { pimpl_->resized(); }
+/** Pause/resume display updates. */
 void MidiDeviceComponent::setPaused(bool p)   { pimpl_->setPaused(p); }
+/** Clears all channel/controller data. */
 void MidiDeviceComponent::resetChannelData()  { pimpl_->resetChannelData(); }
 
+/** Handles incoming MIDI message. */
 void MidiDeviceComponent::handleIncomingMidiMessage(const MidiMessage& m)   { pimpl_->handleIncomingMidiMessage(nullptr, m); };
+/** Accepts drag-and-drop for SVG themes. */
 bool MidiDeviceComponent::isInterestedInFileDrag(const StringArray& f)      { return pimpl_->isInterestedInFileDrag(f); }
+/** Handles dropped files (e.g. SVG theme import). */
 void MidiDeviceComponent::filesDropped(const StringArray& f, int x, int y)  { pimpl_->filesDropped(f, x, y); }
 }

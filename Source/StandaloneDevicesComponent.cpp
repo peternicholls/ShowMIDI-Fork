@@ -21,7 +21,6 @@
 #include "MidiDeviceInfoComparator.h"
 #include "MidiDevicesListener.h"
 #include "ShowMidiApplication.h"
-#include "utility/Scaling.h"
 
 namespace showmidi
 {
@@ -77,13 +76,14 @@ struct StandaloneDevicesComponent::Pimpl : public MultiTimer, public MidiDevices
             if (midiDevices_.size() == 0)
             {
                 g.setColour(theme.colorBackground);
-                g.fillRect(Rectangle<int>(Theme::MIDI_DEVICE_SPACING, 0, sm::scaled(254), owner_->getHeight()));
+                g.fillRect(Rectangle<int>(Theme::MIDI_DEVICE_SPACING, 0, getStandardWidth(), owner_->getHeight()));
                 
                 g.setFont(theme.fontLabel());
                 g.setColour(theme.colorData);
                 
                 g.drawMultiLineText("No MIDI devices are visible.\n\n"
-                                    "Either no devices are connected, or all connected devices are hidden in the settings.", Theme::MIDI_DEVICE_SPACING + 23, 24, sm::scaled(254) - 46);
+                                    "Either no devices are connected, or all connected devices are hidden in the settings.",
+                                    Theme::MIDI_DEVICE_SPACING + 23, 24, getStandardWidth() - 46);
             }
         }
     }
@@ -159,9 +159,7 @@ struct StandaloneDevicesComponent::Pimpl : public MultiTimer, public MidiDevices
             height = std::max(height, c->getVisibleHeight());
         }
         
-        int deviceWidth = sm::scaled(254);
-        if (midiDevices_.size() > 0)
-            deviceWidth = midiDevices_.begin().getValue()->getStandardWidth();
+        int deviceWidth = getStandardWidth();
         auto width = std::max(owner_->getParentWidth(), midiDevices_.size() * (deviceWidth + Theme::MIDI_DEVICE_SPACING) - Theme::MIDI_DEVICE_SPACING);
         owner_->setSize(width, height);
         
@@ -260,9 +258,25 @@ struct StandaloneDevicesComponent::Pimpl : public MultiTimer, public MidiDevices
     {
         MessageManager::callAsync([this] () {
             // resize the window in order to display the MIDI devices
-            auto devices_width = (sm::scaled(254) + Theme::MIDI_DEVICE_SPACING) * std::max(MIN_MIDI_DEVICES_AUTO_SHOWN, std::min(MAX_MIDI_DEVICES_AUTO_SHOWN, midiDevices_.size())) + Theme::MIDI_DEVICE_SPACING;
+            auto devices_width = (getStandardWidth() +
+                                  Theme::MIDI_DEVICE_SPACING) * std::max(MIN_MIDI_DEVICES_AUTO_SHOWN,
+                                                                         std::min(MAX_MIDI_DEVICES_AUTO_SHOWN,
+                                                                                  midiDevices_.size())) + Theme::MIDI_DEVICE_SPACING;
             SMApp.setWindowWidthForMainLayout(devices_width + Theme::SCROLLBAR_THICKNESS);
         });
+    }
+    
+    // Helper to get standard width without direct sm:: dependency
+    int getStandardWidth() const
+    {
+        if (midiDevices_.size() > 0)
+        {
+            return midiDevices_.begin().getValue()->getStandardWidth();
+        }
+        // Fallback: create a temporary MidiDeviceComponent to get the width
+        // This is only used when no devices exist yet
+        auto tempDevice = std::make_unique<MidiDeviceComponent>(nullptr, "temp");
+        return tempDevice->getStandardWidth();
     }
     
     StandaloneDevicesComponent* const owner_;

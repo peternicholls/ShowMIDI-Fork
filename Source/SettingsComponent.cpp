@@ -22,7 +22,7 @@
 #include "PopupColourSelector.h"
 #include "ShowMidiApplication.h"
 #include "SidebarComponent.h"
-#include "utility/Scaling.h"
+#include "layout/Constants.h"
 
 namespace showmidi
 {
@@ -172,7 +172,7 @@ struct SettingsComponent::Pimpl : public Button::Listener, public Value::Listene
         {
             height = theme.linePosition(25.5);
         }
-        owner_->setSize(sm::scaled(254) - SidebarComponent::X_SETTINGS * 2, height);
+        owner_->setSize(showmidi::layout::STANDARD_WIDTH - SidebarComponent::X_SETTINGS * 2, height);
     }
     
     void resized()

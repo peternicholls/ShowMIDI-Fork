@@ -20,7 +20,7 @@
 #include "MidiDeviceComponent.h"
 #include "SidebarComponent.h"
 #include "ShowMidiApplication.h"
-#include "utility/Scaling.h"
+#include "layout/Constants.h"
 
 namespace showmidi
 {
@@ -46,7 +46,7 @@ struct MainLayoutComponent::Pimpl : public SidebarListener, public KeyListener
         sidebar_->setBounds(0, 0, getSidebarWidth(), DEFAULT_WINDOW_HEIGHT);
         owner_->addAndMakeVisible(sidebar_.get());
         
-        auto default_width = sm::scaled(254) + Theme::SCROLLBAR_THICKNESS;
+        auto default_width = showmidi::layout::STANDARD_WIDTH + Theme::SCROLLBAR_THICKNESS;
         if (type == MainLayoutType::layoutStandalone)
         {
             default_width += Theme::MIDI_DEVICE_SPACING * 2;
