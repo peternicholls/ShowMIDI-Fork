@@ -47,6 +47,7 @@ ShowMIDI displays:
 * Clock Continue (CONT)
 * Clock Stop (STOP)
 * System Exclusive (SYSEX)
+* DPI-aware user interface with scaling for high-resolution monitors ([see DPI](#dpi))
 
 ## Video introduction
 
@@ -81,6 +82,10 @@ The data can either be visualized as horizontal lines or as scrolling graphs. To
 To quickly clear the displayed data, press the reset button or the `delete`/`backspace` key on your keyboard. 
 
 The plugin versions can be used in any DAW that supports MIDI effect plugins. Some plugin formats, like VST3, might filter out certain MIDI messages and not present a fully accurate view.
+
+## DPI
+
+ShowMIDI automatically scales its interface to match your display's pixel density. The scaling logic relies on JUCE's desktop scaling utilities and helper classes such as [`Source/utility/Scaling.h`](Source/utility/Scaling.h).
 
 ## Themes
 
