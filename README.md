@@ -98,6 +98,10 @@ You can find the included themes [in the repository](https://github.com/gbevin/S
 ![](https://raw.githubusercontent.com/gbevin/ShowMIDI/main/Themes/light.svg)
 ![](https://raw.githubusercontent.com/gbevin/ShowMIDI/main/Themes/mouha.svg)
 
+## DPI-Aware Layout
+
+ShowMIDI uses logical layout units that scale to the current monitor. See [docs/dpi-scaling.md](docs/dpi-scaling.md) for an overview of the scaling helpers and how to add new layout constants.
+
 ## Credits
 
 ShowMIDI was created by Geert Bevin: https://uwyn.com
