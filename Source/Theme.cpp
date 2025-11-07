@@ -20,14 +20,11 @@
 #include <JuceHeader.h>
 
 #include "DetectDevice.h"
+#include "DpiScaling.h"
+#include "LayoutConstants.h"
 
 namespace showmidi
 {
-    static constexpr int EXPANDED_WIDTH = 200;
-#if JUCE_IOS
-    static constexpr int EXPANDED_WIDTH_NARROW = 122;
-#endif
-
     Theme Theme::getDefault()
     {
         return Desktop::getInstance().isDarkModeActive() ? THEME_DARK : THEME_LIGHT;
@@ -39,10 +36,10 @@ namespace showmidi
         auto orientation = Desktop::getInstance().getCurrentOrientation();
         if (isiPhone() && (orientation == Desktop::rotatedClockwise || orientation == Desktop::rotatedAntiClockwise))
         {
-            return 16;
+            return layout::LINE_HEIGHT_NARROW;
         }
 #endif
-        return 22;
+        return layout::LINE_HEIGHT_NORMAL;
     }
     
     int Theme::getSidebarExpandedWidth()
@@ -51,10 +48,10 @@ namespace showmidi
         auto orientation = Desktop::getInstance().getCurrentOrientation();
         if (isiPhone() && (orientation == Desktop::upright || orientation == Desktop::upsideDown))
         {
-            return EXPANDED_WIDTH_NARROW;
+            return layout::SIDEBAR_EXPANDED_WIDTH_NARROW;
         }
 #endif
-        return EXPANDED_WIDTH;
+        return layout::SIDEBAR_EXPANDED_WIDTH;
     }
 
     int Theme::linePosition(float number)
@@ -64,7 +61,7 @@ namespace showmidi
 
     Font Theme::fontLabel()
     {
-        return Font(16, Font::bold);
+        return Font(sm::scaled(sm::layout::FONT_SIZE), Font::bold);
     }
 
     int Theme::labelHeight()
@@ -74,7 +71,7 @@ namespace showmidi
     
     Font Theme::fontData()
     {
-        return Font(16, Font::italic);
+        return Font(sm::scaled(sm::layout::FONT_SIZE), Font::italic);
     }
 
     int Theme::dataHeight()

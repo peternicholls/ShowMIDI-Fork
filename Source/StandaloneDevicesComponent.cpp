@@ -21,6 +21,7 @@
 #include "MidiDeviceInfoComparator.h"
 #include "MidiDevicesListener.h"
 #include "ShowMidiApplication.h"
+#include "DpiScaling.h"
 
 namespace showmidi
 {
@@ -76,14 +77,14 @@ struct StandaloneDevicesComponent::Pimpl : public MultiTimer, public MidiDevices
             if (midiDevices_.size() == 0)
             {
                 g.setColour(theme.colorBackground);
-                g.fillRect(Rectangle<int>(Theme::MIDI_DEVICE_SPACING, 0, getStandardWidth(), owner_->getHeight()));
+                g.fillRect(Rectangle<int>(showmidi::layout::MIDI_DEVICE_SPACING, 0, getStandardWidth(), owner_->getHeight()));
                 
                 g.setFont(theme.fontLabel());
                 g.setColour(theme.colorData);
                 
                 g.drawMultiLineText("No MIDI devices are visible.\n\n"
                                     "Either no devices are connected, or all connected devices are hidden in the settings.",
-                                    Theme::MIDI_DEVICE_SPACING + 23, 24, getStandardWidth() - 46);
+                                    showmidi::layout::MIDI_DEVICE_SPACING + sm::scaled(23), sm::scaled(24), getStandardWidth() - sm::scaled(46));
             }
         }
     }
@@ -160,7 +161,7 @@ struct StandaloneDevicesComponent::Pimpl : public MultiTimer, public MidiDevices
         }
         
         int deviceWidth = getStandardWidth();
-        auto width = std::max(owner_->getParentWidth(), midiDevices_.size() * (deviceWidth + Theme::MIDI_DEVICE_SPACING) - Theme::MIDI_DEVICE_SPACING);
+        auto width = std::max(owner_->getParentWidth(), midiDevices_.size() * (deviceWidth + showmidi::layout::MIDI_DEVICE_SPACING) - showmidi::layout::MIDI_DEVICE_SPACING);
         owner_->setSize(width, height);
         
         for (HashMap<const String, MidiDeviceComponent*>::Iterator i(midiDevices_); i.next();)
@@ -243,7 +244,7 @@ struct StandaloneDevicesComponent::Pimpl : public MultiTimer, public MidiDevices
                         midiDevices_.set(info.identifier, component);
                     }
                     
-                    component->setBounds(Theme::MIDI_DEVICE_SPACING + position++ * (component->getStandardWidth() + Theme::MIDI_DEVICE_SPACING), 0,
+                    component->setBounds(showmidi::layout::MIDI_DEVICE_SPACING + position++ * (component->getStandardWidth() + showmidi::layout::MIDI_DEVICE_SPACING), 0,
                                          component->getStandardWidth(), owner_->getParentHeight());
                     
                     owner_->addAndMakeVisible(component);
@@ -259,10 +260,10 @@ struct StandaloneDevicesComponent::Pimpl : public MultiTimer, public MidiDevices
         MessageManager::callAsync([this] () {
             // resize the window in order to display the MIDI devices
             auto devices_width = (getStandardWidth() +
-                                  Theme::MIDI_DEVICE_SPACING) * std::max(MIN_MIDI_DEVICES_AUTO_SHOWN,
+                                  showmidi::layout::MIDI_DEVICE_SPACING) * std::max(MIN_MIDI_DEVICES_AUTO_SHOWN,
                                                                          std::min(MAX_MIDI_DEVICES_AUTO_SHOWN,
-                                                                                  midiDevices_.size())) + Theme::MIDI_DEVICE_SPACING;
-            SMApp.setWindowWidthForMainLayout(devices_width + Theme::SCROLLBAR_THICKNESS);
+                                                                                  midiDevices_.size())) + showmidi::layout::MIDI_DEVICE_SPACING;
+            SMApp.setWindowWidthForMainLayout(devices_width + showmidi::layout::SCROLLBAR_THICKNESS);
         });
     }
     
@@ -273,10 +274,8 @@ struct StandaloneDevicesComponent::Pimpl : public MultiTimer, public MidiDevices
         {
             return midiDevices_.begin().getValue()->getStandardWidth();
         }
-        // Fallback: create a temporary MidiDeviceComponent to get the width
-        // This is only used when no devices exist yet
-        auto tempDevice = std::make_unique<MidiDeviceComponent>(nullptr, "temp");
-        return tempDevice->getStandardWidth();
+        // Fallback: use the scaling utility directly when no devices exist yet
+        return sm::getStandardWidth();
     }
     
     StandaloneDevicesComponent* const owner_;

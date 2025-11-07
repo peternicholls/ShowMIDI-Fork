@@ -33,6 +33,7 @@ namespace showmidi
 
         void paint(Graphics&) override;
         void resized() override;
+        void parentHierarchyChanged() override;
 
         struct Pimpl;
     private:

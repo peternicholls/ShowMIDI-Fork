@@ -17,9 +17,10 @@
  */
 #include "AboutComponent.h"
 
+#include "DpiScaling.h"
 #include "MidiDeviceComponent.h"
 #include "SidebarComponent.h"
-#include "layout/Constants.h"
+#include "LayoutConstants.h"
 
 namespace showmidi
 {
@@ -33,9 +34,6 @@ namespace showmidi
         
         addAndMakeVisible(websiteButton_.get());
         addAndMakeVisible(closeButton_.get());
-
-        updateDimensions();
-        resized();
     }
     
     void AboutComponent::paint(Graphics& g)
@@ -74,6 +72,11 @@ namespace showmidi
                                        getWidth(), theme_.labelHeight());
     }
     
+    void AboutComponent::parentHierarchyChanged()
+    {
+        updateDimensions();
+    }
+    
     void AboutComponent::buttonClicked(Button* buttonThatWasClicked)
     {
         if (buttonThatWasClicked == websiteButton_.get())
@@ -88,6 +91,21 @@ namespace showmidi
     
     void AboutComponent::updateDimensions()
     {
-        setSize(showmidi::layout::STANDARD_WIDTH - SidebarComponent::X_SETTINGS * 2, theme_.linePosition(8));
+        // About box overlays the MIDI device viewport area
+        // Width = parent width - current sidebar width - horizontal margins (X_SETTINGS on each side)
+        auto parent = getParentComponent();
+        if (parent)
+        {
+            auto parentWidth = parent->getWidth();
+            auto sidebar = parent->getChildComponent(0);  // Sidebar is first child
+            auto sidebarWidth = sidebar ? sidebar->getWidth() : 0;
+            auto viewportWidth = parentWidth - sidebarWidth;
+            setSize(viewportWidth - sm::scaled(SidebarComponent::X_SETTINGS, *this) * 2, sm::scaled(theme_.linePosition(8), *this));
+        }
+        else
+        {
+            // Fallback to standard width if no parent
+            setSize(sm::getStandardWidth(*this) - sm::scaled(SidebarComponent::X_SETTINGS, *this) * 2, sm::scaled(theme_.linePosition(8), *this));
+        }
     }
 }

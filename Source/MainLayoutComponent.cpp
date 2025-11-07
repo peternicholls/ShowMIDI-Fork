@@ -20,13 +20,14 @@
 #include "MidiDeviceComponent.h"
 #include "SidebarComponent.h"
 #include "ShowMidiApplication.h"
-#include "layout/Constants.h"
+#include "LayoutConstants.h"
+#include "DpiScaling.h"
 
 namespace showmidi
 {
 struct MainLayoutComponent::Pimpl : public SidebarListener, public KeyListener
 {
-    static constexpr int DEFAULT_WINDOW_HEIGHT = 600;
+    static constexpr int DEFAULT_WINDOW_HEIGHT = layout::DEFAULT_WINDOW_HEIGHT;
     
     Pimpl(MainLayoutComponent* owner, SettingsManager* settings, DeviceManager* deviceManager, MainLayoutType type, Component* content) :
     owner_(owner),
@@ -43,19 +44,19 @@ struct MainLayoutComponent::Pimpl : public SidebarListener, public KeyListener
         owner_->setWantsKeyboardFocus(true);
         owner_->addKeyListener(this);
         
-        sidebar_->setBounds(0, 0, getSidebarWidth(), DEFAULT_WINDOW_HEIGHT);
+        sidebar_->setBounds(0, 0, getSidebarWidth(), sm::scaled(showmidi::layout::DEFAULT_WINDOW_HEIGHT, *owner_));
         owner_->addAndMakeVisible(sidebar_.get());
         
-        auto default_width = showmidi::layout::STANDARD_WIDTH + Theme::SCROLLBAR_THICKNESS;
+        auto default_width = showmidi::layout::STANDARD_WIDTH + showmidi::layout::SCROLLBAR_THICKNESS;
         if (type == MainLayoutType::layoutStandalone)
         {
-            default_width += Theme::MIDI_DEVICE_SPACING * 2;
+            default_width += showmidi::layout::MIDI_DEVICE_SPACING * 2;
         }
         viewport_->setScrollOnDragMode(Viewport::ScrollOnDragMode::all);
         viewport_->setScrollBarsShown(true, true);
-        viewport_->setScrollBarThickness(Theme::SCROLLBAR_THICKNESS);
+        viewport_->setScrollBarThickness(showmidi::layout::SCROLLBAR_THICKNESS);
         viewport_->setViewedComponent(content, false);
-        viewport_->setBounds(sidebar_->getWidth(), 0, default_width, DEFAULT_WINDOW_HEIGHT);
+        viewport_->setBounds(sidebar_->getWidth(), 0, default_width, sm::scaled(showmidi::layout::DEFAULT_WINDOW_HEIGHT, *owner_));
         owner_->addAndMakeVisible(viewport_.get());
     }
     
@@ -74,6 +75,11 @@ struct MainLayoutComponent::Pimpl : public SidebarListener, public KeyListener
         else if (key.getKeyCode() == KeyPress::deleteKey || key.getKeyCode() == KeyPress::backspaceKey)
         {
             deviceManager_->resetChannelData();
+            return true;
+        }
+        else if (key.getModifiers().isCommandDown() && key.getKeyCode() == 'w')
+        {
+            JUCEApplication::getInstance()->systemRequestedQuit();
             return true;
         }
         else if (key.getKeyCode() == 'v' || key.getKeyCode() == 'V')
@@ -156,7 +162,7 @@ MainLayoutComponent::MainLayoutComponent(SettingsManager* s, DeviceManager* d, M
 {
     pimpl_->sidebar_->setup();
     
-    setSize(pimpl_->sidebar_->getWidth() + pimpl_->viewport_->getWidth(), Pimpl::DEFAULT_WINDOW_HEIGHT);
+    setSize(pimpl_->sidebar_->getWidth() + pimpl_->viewport_->getWidth(), sm::scaled(600, *this));
 }
 
 MainLayoutComponent::~MainLayoutComponent() = default;

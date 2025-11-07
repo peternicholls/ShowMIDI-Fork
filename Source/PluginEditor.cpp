@@ -24,13 +24,14 @@
 #include "SettingsManager.h"
 #include "SidebarComponent.h"
 #include "UwynLookAndFeel.h"
-#include "utility/Scaling.h"
+#include "DpiScaling.h"
+#include "LayoutConstants.h"
 
 namespace showmidi
 {
 struct ShowMIDIPluginAudioProcessorEditor::Pimpl : public MultiTimer, public SettingsManager, public DeviceManager
 {
-    static constexpr int DEFAULT_EDITOR_HEIGHT = 600;
+    static constexpr int DEFAULT_EDITOR_HEIGHT = layout::DEFAULT_EDITOR_HEIGHT;
     
     enum Timers
     {
@@ -48,15 +49,15 @@ struct ShowMIDIPluginAudioProcessorEditor::Pimpl : public MultiTimer, public Set
         layout_ = std::make_unique<MainLayoutComponent>(this, this, MainLayoutType::layoutPlugin, midiDevice_.get());
         
         owner_->setResizable(true, true);
-        owner_->getConstrainer()->setMinimumWidth(layout_->getSidebarWidth() + midiDevice_->getStandardWidth() + Theme::SCROLLBAR_THICKNESS);
+        owner_->getConstrainer()->setMinimumWidth(layout_->getSidebarWidth() + midiDevice_->getStandardWidth() + sm::scaled(showmidi::layout::SCROLLBAR_THICKNESS, *owner_));
         owner_->getConstrainer()->setMaximumWidth(owner_->getConstrainer()->getMaximumWidth());
-        owner_->getConstrainer()->setMinimumHeight(120);
+        owner_->getConstrainer()->setMinimumHeight(sm::scaled(120, *owner_));
         
-        midiDevice_->setBounds(0, 0, midiDevice_->getStandardWidth(), DEFAULT_EDITOR_HEIGHT);
+        midiDevice_->setBounds(0, 0, midiDevice_->getStandardWidth(), sm::scaled(DEFAULT_EDITOR_HEIGHT, *owner_));
         
         owner_->addAndMakeVisible(layout_.get());
         
-        owner_->setSize(layout_->getWidth(), DEFAULT_EDITOR_HEIGHT);
+        owner_->setSize(layout_->getWidth(), sm::scaled(DEFAULT_EDITOR_HEIGHT, *owner_));
         owner_->setWantsKeyboardFocus(true);
         
         // 30Hz
@@ -225,6 +226,16 @@ void ShowMIDIPluginAudioProcessorEditor::resized()
     if (pimpl_.get() && isVisible() && getHeight() > 0)
     {
         pimpl_->resized(getHeight());
+    }
+}
+
+void ShowMIDIPluginAudioProcessorEditor::parentHierarchyChanged()
+{
+    AudioProcessorEditor::parentHierarchyChanged();
+    // Window may have moved to different monitor with different DPI - recalculate layout
+    if (pimpl_.get())
+    {
+        resized();
     }
 }
 }

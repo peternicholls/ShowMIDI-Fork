@@ -27,8 +27,8 @@
 
 #include "MidiDeviceComponent.h"
 #include "ChannelState.h"
-#include "utility/Scaling.h"
-#include "layout/Constants.h"
+#include "DpiScaling.h"
+#include "LayoutConstants.h"
 
 namespace showmidi
 {

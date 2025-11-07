@@ -17,6 +17,8 @@
  */
 #include "PopupColourSelector.h"
 
+#include "DpiScaling.h"
+
 namespace showmidi
 {
     PopupColourSelector::PopupColourSelector(const Value& colour) : colourValue_(colour)
@@ -27,7 +29,7 @@ namespace showmidi
         selector_.addChangeListener(this);
         
         colourValue_.addListener(this);
-        setSize(300, 400);
+        setSize(sm::scaled(layout::POPUP_COLOR_SELECTOR_WIDTH, *this), sm::scaled(layout::POPUP_COLOR_SELECTOR_HEIGHT, *this));
     }
     
     void PopupColourSelector::resized()

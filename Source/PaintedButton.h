@@ -19,6 +19,7 @@
 
 #include "JuceHeader.h"
 
+#include "DpiScaling.h"
 #include "Theme.h"
 
 namespace showmidi
@@ -40,8 +41,6 @@ namespace showmidi
     private:
         void setBounds(Rectangle<int>);
         void setBounds(int, int, int, int);
-
-        static constexpr int DEFAULT_TOUCH_OUTSET { 12 };
         
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PaintedButton)
     };

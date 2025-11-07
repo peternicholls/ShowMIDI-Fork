@@ -22,7 +22,8 @@
 #include "PopupColourSelector.h"
 #include "ShowMidiApplication.h"
 #include "SidebarComponent.h"
-#include "layout/Constants.h"
+#include "LayoutConstants.h"
+#include "DpiScaling.h"
 
 namespace showmidi
 {
@@ -43,11 +44,11 @@ struct SettingsComponent::Pimpl : public Button::Listener, public Value::Listene
         timeoutNeverButton_ = std::make_unique<PaintedButton>("never");
         windowRegularButton_ = std::make_unique<PaintedButton>("regular");
         windowAlwaysOnTopButton_ = std::make_unique<PaintedButton>("always on top");
-        loadThemeButton_ = std::make_unique<PaintedButton>("load");
-        saveThemeButton_ = std::make_unique<PaintedButton>("save");
         graphHeight1Button_ = std::make_unique<PaintedButton>("compact");
         graphHeight2Button_ = std::make_unique<PaintedButton>("medium");
         graphHeight3Button_ = std::make_unique<PaintedButton>("large");
+        loadThemeButton_ = std::make_unique<PaintedButton>("load");
+        saveThemeButton_ = std::make_unique<PaintedButton>("save");
         randomThemeButton_ = std::make_unique<PaintedButton>("random");
         resetThemeButton_ = std::make_unique<PaintedButton>("reset");
         colorBackgroundButton_ = std::make_unique<PaintedButton>();
@@ -159,6 +160,20 @@ struct SettingsComponent::Pimpl : public Button::Listener, public Value::Listene
         g.setFont(manager_->getSettings().getTheme().fontData().withStyle(condition() ? Font::underlined : Font::plain));
     }
     
+    /**
+     * Calculate button width based on text width with padding.
+     * Returns the width needed for setBoundsForTouch (includes touch outset expansion).
+     */
+    int calculateButtonWidth(const String& text)
+    {
+        auto& theme = manager_->getSettings().getTheme();
+        auto font = theme.fontLabel();
+        auto textWidth = font.getStringWidth(text);
+        
+        // Button width = text width (touch outset is added by setBoundsForTouch)
+        return textWidth;
+    }
+    
     void updateDimensions()
     {
         auto& theme = manager_->getSettings().getTheme();
@@ -166,13 +181,29 @@ struct SettingsComponent::Pimpl : public Button::Listener, public Value::Listene
         int height;
         if (manager_->isPlugin() || SystemStats::getOperatingSystemType() == SystemStats::iOS)
         {
-            height = theme.linePosition(22.5);
+            height = sm::scaled(theme.linePosition(22.5), *owner_);
         }
         else
         {
-            height = theme.linePosition(25.5);
+            height = sm::scaled(theme.linePosition(25.5), *owner_);
         }
-        owner_->setSize(showmidi::layout::STANDARD_WIDTH - SidebarComponent::X_SETTINGS * 2, height);
+        
+        // Settings box overlays the MIDI device viewport area
+        // Width = parent width - current sidebar width - horizontal margins (X_SETTINGS on each side)
+        auto parent = owner_->getParentComponent();
+        if (parent)
+        {
+            auto parentWidth = parent->getWidth();
+            auto sidebar = parent->getChildComponent(0);  // Sidebar is first child
+            auto sidebarWidth = sidebar ? sidebar->getWidth() : 0;
+            auto viewportWidth = parentWidth - sidebarWidth;
+            owner_->setSize(viewportWidth - sm::scaled(SidebarComponent::X_SETTINGS, *owner_) * 2, height);
+        }
+        else
+        {
+            // Fallback to standard width if no parent
+            owner_->setSize(sm::getStandardWidth(*owner_) - sm::scaled(SidebarComponent::X_SETTINGS, *owner_) * 2, height);
+        }
     }
     
     void resized()
@@ -180,50 +211,66 @@ struct SettingsComponent::Pimpl : public Button::Listener, public Value::Listene
         auto& settings = manager_->getSettings();
         auto& theme = settings.getTheme();
         
-        auto left_margin = 23;
-        auto button_spacing = 73;
-        auto button_spacing4 = 45;
+        auto left_margin = sm::scaled(sm::layout::SETTINGS_LEFT_MARGIN);
+        auto button_gap = sm::scaled(sm::layout::SETTINGS_BUTTON_GAP);
+        auto button_gap4 = sm::scaled(sm::layout::SETTINGS_BUTTON_GAP_4COL);
         auto y_offset = theme.linePosition(2);
+        auto labelHeight = theme.labelHeight();
         
         // middle c
         
-        middleCOct2Button_->setBoundsForTouch(left_margin, y_offset,
-                                              getWidth(), theme.labelHeight());
-        middleCOct3Button_->setBoundsForTouch(left_margin + button_spacing, y_offset,
-                                              getWidth(), theme.labelHeight());
-        middleCOct4Button_->setBoundsForTouch(left_margin + button_spacing * 2, y_offset,
-                                              getWidth(), theme.labelHeight());
+        auto middleCOct2Width = calculateButtonWidth("oct 2");
+        auto middleCOct3Width = calculateButtonWidth("oct 3");
+        auto middleCOct4Width = calculateButtonWidth("oct 4");
+        
+        int x = left_margin;
+        middleCOct2Button_->setBoundsForTouch(x, y_offset, middleCOct2Width, labelHeight);
+        x += middleCOct2Width + button_gap;
+        middleCOct3Button_->setBoundsForTouch(x, y_offset, middleCOct3Width, labelHeight);
+        x += middleCOct3Width + button_gap;
+        middleCOct4Button_->setBoundsForTouch(x, y_offset, middleCOct4Width, labelHeight);
         
         // note format
         
         y_offset += theme.linePosition(3);
         
-        notesNameButton_->setBoundsForTouch(left_margin, y_offset,
-                                            getWidth(), theme.labelHeight());
-        notesNumberButton_->setBoundsForTouch(left_margin + button_spacing, y_offset,
-                                              getWidth(), theme.labelHeight());
+        auto notesNameWidth = calculateButtonWidth("name");
+        auto notesNumberWidth = calculateButtonWidth("number");
+        
+        x = left_margin;
+        notesNameButton_->setBoundsForTouch(x, y_offset, notesNameWidth, labelHeight);
+        x += notesNameWidth + button_gap;
+        notesNumberButton_->setBoundsForTouch(x, y_offset, notesNumberWidth, labelHeight);
         
         // number format
         
         y_offset += theme.linePosition(3);
         
-        numbersDecButton_->setBoundsForTouch(left_margin, y_offset,
-                                             getWidth(), theme.labelHeight());
-        numbersHexButton_->setBoundsForTouch(left_margin + button_spacing, y_offset,
-                                             getWidth(), theme.labelHeight());
+        auto numbersDecWidth = calculateButtonWidth("decimal");
+        auto numbersHexWidth = calculateButtonWidth("hexadecimal");
         
-        // timeout delay
-        
+        x = left_margin;
+        numbersDecButton_->setBoundsForTouch(x, y_offset, numbersDecWidth, labelHeight);
+        x += numbersDecWidth + button_gap;
+        numbersHexButton_->setBoundsForTouch(x, y_offset, numbersHexWidth, labelHeight);
+
+        // timeout delay  NB: uses 4-column gap!
+
         y_offset += theme.linePosition(3);
         
-        timeout2SecButton_->setBoundsForTouch(left_margin, y_offset,
-                                              getWidth(), theme.labelHeight());
-        timeout5SecButton_->setBoundsForTouch(left_margin + button_spacing4, y_offset,
-                                              getWidth(), theme.labelHeight());
-        timeout10SecButton_->setBoundsForTouch(left_margin + button_spacing4 * 2, y_offset,
-                                               getWidth(), theme.labelHeight());
-        timeoutNeverButton_->setBoundsForTouch(left_margin + button_spacing * 2, y_offset,
-                                               getWidth(), theme.labelHeight());
+        auto timeout2SecWidth = calculateButtonWidth("2sec");
+        auto timeout5SecWidth = calculateButtonWidth("5sec");
+        auto timeout10SecWidth = calculateButtonWidth("10sec");
+        auto timeoutNeverWidth = calculateButtonWidth("never");
+        
+        x = left_margin;
+        timeout2SecButton_->setBoundsForTouch(x, y_offset, timeout2SecWidth, labelHeight);
+        x += timeout2SecWidth + button_gap4;
+        timeout5SecButton_->setBoundsForTouch(x, y_offset, timeout5SecWidth, labelHeight);
+        x += timeout5SecWidth + button_gap4;
+        timeout10SecButton_->setBoundsForTouch(x, y_offset, timeout10SecWidth, labelHeight);
+        x += timeout10SecWidth + button_gap4;
+        timeoutNeverButton_->setBoundsForTouch(x, y_offset, timeoutNeverWidth, labelHeight);
         
         if (!manager_->isPlugin() && SystemStats::getOperatingSystemType() != SystemStats::iOS)
         {
@@ -231,41 +278,53 @@ struct SettingsComponent::Pimpl : public Button::Listener, public Value::Listene
             
             y_offset += theme.linePosition(3);
             
-            windowRegularButton_->setBoundsForTouch(left_margin, y_offset,
-                                                    getWidth(), theme.labelHeight());
-            windowAlwaysOnTopButton_->setBoundsForTouch(left_margin + button_spacing, y_offset,
-                                                        getWidth(), theme.labelHeight());
+            auto windowRegularWidth = calculateButtonWidth("regular");
+            auto windowAlwaysOnTopWidth = calculateButtonWidth("always on top");
+            
+            x = left_margin;
+            windowRegularButton_->setBoundsForTouch(x, y_offset, windowRegularWidth, labelHeight);
+            x += windowRegularWidth + button_gap;
+            windowAlwaysOnTopButton_->setBoundsForTouch(x, y_offset, windowAlwaysOnTopWidth, labelHeight);
         }
         
         // control graph height
         
         y_offset += theme.linePosition(3);
         
-        graphHeight1Button_->setBoundsForTouch(left_margin, y_offset,
-                                               getWidth(), theme.labelHeight());
-        graphHeight2Button_->setBoundsForTouch(left_margin + button_spacing, y_offset,
-                                               getWidth(), theme.labelHeight());
-        graphHeight3Button_->setBoundsForTouch(left_margin + button_spacing * 2, y_offset,
-                                               getWidth(), theme.labelHeight());
+        auto graphHeight1Width = calculateButtonWidth("compact");
+        auto graphHeight2Width = calculateButtonWidth("medium");
+        auto graphHeight3Width = calculateButtonWidth("large");
         
-        // active theme
+        x = left_margin;
+        graphHeight1Button_->setBoundsForTouch(x, y_offset, graphHeight1Width, labelHeight);
+        x += graphHeight1Width + button_gap;
+        graphHeight2Button_->setBoundsForTouch(x, y_offset, graphHeight2Width, labelHeight);
+        x += graphHeight2Width + button_gap;
+        graphHeight3Button_->setBoundsForTouch(x, y_offset, graphHeight3Width, labelHeight);
+        
+        // active theme NB: uses 4-column gap!
         
         y_offset += theme.linePosition(3);
         
-        loadThemeButton_->setBoundsForTouch(left_margin, y_offset,
-                                            getWidth(), theme.labelHeight());
-        saveThemeButton_->setBoundsForTouch(left_margin + button_spacing4, y_offset,
-                                            getWidth(), theme.labelHeight());
-        randomThemeButton_->setBoundsForTouch(left_margin + button_spacing4 * 2, y_offset,
-                                              getWidth(), theme.labelHeight());
-        resetThemeButton_->setBoundsForTouch(left_margin + button_spacing * 2, y_offset,
-                                             getWidth(), theme.labelHeight());
+        auto loadThemeWidth = calculateButtonWidth("load");
+        auto saveThemeWidth = calculateButtonWidth("save");
+        auto randomThemeWidth = calculateButtonWidth("random");
+        auto resetThemeWidth = calculateButtonWidth("reset");
+        
+        x = left_margin;
+        loadThemeButton_->setBoundsForTouch(x, y_offset, loadThemeWidth, labelHeight);
+        x += loadThemeWidth + button_gap4;
+        saveThemeButton_->setBoundsForTouch(x, y_offset, saveThemeWidth, labelHeight);
+        x += saveThemeWidth + button_gap4;
+        randomThemeButton_->setBoundsForTouch(x, y_offset, randomThemeWidth, labelHeight);
+        x += randomThemeWidth + button_gap4;
+        resetThemeButton_->setBoundsForTouch(x, y_offset, resetThemeWidth, labelHeight);
         
         // theme colours
         
         y_offset += theme.linePosition(2);
         
-        int color_x = 23;
+        int color_x = sm::scaled(sm::layout::SETTINGS_LEFT_MARGIN);
         int color_x_offset = (int)(theme.lineHeight() * 1.5);
         int color_y = y_offset;
         int color_y_offset = (int)(theme.lineHeight() * 1.5);
@@ -281,7 +340,7 @@ struct SettingsComponent::Pimpl : public Button::Listener, public Value::Listene
         colorTrackButton_->setBoundsForTouch(color_x, color_y, color_w, color_h);
         color_x += color_x_offset;
         colorLabelButton_->setBoundsForTouch(color_x, color_y, color_w, color_h);
-        color_x = 23;
+        color_x = sm::scaled(sm::layout::SETTINGS_LEFT_MARGIN);
         color_y += color_y_offset;
         colorDataButton_->setBoundsForTouch(color_x, color_y, color_w, color_h);
         color_x += color_x_offset;
@@ -293,8 +352,8 @@ struct SettingsComponent::Pimpl : public Button::Listener, public Value::Listene
         
         // close button
         
-        closeButton_->setBoundsForTouch(getWidth() - 24, theme.linePosition(1) - theme.labelHeight() + 3,
-                                        28, theme.labelHeight());
+        closeButton_->setBoundsForTouch(getWidth() - sm::scaled(sm::layout::SETTINGS_CLOSE_BUTTON_RIGHT), theme.linePosition(1) - theme.labelHeight() + sm::scaled(sm::layout::SETTINGS_CLOSE_BUTTON_TOP),
+                                        sm::scaled(sm::layout::SETTINGS_CLOSE_BUTTON_WIDTH), theme.labelHeight());
         
     }
     void paint(Graphics& g)
@@ -305,8 +364,8 @@ struct SettingsComponent::Pimpl : public Button::Listener, public Value::Listene
         g.fillAll(theme.colorBackground);
         
         g.setColour(theme.colorData);
-        g.drawRect(Rectangle<int>{0, 0, getWidth(), getHeight()});
-        
+        g.drawRect(Rectangle<int>{0, 0, getWidth(), getHeight()}); // TODO: Use dpi scaling width of container column
+
         auto y_offset = theme.linePosition(1);
         
         // middle c
@@ -314,7 +373,7 @@ struct SettingsComponent::Pimpl : public Button::Listener, public Value::Listene
         g.setColour(theme.colorData);
         g.setFont(theme.fontLabel());
         g.drawText("Middle C",
-                   23, y_offset,
+                   sm::scaled(sm::layout::SETTINGS_LEFT_MARGIN), y_offset,
                    getWidth(), theme.labelHeight(),
                    Justification::centredLeft, true);
         
@@ -333,7 +392,7 @@ struct SettingsComponent::Pimpl : public Button::Listener, public Value::Listene
         g.setColour(theme.colorData);
         g.setFont(theme.fontLabel());
         g.drawText("Note Format",
-                   23, y_offset,
+                   sm::scaled(sm::layout::SETTINGS_LEFT_MARGIN), y_offset,
                    getWidth(), theme.labelHeight(),
                    Justification::centredLeft, true);
         
@@ -350,7 +409,7 @@ struct SettingsComponent::Pimpl : public Button::Listener, public Value::Listene
         g.setColour(theme.colorData);
         g.setFont(theme.fontLabel());
         g.drawText("Number Format",
-                   23, y_offset,
+                   sm::scaled(sm::layout::SETTINGS_LEFT_MARGIN), y_offset,
                    getWidth(), theme.labelHeight(),
                    Justification::centredLeft, true);
         
@@ -367,7 +426,7 @@ struct SettingsComponent::Pimpl : public Button::Listener, public Value::Listene
         g.setColour(theme.colorData);
         g.setFont(theme.fontLabel());
         g.drawText("Timeout Delay",
-                   23, y_offset,
+                   sm::scaled(sm::layout::SETTINGS_LEFT_MARGIN), y_offset,
                    getWidth(), theme.labelHeight(),
                    Justification::centredLeft, true);
         
@@ -390,7 +449,7 @@ struct SettingsComponent::Pimpl : public Button::Listener, public Value::Listene
             g.setColour(theme.colorData);
             g.setFont(theme.fontLabel());
             g.drawText("Window Position",
-                       23, y_offset,
+                       sm::scaled(sm::layout::SETTINGS_LEFT_MARGIN), y_offset,
                        getWidth(), theme.labelHeight(),
                        Justification::centredLeft, true);
             
@@ -408,7 +467,7 @@ struct SettingsComponent::Pimpl : public Button::Listener, public Value::Listene
         g.setColour(theme.colorData);
         g.setFont(theme.fontLabel());
         g.drawText("Control Graph Height",
-                   23, y_offset,
+                   sm::scaled(sm::layout::SETTINGS_LEFT_MARGIN), y_offset,
                    getWidth(), theme.labelHeight(),
                    Justification::centredLeft, true);
         
@@ -427,7 +486,7 @@ struct SettingsComponent::Pimpl : public Button::Listener, public Value::Listene
         g.setColour(theme.colorData);
         g.setFont(theme.fontLabel());
         g.drawText("Active Theme",
-                   23, y_offset,
+                   sm::scaled(sm::layout::SETTINGS_LEFT_MARGIN), y_offset,
                    getWidth(), theme.labelHeight(),
                    Justification::centredLeft, true);
         
