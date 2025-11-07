@@ -22,7 +22,7 @@
  compiler inlines them.
  */
 #include <juce_gui_basics/juce_gui_basics.h>
-#include "../layout/Constants.h"
+#include "LayoutConstants.h"
 
 namespace sm
 {
@@ -84,4 +84,7 @@ namespace sm
     {
         return scaled(::showmidi::layout::STANDARD_WIDTH, c);
     }
+
+    /** Alias for layout constants namespace (new preferred way). */
+    namespace layout = ::showmidi::layout;
 } // namespace sm
