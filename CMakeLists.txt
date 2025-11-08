@@ -29,7 +29,7 @@ set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded" CACHE STRING "Runtime")
 set(CMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED "NO")
 set(CMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED "NO")
 
-project(ShowMIDI VERSION 1.0.0)
+project(ShowMIDI VERSION 1.1.1)
 
 # define the exporter types used in your Projucer configuration
 if (APPLE)

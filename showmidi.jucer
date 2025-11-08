@@ -4,7 +4,7 @@
               addUsingNamespaceToJuceHeader="1" displaySplashScreen="0" jucerFormatVersion="1"
               pluginFormats="buildAU,buildAUv3,buildLV2,buildStandalone,buildVST,buildVST3"
               pluginCharacteristicsValue="pluginIsMidiEffectPlugin,pluginProducesMidiOut,pluginWantsMidiIn"
-              version="1.0.1" companyName="Uwyn" companyWebsite="https://www.uwyn.com"
+              version="1.1.1" companyName="Uwyn" companyWebsite="https://www.uwyn.com"
               companyEmail="info@uwyn.com" bundleIdentifier="com.uwyn.showmidi"
               pluginName="ShowMIDI" pluginManufacturer="Uwyn" pluginManufacturerCode="Uwyn"
               pluginCode="shmi" pluginAUIsSandboxSafe="1" pluginVSTNumMidiInputs="1"
