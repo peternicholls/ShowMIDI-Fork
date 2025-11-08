@@ -418,8 +418,8 @@
 		8EE9203A20244ED3DE950758 /* ShowMIDI */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ShowMIDI; sourceTree = BUILT_PRODUCTS_DIR; };
 		8EEF02F4B9640EBAC9C1B340 /* PropertiesSettings.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PropertiesSettings.cpp; path = ../../Source/PropertiesSettings.cpp; sourceTree = SOURCE_ROOT; };
 		93CD70970B7171379643BDD4 /* juce_data_structures */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_data_structures; path = ../../JUCE/modules/juce_data_structures; sourceTree = SOURCE_ROOT; };
-		9623D0212DE12AAA008CF032 /* Scaling.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Scaling.h; sourceTree = "<group>"; };
-		96B0712E2DE15A3B0050384E /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		9623D0212DE12AAA008CF032 /* DpiScaling.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DpiScaling.h; path = ../../Source/DpiScaling.h; sourceTree = SOURCE_ROOT; };
+		96B0712E2DE15A3B0050384E /* LayoutConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = LayoutConstants.h; path = ../../Source/LayoutConstants.h; sourceTree = SOURCE_ROOT; };
 		9A2BC4DA5BB07ED9989A954E /* JuceLV2Defines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = JuceLV2Defines.h; path = ../../JuceLibraryCode/JuceLV2Defines.h; sourceTree = SOURCE_ROOT; };
 		9B35CA1CF4CBD6EC4BF5D6C5 /* juce_lv2_helper */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = juce_lv2_helper; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C19881D8BF4AD54F23350A1 /* include_juce_audio_processors.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_audio_processors.mm; path = ../../JuceLibraryCode/include_juce_audio_processors.mm; sourceTree = SOURCE_ROOT; };
@@ -726,20 +726,20 @@
 		9623D0222DE12AAA008CF032 /* utility */ = {
 			isa = PBXGroup;
 			children = (
-				9623D0212DE12AAA008CF032 /* Scaling.h */,
+				9623D0212DE12AAA008CF032 /* DpiScaling.h */,
 			);
 			name = utility;
-			path = /Users/peternicholls/Dev/ShowMIDI.git/Source/utility;
-			sourceTree = "<absolute>";
+			path = "";
+			sourceTree = "<group>";
 		};
 		96B0712F2DE15A3B0050384E /* layout */ = {
 			isa = PBXGroup;
 			children = (
-				96B0712E2DE15A3B0050384E /* Constants.h */,
+				96B0712E2DE15A3B0050384E /* LayoutConstants.h */,
 			);
 			name = layout;
-			path = /Users/peternicholls/Dev/ShowMIDI.git/Source/layout;
-			sourceTree = "<absolute>";
+			path = "";
+			sourceTree = "<group>";
 		};
 		96EFF9EB2DE10DD500EA03D1 /* Recovered References */ = {
 			isa = PBXGroup;
