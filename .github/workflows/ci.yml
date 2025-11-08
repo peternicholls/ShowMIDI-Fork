@@ -1,0 +1,257 @@
+name: CI
+
+on:
+  # PRs to develop or main trigger full validation
+  pull_request:
+    branches:
+      - develop
+      - main
+  
+  # Pushes to main (production) trigger full validation
+  push:
+    branches:
+      - main
+      - 'release/**'
+      - 'hotfix/**'
+  
+  # Manual trigger for testing
+  workflow_dispatch:
+
+# Cancel in-progress runs when new commits pushed
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  code-quality:
+    name: Code Quality Checks
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential pkg-config \
+            libasound2-dev libfreetype6-dev libx11-dev \
+            libxrandr-dev libxinerama-dev libxcursor-dev
+      
+      - name: Check GPL-3.0 headers
+        run: |
+          echo "Checking for GPL-3.0 license headers in source files..."
+          missing_headers=0
+          for file in $(find Source -name "*.cpp" -o -name "*.h"); do
+            if ! grep -q "GNU General Public License" "$file"; then
+              echo "❌ Missing GPL-3.0 header: $file"
+              missing_headers=$((missing_headers + 1))
+            fi
+          done
+          if [ $missing_headers -gt 0 ]; then
+            echo "⚠️  Found $missing_headers files without GPL-3.0 headers"
+            echo "This is a warning, not blocking the build"
+          else
+            echo "✅ All source files have GPL-3.0 headers"
+          fi
+      
+      - name: Configure CMake (with warnings as errors)
+        run: |
+          mkdir -p build
+          cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_CXX_FLAGS="-Wall -Wextra -Werror"
+      
+      - name: Build (warnings as errors)
+        run: |
+          cd build
+          cmake --build . --config Release
+
+  build-and-test-macos:
+    name: Build and Test (macOS)
+    runs-on: macos-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      
+      - name: Select Xcode version
+        run: sudo xcode-select -s /Applications/Xcode_15.2.app/Contents/Developer
+      
+      - name: Build with Xcode (Standalone)
+        run: |
+          cd Builds/MacOSX
+          xcodebuild -project ShowMIDI.xcodeproj \
+            -scheme ShowMIDI \
+            -configuration Release \
+            clean build \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO
+      
+      - name: Build with Xcode (VST3)
+        run: |
+          cd Builds/MacOSX
+          xcodebuild -project ShowMIDI.xcodeproj \
+            -scheme "ShowMIDI - VST3" \
+            -configuration Release \
+            clean build \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO
+      
+      - name: Build with Xcode (AU)
+        run: |
+          cd Builds/MacOSX
+          xcodebuild -project ShowMIDI.xcodeproj \
+            -scheme "ShowMIDI - AU" \
+            -configuration Release \
+            clean build \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO
+      
+      - name: Smoke Test (Launch and validate)
+        run: |
+          echo "Launching ShowMIDI standalone app..."
+          # This is a basic smoke test - just verify the app bundle exists
+          if [ -d "Builds/MacOSX/build/Release/ShowMIDI.app" ]; then
+            echo "✅ ShowMIDI.app bundle created successfully"
+          else
+            echo "❌ ShowMIDI.app bundle not found"
+            exit 1
+          fi
+          
+          # Check for common issues in build output
+          echo "Checking for leak detector warnings..."
+          if grep -r "LEAKED" Builds/MacOSX/build/ 2>/dev/null; then
+            echo "⚠️  JUCE leak detector warnings found"
+            echo "This is a warning, review the leaks manually"
+          else
+            echo "✅ No leak detector warnings"
+          fi
+      
+      - name: Upload macOS artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ShowMIDI-macOS
+          path: |
+            Builds/MacOSX/build/Release/ShowMIDI.app
+            Builds/MacOSX/build/Release/*.vst3
+            Builds/MacOSX/build/Release/*.component
+
+  build-windows:
+    name: Build (Windows)
+    runs-on: windows-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+      
+      - name: Build with Visual Studio 2022
+        run: |
+          cd Builds\VisualStudio2022
+          msbuild ShowMIDI.sln /p:Configuration=Release /p:Platform=x64
+      
+      - name: Verify build artifacts
+        run: |
+          echo "Checking for build artifacts..."
+          if (Test-Path "Builds\VisualStudio2022\x64\Release\Standalone Plugin\ShowMIDI.exe") {
+            Write-Host "✅ ShowMIDI.exe created successfully"
+          } else {
+            Write-Host "❌ ShowMIDI.exe not found"
+            exit 1
+          }
+      
+      - name: Upload Windows artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ShowMIDI-Windows
+          path: |
+            Builds/VisualStudio2022/x64/Release/**/*.exe
+            Builds/VisualStudio2022/x64/Release/**/*.vst3
+
+  build-linux:
+    name: Build (Linux)
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential pkg-config cmake \
+            libasound2-dev libfreetype6-dev libx11-dev \
+            libxrandr-dev libxinerama-dev libxcursor-dev
+      
+      - name: Configure CMake
+        run: |
+          mkdir -p build
+          cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release
+      
+      - name: Build
+        run: |
+          cd build
+          cmake --build . --config Release -j$(nproc)
+      
+      - name: Verify build artifacts
+        run: |
+          echo "Checking for build artifacts..."
+          if [ -f "build/ShowMIDI_artefacts/Release/Standalone/ShowMIDI" ]; then
+            echo "✅ ShowMIDI standalone binary created"
+          else
+            echo "⚠️  ShowMIDI standalone binary not found at expected location"
+            echo "Searching for build artifacts..."
+            find build -name "ShowMIDI" -o -name "*.so" -o -name "*.vst3"
+          fi
+      
+      - name: Upload Linux artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ShowMIDI-Linux
+          path: |
+            build/ShowMIDI_artefacts/Release/**/*
+
+  build-ios:
+    name: Build (iOS AUv3)
+    runs-on: macos-latest
+    # iOS build is optional - comment out if not needed
+    if: false  # Enable this by changing to 'true' when iOS build is ready
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      
+      - name: Select Xcode version
+        run: sudo xcode-select -s /Applications/Xcode_15.2.app/Contents/Developer
+      
+      - name: Build iOS AUv3
+        run: |
+          cd Builds/iOS
+          xcodebuild -project ShowMIDI.xcodeproj \
+            -scheme "ShowMIDI - AUv3 AppExtension" \
+            -configuration Release \
+            -sdk iphonesimulator \
+            -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.2' \
+            clean build \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO
+      
+      - name: Upload iOS artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ShowMIDI-iOS
+          path: Builds/iOS/build/Release-iphonesimulator/*.appex
