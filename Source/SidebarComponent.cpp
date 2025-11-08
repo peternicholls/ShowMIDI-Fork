@@ -18,6 +18,7 @@
 #include "SidebarComponent.h"
 
 #include "AboutComponent.h"
+#include "DpiScaling.h"
 #include "PaintedButton.h"
 #include "DeviceListener.h"
 #include "PortListComponent.h"
@@ -30,9 +31,9 @@ namespace showmidi
 
     struct SidebarComponent::Pimpl : public Button::Listener, public DeviceListener
     {
-        static constexpr int COLLAPSED_WIDTH = 36;
-        static constexpr int Y_PORTLIST = 48;
-        static constexpr int PORTLIST_BOTTOM_MARGIN = 36;
+        inline static const int COLLAPSED_WIDTH = sm::scaled(sm::layout::SIDEBAR_COLLAPSED_WIDTH);
+        inline static const int Y_PORTLIST = sm::scaled(sm::layout::SIDEBAR_Y_PORTLIST);
+        inline static const int PORTLIST_BOTTOM_MARGIN = sm::scaled(sm::layout::SIDEBAR_PORTLIST_BOTTOM_MARGIN);
 
         Pimpl(SidebarComponent* owner, SettingsManager* settings, DeviceManager* deviceManager, SidebarType type, SidebarListener* listener) :
             owner_(owner),
@@ -97,7 +98,7 @@ namespace showmidi
                 portViewport_ = std::make_unique<Viewport>();
                 portViewport_->setScrollOnDragMode(Viewport::ScrollOnDragMode::all);
                 portViewport_->setScrollBarsShown(true, false);
-                portViewport_->setScrollBarThickness(Theme::SCROLLBAR_THICKNESS);
+                portViewport_->setScrollBarThickness(sm::scaled(showmidi::layout::SCROLLBAR_THICKNESS, *owner_));
                 portViewport_->setViewedComponent(portList_.get(), false);
                 owner_->addChildComponent(portViewport_.get());
             }
@@ -272,51 +273,51 @@ namespace showmidi
         
         void resized()
         {
-            collapsedButton_->setBoundsForTouch(X_COLLAPSED, Y_COLLAPSED,
+            collapsedButton_->setBoundsForTouch(sm::scaled(X_COLLAPSED, *owner_), sm::scaled(Y_COLLAPSED, *owner_),
                                                collapsedSvg_->getWidth(), collapsedSvg_->getHeight());
 
-            expandedButton_->setBoundsForTouch(X_EXPANDED, Y_EXPANDED,
+            expandedButton_->setBoundsForTouch(sm::scaled(X_EXPANDED, *owner_), sm::scaled(Y_EXPANDED, *owner_),
                                               expandedSvg_->getWidth(), expandedSvg_->getHeight());
 
             if (expanded_)
             {
-                playButton_->setBoundsForTouch(X_PLAY_EXPANDED, Y_PLAY_EXPANDED,
+                playButton_->setBoundsForTouch(sm::scaled(X_PLAY_EXPANDED, *owner_), sm::scaled(Y_PLAY_EXPANDED, *owner_),
                                                playSvg_->getWidth(), playSvg_->getHeight());
                 
-                pauseButton_->setBoundsForTouch(X_PLAY_EXPANDED, Y_PLAY_EXPANDED,
+                pauseButton_->setBoundsForTouch(sm::scaled(X_PLAY_EXPANDED, *owner_), sm::scaled(Y_PLAY_EXPANDED, *owner_),
                                                 pauseSvg_->getWidth(), pauseSvg_->getHeight());
                 
-                barButton_->setBoundsForTouch(X_VISUALIZATION_EXPANDED, Y_VISUALIZATION_EXPANDED,
+                barButton_->setBoundsForTouch(sm::scaled(X_VISUALIZATION_EXPANDED, *owner_), sm::scaled(Y_VISUALIZATION_EXPANDED, *owner_),
                                                barSvg_->getWidth(), barSvg_->getHeight());
                 
-                graphButton_->setBoundsForTouch(X_VISUALIZATION_EXPANDED, Y_VISUALIZATION_EXPANDED,
+                graphButton_->setBoundsForTouch(sm::scaled(X_VISUALIZATION_EXPANDED, *owner_), sm::scaled(Y_VISUALIZATION_EXPANDED, *owner_),
                                                 graphSvg_->getWidth(), graphSvg_->getHeight());
                 
-                resetButton_->setBoundsForTouch(owner_->getWidth() - resetSvg_->getWidth() - X_RESET_EXPANDED, Y_RESET_EXPANDED,
+                resetButton_->setBoundsForTouch(owner_->getWidth() - resetSvg_->getWidth() - sm::scaled(X_RESET_EXPANDED, *owner_), sm::scaled(Y_RESET_EXPANDED, *owner_),
                                                 resetSvg_->getWidth(), resetSvg_->getHeight());
             }
             else
             {
-                playButton_->setBoundsForTouch(X_PLAY_COLLAPSED, Y_PLAY_COLLAPSED,
+                playButton_->setBoundsForTouch(sm::scaled(X_PLAY_COLLAPSED, *owner_), sm::scaled(Y_PLAY_COLLAPSED, *owner_),
                                                playSvg_->getWidth(), playSvg_->getHeight());
                 
-                pauseButton_->setBoundsForTouch(X_PLAY_COLLAPSED, Y_PLAY_COLLAPSED,
+                pauseButton_->setBoundsForTouch(sm::scaled(X_PLAY_COLLAPSED, *owner_), sm::scaled(Y_PLAY_COLLAPSED, *owner_),
                                                 pauseSvg_->getWidth(), pauseSvg_->getHeight());
                 
-                barButton_->setBoundsForTouch(X_VISUALIZATION_COLLAPSED, Y_VISUALIZATION_COLLAPSED,
+                barButton_->setBoundsForTouch(sm::scaled(X_VISUALIZATION_COLLAPSED, *owner_), sm::scaled(Y_VISUALIZATION_COLLAPSED, *owner_),
                                                barSvg_->getWidth(), barSvg_->getHeight());
                 
-                graphButton_->setBoundsForTouch(X_VISUALIZATION_COLLAPSED, Y_VISUALIZATION_COLLAPSED,
+                graphButton_->setBoundsForTouch(sm::scaled(X_VISUALIZATION_COLLAPSED, *owner_), sm::scaled(Y_VISUALIZATION_COLLAPSED, *owner_),
                                                 graphSvg_->getWidth(), graphSvg_->getHeight());
                 
-                resetButton_->setBoundsForTouch(X_RESET_COLLAPSED, owner_->getHeight() - resetSvg_->getHeight() - Y_RESET_COLLAPSED,
+                resetButton_->setBoundsForTouch(sm::scaled(X_RESET_COLLAPSED, *owner_), owner_->getHeight() - resetSvg_->getHeight() - sm::scaled(Y_RESET_COLLAPSED, *owner_),
                                                 resetSvg_->getWidth(), resetSvg_->getHeight());
             }
 
-            helpButton_->setBoundsForTouch(X_HELP, owner_->getHeight() - helpSvg_->getHeight() - Y_HELP,
+            helpButton_->setBoundsForTouch(sm::scaled(X_HELP, *owner_), owner_->getHeight() - helpSvg_->getHeight() - sm::scaled(Y_HELP, *owner_),
                                           helpSvg_->getWidth(), helpSvg_->getHeight());
             
-            settingsButton_->setBoundsForTouch(owner_->getWidth() - expandedSvg_->getWidth() - X_SETTINGS, Y_SETTINGS,
+            settingsButton_->setBoundsForTouch(owner_->getWidth() - expandedSvg_->getWidth() - sm::scaled(X_SETTINGS, *owner_), sm::scaled(Y_SETTINGS, *owner_),
                                               settingsSvg_->getWidth(), settingsSvg_->getHeight());
 
             if (portViewport_.get())
@@ -326,10 +327,10 @@ namespace showmidi
             }
             
             about_->updateDimensions();
-            about_->setTopLeftPosition(owner_->getWidth() + X_SETTINGS, owner_->getHeight() - Y_SETTINGS - about_->getHeight());
+            about_->setTopLeftPosition(owner_->getWidth() + sm::scaled(X_SETTINGS, *owner_), owner_->getHeight() - sm::scaled(Y_SETTINGS, *owner_) - about_->getHeight());
 
             settings_->updateDimensions();
-            settings_->setTopLeftPosition(owner_->getWidth() + X_SETTINGS, Y_SETTINGS);
+            settings_->setTopLeftPosition(owner_->getWidth() + sm::scaled(X_SETTINGS, *owner_), sm::scaled(Y_SETTINGS, *owner_));
         }
         
         int getActiveWidth()

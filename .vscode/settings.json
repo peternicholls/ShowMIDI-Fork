@@ -1,0 +1,6 @@
+{
+    "C_Cpp.errorSquiggles": "Disabled", // Disables red squiggles for errors
+    "C_Cpp.intelliSenseEngineFallback": "Enabled", // Uses fallback mode if no targets
+    "C_Cpp.default.includePath": [], // Prevents missing include errors if you have no targets
+    "C_Cpp.default.defines": []
+}

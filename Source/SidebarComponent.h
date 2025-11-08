@@ -20,6 +20,7 @@
 #include <JuceHeader.h>
 
 #include "DeviceManager.h"
+#include "LayoutConstants.h"
 #include "SettingsManager.h"
 
 namespace showmidi
@@ -42,35 +43,35 @@ namespace showmidi
     class SidebarComponent : public Component
     {
     public:        
-        static constexpr int X_COLLAPSED = 14;
-        static constexpr int Y_COLLAPSED = 13;
+        static constexpr int X_COLLAPSED = showmidi::layout::SIDEBAR_X_COLLAPSED;
+        static constexpr int Y_COLLAPSED = showmidi::layout::SIDEBAR_Y_COLLAPSED;
 
-        static constexpr int X_EXPANDED = 12;
-        static constexpr int Y_EXPANDED = 13;
+        static constexpr int X_EXPANDED = showmidi::layout::SIDEBAR_X_EXPANDED;
+        static constexpr int Y_EXPANDED = showmidi::layout::SIDEBAR_Y_EXPANDED;
 
-        static constexpr int X_SETTINGS = 11;
-        static constexpr int Y_SETTINGS = 11;
+        static constexpr int X_SETTINGS = showmidi::layout::SIDEBAR_X_SETTINGS;
+        static constexpr int Y_SETTINGS = showmidi::layout::SIDEBAR_Y_SETTINGS;
 
-        static constexpr int X_PLAY_COLLAPSED = 12;
-        static constexpr int Y_PLAY_COLLAPSED = 44;
+        static constexpr int X_PLAY_COLLAPSED = showmidi::layout::SIDEBAR_X_PLAY_COLLAPSED;
+        static constexpr int Y_PLAY_COLLAPSED = showmidi::layout::SIDEBAR_Y_PLAY_COLLAPSED;
 
-        static constexpr int X_PLAY_EXPANDED = 40;
-        static constexpr int Y_PLAY_EXPANDED = 11;
+        static constexpr int X_PLAY_EXPANDED = showmidi::layout::SIDEBAR_X_PLAY_EXPANDED;
+        static constexpr int Y_PLAY_EXPANDED = showmidi::layout::SIDEBAR_Y_PLAY_EXPANDED;
 
-        static constexpr int X_VISUALIZATION_COLLAPSED = 12;
-        static constexpr int Y_VISUALIZATION_COLLAPSED = 78;
+        static constexpr int X_VISUALIZATION_COLLAPSED = showmidi::layout::SIDEBAR_X_VISUALIZATION_COLLAPSED;
+        static constexpr int Y_VISUALIZATION_COLLAPSED = showmidi::layout::SIDEBAR_Y_VISUALIZATION_COLLAPSED;
 
-        static constexpr int X_VISUALIZATION_EXPANDED = 68;
-        static constexpr int Y_VISUALIZATION_EXPANDED = 11;
+        static constexpr int X_VISUALIZATION_EXPANDED = showmidi::layout::SIDEBAR_X_VISUALIZATION_EXPANDED;
+        static constexpr int Y_VISUALIZATION_EXPANDED = showmidi::layout::SIDEBAR_Y_VISUALIZATION_EXPANDED;
 
-        static constexpr int X_RESET_COLLAPSED = 11;
-        static constexpr int Y_RESET_COLLAPSED = 46;
+        static constexpr int X_RESET_COLLAPSED = showmidi::layout::SIDEBAR_X_RESET_COLLAPSED;
+        static constexpr int Y_RESET_COLLAPSED = showmidi::layout::SIDEBAR_Y_RESET_COLLAPSED;
 
-        static constexpr int X_RESET_EXPANDED = 39;
-        static constexpr int Y_RESET_EXPANDED = 11;
+        static constexpr int X_RESET_EXPANDED = showmidi::layout::SIDEBAR_X_RESET_EXPANDED;
+        static constexpr int Y_RESET_EXPANDED = showmidi::layout::SIDEBAR_Y_RESET_EXPANDED;
 
-        static constexpr int X_HELP = 11;
-        static constexpr int Y_HELP = 12;
+        static constexpr int X_HELP = showmidi::layout::SIDEBAR_X_HELP;
+        static constexpr int Y_HELP = showmidi::layout::SIDEBAR_Y_HELP;
 
         SidebarComponent(SettingsManager*, DeviceManager*, SidebarType, SidebarListener*);
         ~SidebarComponent() override;

@@ -17,6 +17,7 @@
  */
 #include "AboutComponent.h"
 
+#include "DpiScaling.h"
 #include "PaintedButton.h"
 
 namespace showmidi
@@ -37,17 +38,20 @@ namespace showmidi
     void PaintedButton::setBoundsForTouch(int x, int y, int w, int h)
     {
         auto bounds = Rectangle<int> {x, y, w, h};
-        Component::setBounds(bounds.expanded(DEFAULT_TOUCH_OUTSET));
+        auto touchOutset = sm::scaled(sm::layout::BUTTON_DEFAULT_TOUCH_OUTSET, *this);
+        Component::setBounds(bounds.expanded(touchOutset));
     }
 
     Rectangle<float> PaintedButton::getBoundsForDrawing()
     {
-        return getBounds().reduced(DEFAULT_TOUCH_OUTSET).toFloat();
+        auto touchOutset = sm::scaled(sm::layout::BUTTON_DEFAULT_TOUCH_OUTSET, *this);
+        return getBounds().reduced(touchOutset).toFloat();
     }
 
     void PaintedButton::drawName(Graphics& g, Justification justificationType)
     {
-        auto bounds = getBounds().reduced(DEFAULT_TOUCH_OUTSET);
+        auto touchOutset = sm::scaled(sm::layout::BUTTON_DEFAULT_TOUCH_OUTSET, *this);
+        auto bounds = getBounds().reduced(touchOutset);
         g.drawText(getName(),
                    bounds.getX(), bounds.getY(),
                    bounds.getWidth(), bounds.getHeight(),
@@ -56,7 +60,8 @@ namespace showmidi
     
     void PaintedButton::drawDrawable(Graphics& g, Drawable& drawable)
     {
-        auto bounds = getBounds().reduced(DEFAULT_TOUCH_OUTSET);
+        auto touchOutset = sm::scaled(sm::layout::BUTTON_DEFAULT_TOUCH_OUTSET, *this);
+        auto bounds = getBounds().reduced(touchOutset);
         drawable.drawAt(g, (float)bounds.getX(), (float)bounds.getY(), 1.0f);
     }
 }

@@ -31,7 +31,7 @@ namespace showmidi
         MidiDeviceComponent(SettingsManager*, const MidiDeviceInfo&);
         ~MidiDeviceComponent() override;
         
-        static int getStandardWidth();
+        int getStandardWidth() const;
         int getVisibleHeight() const;
 
         void render();

@@ -18,6 +18,7 @@
 #include "PortListComponent.h"
 
 #include "AboutComponent.h"
+#include "DpiScaling.h"
 #include "MidiDeviceInfoComparator.h"
 #include "MidiDevicesListener.h"
 #include "PaintedButton.h"
@@ -41,11 +42,11 @@ namespace showmidi
             owner_->removeMouseListener(this);
         }
         
-        static constexpr int X_VISIBILITY = 10;
-        static constexpr int Y_VISIBILITY = -2;
-        static constexpr int X_PORT = 34;
-        static constexpr int PORT_RIGHT_MARGIN = 8;
-        static constexpr int PORT_Y_SPACING = 29;
+        inline static const int X_VISIBILITY = sm::scaled(sm::layout::PORTLIST_X_VISIBILITY);
+        inline static const int Y_VISIBILITY = sm::scaled(sm::layout::PORTLIST_Y_VISIBILITY);
+        inline static const int X_PORT = sm::scaled(sm::layout::PORTLIST_X_PORT);
+        inline static const int PORT_RIGHT_MARGIN = sm::scaled(sm::layout::PORTLIST_PORT_RIGHT_MARGIN);
+        inline static const int PORT_Y_SPACING = sm::scaled(sm::layout::PORTLIST_PORT_Y_SPACING);
         
         void paint(Graphics& g)
         {
