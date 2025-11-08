@@ -1,0 +1,64 @@
+name: Download Statistics Tracker
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  track-stats:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install deps
+      run: pip install requests pandas matplotlib seaborn
+
+    - name: Collect stats and generate report
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        python - <<'PY'
+        import os, requests, json
+        REPO="peternicholls/ShowMIDI-Fork"
+        API=f"https://api.github.com/repos/{REPO}/releases"
+        headers={"Authorization":f"token {os.getenv('GITHUB_TOKEN','')}"}
+        r=requests.get(API, headers=headers)
+        releases=r.json()
+        total=0
+        rows=[]
+        for rel in releases:
+          for a in rel.get('assets',[]):
+            rows.append((rel['tag_name'], a['name'], a.get('download_count',0), a.get('size',0)))
+            total += a.get('download_count',0)
+        with open('DOWNLOAD_STATS.md','w') as f:
+          f.write(f"# Download statistics\\n\\nTotal downloads: {total}\\n")
+          f.write("|Release|Asset|Downloads|Size bytes|\\n|---|---|---:|---:|\\n")
+          for r in rows:
+            f.write(f"|{r[0]}|{r[1]}|{r[2]}|{r[3]}|\\n")
+        print('Report written to DOWNLOAD_STATS.md')
+        PY
+
+    - name: Commit stats
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git add DOWNLOAD_STATS.md
+        if ! git diff --staged --quiet; then
+          git commit -m "📊 Update download statistics"
+          git push
+        else
+          echo "No changes"
+        fi

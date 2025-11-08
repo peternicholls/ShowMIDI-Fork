@@ -3,15 +3,13 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 90;
 	objects = {
 
 /* Begin PBXAggregateTarget section */
 		8D4550665620D436C7E8B433 /* ShowMIDI - All */ = {
 			isa = PBXAggregateTarget;
 			buildConfigurationList = B6721A6027B23041E913E4DC /* Build configuration list for PBXAggregateTarget "ShowMIDI - All" */;
-			buildPhases = (
-			);
 			dependencies = (
 				B990212E7035DE27648BF609 /* PBXTargetDependency */,
 				FB02B11E1D8FBDB347575ECF /* PBXTargetDependency */,
@@ -30,42 +28,219 @@
 
 /* Begin PBXBuildFile section */
 		0406D44DAD69C5E32184B8D6 /* include_juce_core.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2C4A1E8364601AAA7BEC47D3 /* include_juce_core.mm */; };
-		0E37862E84E50AAAF3B36BFF /* PaintedButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E071CD1AE979F36DF9BCBCCF /* PaintedButton.cpp */; };
 		181E4F7E9A37FF1A315C969E /* include_juce_audio_processors_ara.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DBBE0BDEA350843E5CBE837 /* include_juce_audio_processors_ara.cpp */; };
-		18BC972C6047CC27A142C2B8 /* ShowMidiApplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7FA88F4A6B12D91E3D015FA /* ShowMidiApplication.cpp */; };
 		1A6345A42B0B251C2F9EFB58 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B29AD572554995864888DF39 /* Accelerate.framework */; };
 		1B94A63C6E60F8CAAD9E41C9 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F3350340A2A48DC2084FBD90 /* QuartzCore.framework */; };
-		1D70697182F531840C93CE15 /* UwynLookAndFeel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2C52E4AAA54DA857A279031C /* UwynLookAndFeel.cpp */; };
 		20E9664F68D15072D1364568 /* include_juce_audio_plugin_client_VST2.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0A7F227ECEBD8AF6A41CB558 /* include_juce_audio_plugin_client_VST2.mm */; };
 		210807DB7EBC56D34A5390FD /* include_juce_audio_plugin_client_LV2.mm in Sources */ = {isa = PBXBuildFile; fileRef = B4C89F1AD3A2986B441B3312 /* include_juce_audio_plugin_client_LV2.mm */; };
 		229F83467C59FB55E505CD5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B3C4CF0B1689E7148204025 /* Foundation.framework */; };
 		249CE4640C712BC1782DCB5D /* CoreMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17ACFE7C6558A3BFE6DE79C9 /* CoreMIDI.framework */; };
-		2A3F29A4BBBF0F020B51B865 /* DeviceListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E13E48BEF4C0D5FDB08D7E2D /* DeviceListener.cpp */; };
-		2BE136F9771FD33F0C7A6703 /* MidiDevicesListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 522F4183B107213ABBA95E54 /* MidiDevicesListener.cpp */; };
-		353E878E2C4866F8F792ABB8 /* PropertiesSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EEF02F4B9640EBAC9C1B340 /* PropertiesSettings.cpp */; };
 		368701CC81BCD114F89A6FEE /* include_juce_graphics.mm in Sources */ = {isa = PBXBuildFile; fileRef = F0823A50303AB62A3DC1CF36 /* include_juce_graphics.mm */; };
 		4408F5269D7071063662550F /* include_juce_audio_plugin_client_ARA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FDB11BB7D46CFB537BD77891 /* include_juce_audio_plugin_client_ARA.cpp */; };
 		489E608DB817050A5D5D3162 /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B14489F06D2BD531D0FFF376 /* MetalKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		49275756321FDB8F7DC25D31 /* AboutComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 80ABD3BDC42C5FE92F7FE42C /* AboutComponent.cpp */; };
 		56B55F900F1CB4087ADE725F /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D85E9B456D141CE755AB2F5 /* Security.framework */; };
 		5962D30695731C6915E8E280 /* include_juce_audio_plugin_client_AU_1.mm in Sources */ = {isa = PBXBuildFile; fileRef = DF270F4F863ED855E7233932 /* include_juce_audio_plugin_client_AU_1.mm */; };
 		5B7E8052B6CF49139215A85B /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D06DECE0E3AB7FD4855DDD55 /* Cocoa.framework */; };
 		5D5B029DE57BC7B2770A6B2E /* include_juce_audio_processors.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9C19881D8BF4AD54F23350A1 /* include_juce_audio_processors.mm */; };
 		685FBF167055939EFF0BC772 /* include_juce_audio_plugin_client_Standalone.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 84B181AE7A602CF26F9C4158 /* include_juce_audio_plugin_client_Standalone.cpp */; };
-		69B90CBB6BB21353587D2A97 /* PluginEditor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5E8212E205DE721CE55589C7 /* PluginEditor.cpp */; };
 		712D7573805649AE18AE3A5A /* include_juce_audio_plugin_client_AUv3.mm in Sources */ = {isa = PBXBuildFile; fileRef = 71D389B4B47E269F6BCDF779 /* include_juce_audio_plugin_client_AUv3.mm */; };
 		72EE5FBBCCCA12C9D90532FB /* include_juce_audio_processors_lv2_libs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 372E247AE8EA1DCC2438C0C3 /* include_juce_audio_processors_lv2_libs.cpp */; };
 		73AA388CD40FCABF9457235A /* ShowMIDI.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 18E89D52FCDF34385983843E /* ShowMIDI.appex */; };
-		74A90D33B60D692AC29558AE /* MidiDeviceComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4103274634C632287BD3388D /* MidiDeviceComponent.cpp */; };
 		7A6064389966372F9F3E2917 /* DiscRecording.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4417A93F2384B0094F9F038F /* DiscRecording.framework */; };
 		7D3662134D4D4F29CE66FD36 /* include_juce_audio_devices.mm in Sources */ = {isa = PBXBuildFile; fileRef = 360F084DCC1FFB986575FC0B /* include_juce_audio_devices.mm */; };
-		7D4A2F5E55D62DA0F82EFDED /* StandaloneDevicesComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 031AE9228EBD95C338AB3D48 /* StandaloneDevicesComponent.cpp */; };
-		7F2788CCDD71A91C6E237A99 /* DetectDevice.mm in Sources */ = {isa = PBXBuildFile; fileRef = F689C060A21653E6996175AB /* DetectDevice.mm */; };
 		7F650D414C30A326AC845F7B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F510F4D6670ABB994871EC11 /* AVFoundation.framework */; };
 		89257B225513F271B67C2D83 /* include_juce_audio_basics.mm in Sources */ = {isa = PBXBuildFile; fileRef = D37BC26585486939C17BB1A9 /* include_juce_audio_basics.mm */; };
 		8A7D3D28E13F8FDC1822A9AF /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27ECFCD7203995ED4729E23E /* CoreAudio.framework */; };
 		8D65268047C04AB47CA72AB2 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04B573B9A4233581640FCE37 /* AudioToolbox.framework */; };
-		930F21046AF312901BFB919B /* StandaloneWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000EE2EE2449DE5643E24358 /* StandaloneWindow.cpp */; };
+		9647A3C42EBFED76005C8C16 /* PropertiesSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3B22EBFED76005C8C16 /* PropertiesSettings.cpp */; };
+		9647A3C52EBFED76005C8C16 /* AboutComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3942EBFED76005C8C16 /* AboutComponent.cpp */; };
+		9647A3C62EBFED76005C8C16 /* Main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A39D2EBFED76005C8C16 /* Main.cpp */; };
+		9647A3C72EBFED76005C8C16 /* SettingsComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3B52EBFED76005C8C16 /* SettingsComponent.cpp */; };
+		9647A3C82EBFED76005C8C16 /* MainLayoutComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A39F2EBFED76005C8C16 /* MainLayoutComponent.cpp */; };
+		9647A3C92EBFED76005C8C16 /* Theme.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3C02EBFED76005C8C16 /* Theme.cpp */; };
+		9647A3CA2EBFED76005C8C16 /* UwynLookAndFeel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3C22EBFED76005C8C16 /* UwynLookAndFeel.cpp */; };
+		9647A3CB2EBFED76005C8C16 /* DeviceListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3992EBFED76005C8C16 /* DeviceListener.cpp */; };
+		9647A3CC2EBFED76005C8C16 /* PopupColourSelector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3AE2EBFED76005C8C16 /* PopupColourSelector.cpp */; };
+		9647A3CD2EBFED76005C8C16 /* MidiDevicesListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3A42EBFED76005C8C16 /* MidiDevicesListener.cpp */; };
+		9647A3CE2EBFED76005C8C16 /* PaintedButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3A62EBFED76005C8C16 /* PaintedButton.cpp */; };
+		9647A3CF2EBFED76005C8C16 /* ShowMidiApplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3B82EBFED76005C8C16 /* ShowMidiApplication.cpp */; };
+		9647A3D02EBFED76005C8C16 /* PortListComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3B02EBFED76005C8C16 /* PortListComponent.cpp */; };
+		9647A3D12EBFED76005C8C16 /* StandaloneDevicesComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3BC2EBFED76005C8C16 /* StandaloneDevicesComponent.cpp */; };
+		9647A3D22EBFED76005C8C16 /* SidebarComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3BA2EBFED76005C8C16 /* SidebarComponent.cpp */; };
+		9647A3D32EBFED76005C8C16 /* PluginProcessor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3AA2EBFED76005C8C16 /* PluginProcessor.cpp */; };
+		9647A3D42EBFED76005C8C16 /* PluginEditor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3A82EBFED76005C8C16 /* PluginEditor.cpp */; };
+		9647A3D52EBFED76005C8C16 /* PluginSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3AC2EBFED76005C8C16 /* PluginSettings.cpp */; };
+		9647A3D62EBFED76005C8C16 /* StandaloneWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3BE2EBFED76005C8C16 /* StandaloneWindow.cpp */; };
+		9647A3D72EBFED76005C8C16 /* DetectDevice.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3972EBFED76005C8C16 /* DetectDevice.mm */; };
+		9647A3D82EBFED76005C8C16 /* MidiDeviceComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3A12EBFED76005C8C16 /* MidiDeviceComponent.cpp */; };
+		9647A3D92EBFED76005C8C16 /* PropertiesSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3B22EBFED76005C8C16 /* PropertiesSettings.cpp */; };
+		9647A3DA2EBFED76005C8C16 /* AboutComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3942EBFED76005C8C16 /* AboutComponent.cpp */; };
+		9647A3DB2EBFED76005C8C16 /* Main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A39D2EBFED76005C8C16 /* Main.cpp */; };
+		9647A3DC2EBFED76005C8C16 /* SettingsComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3B52EBFED76005C8C16 /* SettingsComponent.cpp */; };
+		9647A3DD2EBFED76005C8C16 /* MainLayoutComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A39F2EBFED76005C8C16 /* MainLayoutComponent.cpp */; };
+		9647A3DE2EBFED76005C8C16 /* Theme.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3C02EBFED76005C8C16 /* Theme.cpp */; };
+		9647A3DF2EBFED76005C8C16 /* UwynLookAndFeel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3C22EBFED76005C8C16 /* UwynLookAndFeel.cpp */; };
+		9647A3E02EBFED76005C8C16 /* DeviceListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3992EBFED76005C8C16 /* DeviceListener.cpp */; };
+		9647A3E12EBFED76005C8C16 /* PopupColourSelector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3AE2EBFED76005C8C16 /* PopupColourSelector.cpp */; };
+		9647A3E22EBFED76005C8C16 /* MidiDevicesListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3A42EBFED76005C8C16 /* MidiDevicesListener.cpp */; };
+		9647A3E32EBFED76005C8C16 /* PaintedButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3A62EBFED76005C8C16 /* PaintedButton.cpp */; };
+		9647A3E42EBFED76005C8C16 /* ShowMidiApplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3B82EBFED76005C8C16 /* ShowMidiApplication.cpp */; };
+		9647A3E52EBFED76005C8C16 /* PortListComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3B02EBFED76005C8C16 /* PortListComponent.cpp */; };
+		9647A3E62EBFED76005C8C16 /* StandaloneDevicesComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3BC2EBFED76005C8C16 /* StandaloneDevicesComponent.cpp */; };
+		9647A3E72EBFED76005C8C16 /* SidebarComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3BA2EBFED76005C8C16 /* SidebarComponent.cpp */; };
+		9647A3E82EBFED76005C8C16 /* PluginProcessor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3AA2EBFED76005C8C16 /* PluginProcessor.cpp */; };
+		9647A3E92EBFED76005C8C16 /* PluginEditor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3A82EBFED76005C8C16 /* PluginEditor.cpp */; };
+		9647A3EA2EBFED76005C8C16 /* PluginSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3AC2EBFED76005C8C16 /* PluginSettings.cpp */; };
+		9647A3EB2EBFED76005C8C16 /* StandaloneWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3BE2EBFED76005C8C16 /* StandaloneWindow.cpp */; };
+		9647A3EC2EBFED76005C8C16 /* DetectDevice.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3972EBFED76005C8C16 /* DetectDevice.mm */; };
+		9647A3ED2EBFED76005C8C16 /* MidiDeviceComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3A12EBFED76005C8C16 /* MidiDeviceComponent.cpp */; };
+		9647A3EE2EBFED76005C8C16 /* PropertiesSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3B22EBFED76005C8C16 /* PropertiesSettings.cpp */; };
+		9647A3EF2EBFED76005C8C16 /* AboutComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3942EBFED76005C8C16 /* AboutComponent.cpp */; };
+		9647A3F02EBFED76005C8C16 /* Main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A39D2EBFED76005C8C16 /* Main.cpp */; };
+		9647A3F12EBFED76005C8C16 /* SettingsComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3B52EBFED76005C8C16 /* SettingsComponent.cpp */; };
+		9647A3F22EBFED76005C8C16 /* MainLayoutComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A39F2EBFED76005C8C16 /* MainLayoutComponent.cpp */; };
+		9647A3F32EBFED76005C8C16 /* Theme.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3C02EBFED76005C8C16 /* Theme.cpp */; };
+		9647A3F42EBFED76005C8C16 /* UwynLookAndFeel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3C22EBFED76005C8C16 /* UwynLookAndFeel.cpp */; };
+		9647A3F52EBFED76005C8C16 /* DeviceListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3992EBFED76005C8C16 /* DeviceListener.cpp */; };
+		9647A3F62EBFED76005C8C16 /* PopupColourSelector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3AE2EBFED76005C8C16 /* PopupColourSelector.cpp */; };
+		9647A3F72EBFED76005C8C16 /* MidiDevicesListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3A42EBFED76005C8C16 /* MidiDevicesListener.cpp */; };
+		9647A3F82EBFED76005C8C16 /* PaintedButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3A62EBFED76005C8C16 /* PaintedButton.cpp */; };
+		9647A3F92EBFED76005C8C16 /* ShowMidiApplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3B82EBFED76005C8C16 /* ShowMidiApplication.cpp */; };
+		9647A3FA2EBFED76005C8C16 /* PortListComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3B02EBFED76005C8C16 /* PortListComponent.cpp */; };
+		9647A3FB2EBFED76005C8C16 /* StandaloneDevicesComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3BC2EBFED76005C8C16 /* StandaloneDevicesComponent.cpp */; };
+		9647A3FC2EBFED76005C8C16 /* SidebarComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3BA2EBFED76005C8C16 /* SidebarComponent.cpp */; };
+		9647A3FD2EBFED76005C8C16 /* PluginProcessor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3AA2EBFED76005C8C16 /* PluginProcessor.cpp */; };
+		9647A3FE2EBFED76005C8C16 /* PluginEditor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3A82EBFED76005C8C16 /* PluginEditor.cpp */; };
+		9647A3FF2EBFED76005C8C16 /* PluginSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3AC2EBFED76005C8C16 /* PluginSettings.cpp */; };
+		9647A4002EBFED76005C8C16 /* StandaloneWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3BE2EBFED76005C8C16 /* StandaloneWindow.cpp */; };
+		9647A4012EBFED76005C8C16 /* DetectDevice.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3972EBFED76005C8C16 /* DetectDevice.mm */; };
+		9647A4022EBFED76005C8C16 /* MidiDeviceComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3A12EBFED76005C8C16 /* MidiDeviceComponent.cpp */; };
+		9647A4032EBFED76005C8C16 /* PropertiesSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3B22EBFED76005C8C16 /* PropertiesSettings.cpp */; };
+		9647A4042EBFED76005C8C16 /* AboutComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3942EBFED76005C8C16 /* AboutComponent.cpp */; };
+		9647A4052EBFED76005C8C16 /* Main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A39D2EBFED76005C8C16 /* Main.cpp */; };
+		9647A4062EBFED76005C8C16 /* SettingsComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3B52EBFED76005C8C16 /* SettingsComponent.cpp */; };
+		9647A4072EBFED76005C8C16 /* MainLayoutComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A39F2EBFED76005C8C16 /* MainLayoutComponent.cpp */; };
+		9647A4082EBFED76005C8C16 /* Theme.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3C02EBFED76005C8C16 /* Theme.cpp */; };
+		9647A4092EBFED76005C8C16 /* UwynLookAndFeel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3C22EBFED76005C8C16 /* UwynLookAndFeel.cpp */; };
+		9647A40A2EBFED76005C8C16 /* DeviceListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3992EBFED76005C8C16 /* DeviceListener.cpp */; };
+		9647A40B2EBFED76005C8C16 /* PopupColourSelector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3AE2EBFED76005C8C16 /* PopupColourSelector.cpp */; };
+		9647A40C2EBFED76005C8C16 /* MidiDevicesListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3A42EBFED76005C8C16 /* MidiDevicesListener.cpp */; };
+		9647A40D2EBFED76005C8C16 /* PaintedButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3A62EBFED76005C8C16 /* PaintedButton.cpp */; };
+		9647A40E2EBFED76005C8C16 /* ShowMidiApplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3B82EBFED76005C8C16 /* ShowMidiApplication.cpp */; };
+		9647A40F2EBFED76005C8C16 /* PortListComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3B02EBFED76005C8C16 /* PortListComponent.cpp */; };
+		9647A4102EBFED76005C8C16 /* StandaloneDevicesComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3BC2EBFED76005C8C16 /* StandaloneDevicesComponent.cpp */; };
+		9647A4112EBFED76005C8C16 /* SidebarComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3BA2EBFED76005C8C16 /* SidebarComponent.cpp */; };
+		9647A4122EBFED76005C8C16 /* PluginProcessor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3AA2EBFED76005C8C16 /* PluginProcessor.cpp */; };
+		9647A4132EBFED76005C8C16 /* PluginEditor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3A82EBFED76005C8C16 /* PluginEditor.cpp */; };
+		9647A4142EBFED76005C8C16 /* PluginSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3AC2EBFED76005C8C16 /* PluginSettings.cpp */; };
+		9647A4152EBFED76005C8C16 /* StandaloneWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3BE2EBFED76005C8C16 /* StandaloneWindow.cpp */; };
+		9647A4162EBFED76005C8C16 /* DetectDevice.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3972EBFED76005C8C16 /* DetectDevice.mm */; };
+		9647A4172EBFED76005C8C16 /* MidiDeviceComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3A12EBFED76005C8C16 /* MidiDeviceComponent.cpp */; };
+		9647A4182EBFED76005C8C16 /* PropertiesSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3B22EBFED76005C8C16 /* PropertiesSettings.cpp */; };
+		9647A4192EBFED76005C8C16 /* AboutComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3942EBFED76005C8C16 /* AboutComponent.cpp */; };
+		9647A41A2EBFED76005C8C16 /* Main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A39D2EBFED76005C8C16 /* Main.cpp */; };
+		9647A41B2EBFED76005C8C16 /* SettingsComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3B52EBFED76005C8C16 /* SettingsComponent.cpp */; };
+		9647A41C2EBFED76005C8C16 /* MainLayoutComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A39F2EBFED76005C8C16 /* MainLayoutComponent.cpp */; };
+		9647A41D2EBFED76005C8C16 /* Theme.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3C02EBFED76005C8C16 /* Theme.cpp */; };
+		9647A41E2EBFED76005C8C16 /* UwynLookAndFeel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3C22EBFED76005C8C16 /* UwynLookAndFeel.cpp */; };
+		9647A41F2EBFED76005C8C16 /* DeviceListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3992EBFED76005C8C16 /* DeviceListener.cpp */; };
+		9647A4202EBFED76005C8C16 /* PopupColourSelector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3AE2EBFED76005C8C16 /* PopupColourSelector.cpp */; };
+		9647A4212EBFED76005C8C16 /* MidiDevicesListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3A42EBFED76005C8C16 /* MidiDevicesListener.cpp */; };
+		9647A4222EBFED76005C8C16 /* PaintedButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3A62EBFED76005C8C16 /* PaintedButton.cpp */; };
+		9647A4232EBFED76005C8C16 /* ShowMidiApplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3B82EBFED76005C8C16 /* ShowMidiApplication.cpp */; };
+		9647A4242EBFED76005C8C16 /* PortListComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3B02EBFED76005C8C16 /* PortListComponent.cpp */; };
+		9647A4252EBFED76005C8C16 /* StandaloneDevicesComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3BC2EBFED76005C8C16 /* StandaloneDevicesComponent.cpp */; };
+		9647A4262EBFED76005C8C16 /* SidebarComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3BA2EBFED76005C8C16 /* SidebarComponent.cpp */; };
+		9647A4272EBFED76005C8C16 /* PluginProcessor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3AA2EBFED76005C8C16 /* PluginProcessor.cpp */; };
+		9647A4282EBFED76005C8C16 /* PluginEditor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3A82EBFED76005C8C16 /* PluginEditor.cpp */; };
+		9647A4292EBFED76005C8C16 /* PluginSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3AC2EBFED76005C8C16 /* PluginSettings.cpp */; };
+		9647A42A2EBFED76005C8C16 /* StandaloneWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3BE2EBFED76005C8C16 /* StandaloneWindow.cpp */; };
+		9647A42B2EBFED76005C8C16 /* DetectDevice.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3972EBFED76005C8C16 /* DetectDevice.mm */; };
+		9647A42C2EBFED76005C8C16 /* MidiDeviceComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3A12EBFED76005C8C16 /* MidiDeviceComponent.cpp */; };
+		9647A42D2EBFED76005C8C16 /* PropertiesSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3B22EBFED76005C8C16 /* PropertiesSettings.cpp */; };
+		9647A42E2EBFED76005C8C16 /* AboutComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3942EBFED76005C8C16 /* AboutComponent.cpp */; };
+		9647A42F2EBFED76005C8C16 /* Main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A39D2EBFED76005C8C16 /* Main.cpp */; };
+		9647A4302EBFED76005C8C16 /* SettingsComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3B52EBFED76005C8C16 /* SettingsComponent.cpp */; };
+		9647A4312EBFED76005C8C16 /* MainLayoutComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A39F2EBFED76005C8C16 /* MainLayoutComponent.cpp */; };
+		9647A4322EBFED76005C8C16 /* Theme.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3C02EBFED76005C8C16 /* Theme.cpp */; };
+		9647A4332EBFED76005C8C16 /* UwynLookAndFeel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3C22EBFED76005C8C16 /* UwynLookAndFeel.cpp */; };
+		9647A4342EBFED76005C8C16 /* DeviceListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3992EBFED76005C8C16 /* DeviceListener.cpp */; };
+		9647A4352EBFED76005C8C16 /* PopupColourSelector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3AE2EBFED76005C8C16 /* PopupColourSelector.cpp */; };
+		9647A4362EBFED76005C8C16 /* MidiDevicesListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3A42EBFED76005C8C16 /* MidiDevicesListener.cpp */; };
+		9647A4372EBFED76005C8C16 /* PaintedButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3A62EBFED76005C8C16 /* PaintedButton.cpp */; };
+		9647A4382EBFED76005C8C16 /* ShowMidiApplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3B82EBFED76005C8C16 /* ShowMidiApplication.cpp */; };
+		9647A4392EBFED76005C8C16 /* PortListComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3B02EBFED76005C8C16 /* PortListComponent.cpp */; };
+		9647A43A2EBFED76005C8C16 /* StandaloneDevicesComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3BC2EBFED76005C8C16 /* StandaloneDevicesComponent.cpp */; };
+		9647A43B2EBFED76005C8C16 /* SidebarComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3BA2EBFED76005C8C16 /* SidebarComponent.cpp */; };
+		9647A43C2EBFED76005C8C16 /* PluginProcessor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3AA2EBFED76005C8C16 /* PluginProcessor.cpp */; };
+		9647A43D2EBFED76005C8C16 /* PluginEditor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3A82EBFED76005C8C16 /* PluginEditor.cpp */; };
+		9647A43E2EBFED76005C8C16 /* PluginSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3AC2EBFED76005C8C16 /* PluginSettings.cpp */; };
+		9647A43F2EBFED76005C8C16 /* StandaloneWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3BE2EBFED76005C8C16 /* StandaloneWindow.cpp */; };
+		9647A4402EBFED76005C8C16 /* DetectDevice.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3972EBFED76005C8C16 /* DetectDevice.mm */; };
+		9647A4412EBFED76005C8C16 /* MidiDeviceComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3A12EBFED76005C8C16 /* MidiDeviceComponent.cpp */; };
+		9647A4422EBFED76005C8C16 /* PropertiesSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3B22EBFED76005C8C16 /* PropertiesSettings.cpp */; };
+		9647A4432EBFED76005C8C16 /* AboutComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3942EBFED76005C8C16 /* AboutComponent.cpp */; };
+		9647A4442EBFED76005C8C16 /* Main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A39D2EBFED76005C8C16 /* Main.cpp */; };
+		9647A4452EBFED76005C8C16 /* SettingsComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3B52EBFED76005C8C16 /* SettingsComponent.cpp */; };
+		9647A4462EBFED76005C8C16 /* MainLayoutComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A39F2EBFED76005C8C16 /* MainLayoutComponent.cpp */; };
+		9647A4472EBFED76005C8C16 /* Theme.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3C02EBFED76005C8C16 /* Theme.cpp */; };
+		9647A4482EBFED76005C8C16 /* UwynLookAndFeel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3C22EBFED76005C8C16 /* UwynLookAndFeel.cpp */; };
+		9647A4492EBFED76005C8C16 /* DeviceListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3992EBFED76005C8C16 /* DeviceListener.cpp */; };
+		9647A44A2EBFED76005C8C16 /* PopupColourSelector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3AE2EBFED76005C8C16 /* PopupColourSelector.cpp */; };
+		9647A44B2EBFED76005C8C16 /* MidiDevicesListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3A42EBFED76005C8C16 /* MidiDevicesListener.cpp */; };
+		9647A44C2EBFED76005C8C16 /* PaintedButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3A62EBFED76005C8C16 /* PaintedButton.cpp */; };
+		9647A44D2EBFED76005C8C16 /* ShowMidiApplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3B82EBFED76005C8C16 /* ShowMidiApplication.cpp */; };
+		9647A44E2EBFED76005C8C16 /* PortListComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3B02EBFED76005C8C16 /* PortListComponent.cpp */; };
+		9647A44F2EBFED76005C8C16 /* StandaloneDevicesComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3BC2EBFED76005C8C16 /* StandaloneDevicesComponent.cpp */; };
+		9647A4502EBFED76005C8C16 /* SidebarComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3BA2EBFED76005C8C16 /* SidebarComponent.cpp */; };
+		9647A4512EBFED76005C8C16 /* PluginProcessor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3AA2EBFED76005C8C16 /* PluginProcessor.cpp */; };
+		9647A4522EBFED76005C8C16 /* PluginEditor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3A82EBFED76005C8C16 /* PluginEditor.cpp */; };
+		9647A4532EBFED76005C8C16 /* PluginSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3AC2EBFED76005C8C16 /* PluginSettings.cpp */; };
+		9647A4542EBFED76005C8C16 /* StandaloneWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3BE2EBFED76005C8C16 /* StandaloneWindow.cpp */; };
+		9647A4552EBFED76005C8C16 /* DetectDevice.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3972EBFED76005C8C16 /* DetectDevice.mm */; };
+		9647A4562EBFED76005C8C16 /* MidiDeviceComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3A12EBFED76005C8C16 /* MidiDeviceComponent.cpp */; };
+		9647A4572EBFED76005C8C16 /* PropertiesSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3B22EBFED76005C8C16 /* PropertiesSettings.cpp */; };
+		9647A4582EBFED76005C8C16 /* AboutComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3942EBFED76005C8C16 /* AboutComponent.cpp */; };
+		9647A4592EBFED76005C8C16 /* Main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A39D2EBFED76005C8C16 /* Main.cpp */; };
+		9647A45A2EBFED76005C8C16 /* SettingsComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3B52EBFED76005C8C16 /* SettingsComponent.cpp */; };
+		9647A45B2EBFED76005C8C16 /* MainLayoutComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A39F2EBFED76005C8C16 /* MainLayoutComponent.cpp */; };
+		9647A45C2EBFED76005C8C16 /* Theme.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3C02EBFED76005C8C16 /* Theme.cpp */; };
+		9647A45D2EBFED76005C8C16 /* UwynLookAndFeel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3C22EBFED76005C8C16 /* UwynLookAndFeel.cpp */; };
+		9647A45E2EBFED76005C8C16 /* DeviceListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3992EBFED76005C8C16 /* DeviceListener.cpp */; };
+		9647A45F2EBFED76005C8C16 /* PopupColourSelector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3AE2EBFED76005C8C16 /* PopupColourSelector.cpp */; };
+		9647A4602EBFED76005C8C16 /* MidiDevicesListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3A42EBFED76005C8C16 /* MidiDevicesListener.cpp */; };
+		9647A4612EBFED76005C8C16 /* PaintedButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3A62EBFED76005C8C16 /* PaintedButton.cpp */; };
+		9647A4622EBFED76005C8C16 /* ShowMidiApplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3B82EBFED76005C8C16 /* ShowMidiApplication.cpp */; };
+		9647A4632EBFED76005C8C16 /* PortListComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3B02EBFED76005C8C16 /* PortListComponent.cpp */; };
+		9647A4642EBFED76005C8C16 /* StandaloneDevicesComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3BC2EBFED76005C8C16 /* StandaloneDevicesComponent.cpp */; };
+		9647A4652EBFED76005C8C16 /* SidebarComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3BA2EBFED76005C8C16 /* SidebarComponent.cpp */; };
+		9647A4662EBFED76005C8C16 /* PluginProcessor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3AA2EBFED76005C8C16 /* PluginProcessor.cpp */; };
+		9647A4672EBFED76005C8C16 /* PluginEditor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3A82EBFED76005C8C16 /* PluginEditor.cpp */; };
+		9647A4682EBFED76005C8C16 /* PluginSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3AC2EBFED76005C8C16 /* PluginSettings.cpp */; };
+		9647A4692EBFED76005C8C16 /* StandaloneWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3BE2EBFED76005C8C16 /* StandaloneWindow.cpp */; };
+		9647A46A2EBFED76005C8C16 /* DetectDevice.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3972EBFED76005C8C16 /* DetectDevice.mm */; };
+		9647A46B2EBFED76005C8C16 /* MidiDeviceComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3A12EBFED76005C8C16 /* MidiDeviceComponent.cpp */; };
+		9647A46C2EBFED76005C8C16 /* PropertiesSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3B22EBFED76005C8C16 /* PropertiesSettings.cpp */; };
+		9647A46D2EBFED76005C8C16 /* AboutComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3942EBFED76005C8C16 /* AboutComponent.cpp */; };
+		9647A46E2EBFED76005C8C16 /* Main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A39D2EBFED76005C8C16 /* Main.cpp */; };
+		9647A46F2EBFED76005C8C16 /* SettingsComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3B52EBFED76005C8C16 /* SettingsComponent.cpp */; };
+		9647A4702EBFED76005C8C16 /* MainLayoutComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A39F2EBFED76005C8C16 /* MainLayoutComponent.cpp */; };
+		9647A4712EBFED76005C8C16 /* Theme.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3C02EBFED76005C8C16 /* Theme.cpp */; };
+		9647A4722EBFED76005C8C16 /* UwynLookAndFeel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3C22EBFED76005C8C16 /* UwynLookAndFeel.cpp */; };
+		9647A4732EBFED76005C8C16 /* DeviceListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3992EBFED76005C8C16 /* DeviceListener.cpp */; };
+		9647A4742EBFED76005C8C16 /* PopupColourSelector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3AE2EBFED76005C8C16 /* PopupColourSelector.cpp */; };
+		9647A4752EBFED76005C8C16 /* MidiDevicesListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3A42EBFED76005C8C16 /* MidiDevicesListener.cpp */; };
+		9647A4762EBFED76005C8C16 /* PaintedButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3A62EBFED76005C8C16 /* PaintedButton.cpp */; };
+		9647A4772EBFED76005C8C16 /* ShowMidiApplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3B82EBFED76005C8C16 /* ShowMidiApplication.cpp */; };
+		9647A4782EBFED76005C8C16 /* PortListComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3B02EBFED76005C8C16 /* PortListComponent.cpp */; };
+		9647A4792EBFED76005C8C16 /* StandaloneDevicesComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3BC2EBFED76005C8C16 /* StandaloneDevicesComponent.cpp */; };
+		9647A47A2EBFED76005C8C16 /* SidebarComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3BA2EBFED76005C8C16 /* SidebarComponent.cpp */; };
+		9647A47B2EBFED76005C8C16 /* PluginProcessor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3AA2EBFED76005C8C16 /* PluginProcessor.cpp */; };
+		9647A47C2EBFED76005C8C16 /* PluginEditor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3A82EBFED76005C8C16 /* PluginEditor.cpp */; };
+		9647A47D2EBFED76005C8C16 /* PluginSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3AC2EBFED76005C8C16 /* PluginSettings.cpp */; };
+		9647A47E2EBFED76005C8C16 /* StandaloneWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3BE2EBFED76005C8C16 /* StandaloneWindow.cpp */; };
+		9647A47F2EBFED76005C8C16 /* DetectDevice.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3972EBFED76005C8C16 /* DetectDevice.mm */; };
+		9647A4802EBFED76005C8C16 /* MidiDeviceComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9647A3A12EBFED76005C8C16 /* MidiDeviceComponent.cpp */; };
 		96EFF98C2DE10DD500EA03D1 /* RecentFilesMenuTemplate.nib in Resources */ = {isa = PBXBuildFile; fileRef = 2DD84B23B20E655253A3D5F0 /* RecentFilesMenuTemplate.nib */; };
 		96EFF98D2DE10DD500EA03D1 /* Icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = ADFC4D4C01DA373375788BEB /* Icon.icns */; };
 		96EFF98E2DE10DD500EA03D1 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B29AD572554995864888DF39 /* Accelerate.framework */; };
@@ -162,30 +337,21 @@
 		96EFF9E92DE10DD500EA03D1 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D2448D40030D125D995FF67 /* Metal.framework */; };
 		96EFF9EA2DE10DD500EA03D1 /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B14489F06D2BD531D0FFF376 /* MetalKit.framework */; };
 		981E56E3C8A61DD1B81AF8D9 /* include_juce_events.mm in Sources */ = {isa = PBXBuildFile; fileRef = D6879283EC09AA73EFF6A618 /* include_juce_events.mm */; };
-		9DCB056E1D3338694E39AC79 /* PortListComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A5AAF56DB59B890D6C10E36 /* PortListComponent.cpp */; };
 		A1B4D81E02C5B74676DC58E2 /* include_juce_gui_extra.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4F7F78F0807149D173DA0F17 /* include_juce_gui_extra.mm */; };
 		A5C4DD496574040E5EAB6BAA /* include_juce_data_structures.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3F0D10A7839AE2AA878473A4 /* include_juce_data_structures.mm */; };
 		A9BD6F7D2314FCD9431A8E7E /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2879982095AE4FF86B6A2718 /* AudioUnit.framework */; };
 		AC28EC40C013E7EAAFB784DE /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7044C8187C93F03ACA494C1E /* WebKit.framework */; };
-		ADAC1E3AC25FA830E7BCABC5 /* Theme.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3BFBD5BE9998618A28B34775 /* Theme.cpp */; };
-		B1967F966631AED4C407CA3C /* MainLayoutComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8C228AC03A494A8D96BE842 /* MainLayoutComponent.cpp */; };
 		B438451537D48B85DC57EE1E /* Icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = ADFC4D4C01DA373375788BEB /* Icon.icns */; };
 		BC8A5BBF5A94353B9D461FD4 /* include_juce_audio_plugin_client_VST3.mm in Sources */ = {isa = PBXBuildFile; fileRef = AA9CF917ADAB3FD307C81656 /* include_juce_audio_plugin_client_VST3.mm */; };
 		C1FD2601A91E6873B440D961 /* include_juce_gui_basics.mm in Sources */ = {isa = PBXBuildFile; fileRef = E9709AF951C28033427F76C6 /* include_juce_gui_basics.mm */; };
 		C2FD810ECCF40E9DF8DB3B9B /* include_juce_audio_formats.mm in Sources */ = {isa = PBXBuildFile; fileRef = 701B09DB73C2B2CAEB125133 /* include_juce_audio_formats.mm */; };
 		CC33E9B4C1EFB967437EADB0 /* juce_VST3ManifestHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0505D902935EB64B7A368578 /* juce_VST3ManifestHelper.mm */; settings = {COMPILER_FLAGS = "-fobjc-arc -w -DJUCE_SKIP_PRECOMPILED_HEADER"; }; };
-		D15701538FF51592C7A4571C /* SidebarComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D443EB07355FF2F422FE3CBA /* SidebarComponent.cpp */; };
 		D655D2371FA9FE4CF61AB094 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D2448D40030D125D995FF67 /* Metal.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		D782D07214CD0BF4CAEBDD92 /* PluginProcessor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2343ECC7F67FA6AD9E72214D /* PluginProcessor.cpp */; };
 		DC59E80EFE3853979939FEB8 /* include_juce_audio_utils.mm in Sources */ = {isa = PBXBuildFile; fileRef = A9B7C49820B6A87EA4DDB498 /* include_juce_audio_utils.mm */; };
 		DCAC176F3871A0D8EB03850A /* include_juce_audio_plugin_client_AU_2.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6C1F80976C3C2D1E3A6B58E8 /* include_juce_audio_plugin_client_AU_2.mm */; };
 		E0A0C8793D8A3B05FE69B85D /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 140A1D6447C1803B4110D447 /* IOKit.framework */; };
 		E41A5EC6AAC70E19B4327840 /* CoreAudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D836C4B412BD0316C8041F6C /* CoreAudioKit.framework */; };
-		E6BDA9C4B95D6F31D96F1438 /* Main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 60D631FC0F78AC6C198E73A8 /* Main.cpp */; };
 		E82687E6264A1ED71A5100DE /* BinaryData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C38DAA745C7DE61B6AFE626D /* BinaryData.cpp */; };
-		EA3EC9247A3B0EDFBE548619 /* PluginSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9DE540E8FB3BA18341A110B /* PluginSettings.cpp */; };
-		F5781FB5579CABE9AB4B0E3F /* PopupColourSelector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 29CF9CBC7CEAEDD1078E3043 /* PopupColourSelector.cpp */; };
-		FB06D6A6352BFA17ACE5F06A /* SettingsComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 541028D9F36EB1F495DCE2A4 /* SettingsComponent.cpp */; };
 		FB5E155E67C06905C0CA4DB4 /* juce_LV2ManifestHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 241EEF2F8683892FB0A8F242 /* juce_LV2ManifestHelper.cpp */; settings = {COMPILER_FLAGS = "-w -DJUCE_SKIP_PRECOMPILED_HEADER"; }; };
 		FB7D6F530DE3F792A9A8AD3D /* RecentFilesMenuTemplate.nib in Resources */ = {isa = PBXBuildFile; fileRef = 2DD84B23B20E655253A3D5F0 /* RecentFilesMenuTemplate.nib */; };
 /* End PBXBuildFile section */
@@ -322,21 +488,17 @@
 /* Begin PBXCopyFilesBuildPhase section */
 		DB8D825ED3339CFE22077761 /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
 			dstPath = "";
-			dstSubfolderSpec = 13;
+			dstSubfolder = PlugIns;
 			files = (
 				73AA388CD40FCABF9457235A /* ShowMIDI.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		000EE2EE2449DE5643E24358 /* StandaloneWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = StandaloneWindow.cpp; path = ../../Source/StandaloneWindow.cpp; sourceTree = SOURCE_ROOT; };
 		001D7A7EB2B1663EDF01F183 /* juce_audio_formats */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_audio_formats; path = ../../JUCE/modules/juce_audio_formats; sourceTree = SOURCE_ROOT; };
-		031AE9228EBD95C338AB3D48 /* StandaloneDevicesComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = StandaloneDevicesComponent.cpp; path = ../../Source/StandaloneDevicesComponent.cpp; sourceTree = SOURCE_ROOT; };
 		04B573B9A4233581640FCE37 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		0505D902935EB64B7A368578 /* juce_VST3ManifestHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = juce_VST3ManifestHelper.mm; path = ../../JUCE/modules/juce_audio_plugin_client/VST3/juce_VST3ManifestHelper.mm; sourceTree = SOURCE_ROOT; };
 		0894206EE398F6A05B9AD091 /* visible.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; name = visible.svg; path = ../../Assets/visible.svg; sourceTree = SOURCE_ROOT; };
@@ -349,97 +511,110 @@
 		182AF8C31CFEC04FAE225494 /* play.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; name = play.svg; path = ../../Assets/play.svg; sourceTree = SOURCE_ROOT; };
 		18E89D52FCDF34385983843E /* ShowMIDI.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ShowMIDI.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BE35E6D3AE7201579824F93 /* juce_core */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_core; path = ../../JUCE/modules/juce_core; sourceTree = SOURCE_ROOT; };
-		226AF0455917BA09A7EFD367 /* StandaloneWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = StandaloneWindow.h; path = ../../Source/StandaloneWindow.h; sourceTree = SOURCE_ROOT; };
-		2343ECC7F67FA6AD9E72214D /* PluginProcessor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PluginProcessor.cpp; path = ../../Source/PluginProcessor.cpp; sourceTree = SOURCE_ROOT; };
 		241EEF2F8683892FB0A8F242 /* juce_LV2ManifestHelper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_LV2ManifestHelper.cpp; path = ../../JUCE/modules/juce_audio_plugin_client/LV2/juce_LV2ManifestHelper.cpp; sourceTree = SOURCE_ROOT; };
 		26B32E7A0B7D819DE0C5E48C /* BinaryData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = BinaryData.h; path = ../../JuceLibraryCode/BinaryData.h; sourceTree = SOURCE_ROOT; };
 		26BF73BC8B167B724EDDA4EA /* hidden.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; name = hidden.svg; path = ../../Assets/hidden.svg; sourceTree = SOURCE_ROOT; };
 		27ECFCD7203995ED4729E23E /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		2879982095AE4FF86B6A2718 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
-		29CF9CBC7CEAEDD1078E3043 /* PopupColourSelector.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PopupColourSelector.cpp; path = ../../Source/PopupColourSelector.cpp; sourceTree = SOURCE_ROOT; };
 		2A19F019D7CCBB5F7E4E124D /* ShowMIDI.vst */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShowMIDI.vst; sourceTree = BUILT_PRODUCTS_DIR; };
 		2BAD118D5E37BE0B29056893 /* Info-AUv3_AppExtension.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-AUv3_AppExtension.plist"; sourceTree = SOURCE_ROOT; };
 		2C4A1E8364601AAA7BEC47D3 /* include_juce_core.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_core.mm; path = ../../JuceLibraryCode/include_juce_core.mm; sourceTree = SOURCE_ROOT; };
-		2C52E4AAA54DA857A279031C /* UwynLookAndFeel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = UwynLookAndFeel.cpp; path = ../../Source/UwynLookAndFeel.cpp; sourceTree = SOURCE_ROOT; };
 		2DBBE0BDEA350843E5CBE837 /* include_juce_audio_processors_ara.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = include_juce_audio_processors_ara.cpp; path = ../../JuceLibraryCode/include_juce_audio_processors_ara.cpp; sourceTree = SOURCE_ROOT; };
 		2DD84B23B20E655253A3D5F0 /* RecentFilesMenuTemplate.nib */ = {isa = PBXFileReference; lastKnownFileType = file.nib; path = RecentFilesMenuTemplate.nib; sourceTree = SOURCE_ROOT; };
 		2E55A32370FE1B59607DC4EE /* juce_audio_devices */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_audio_devices; path = ../../JUCE/modules/juce_audio_devices; sourceTree = SOURCE_ROOT; };
 		2F0DF01345C74A9223A8FD7E /* JetBrainsMono-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file.ttf; name = "JetBrainsMono-SemiBold.ttf"; path = "../../Fonts/JetBrainsMono-SemiBold.ttf"; sourceTree = SOURCE_ROOT; };
 		3149C8B2F0D4F13D1598BD0B /* appicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = appicon.png; path = ../../Assets/appicon.png; sourceTree = SOURCE_ROOT; };
-		32ACC42799D05A35370A20A4 /* AboutComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AboutComponent.h; path = ../../Source/AboutComponent.h; sourceTree = SOURCE_ROOT; };
 		360F084DCC1FFB986575FC0B /* include_juce_audio_devices.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_audio_devices.mm; path = ../../JuceLibraryCode/include_juce_audio_devices.mm; sourceTree = SOURCE_ROOT; };
 		372E247AE8EA1DCC2438C0C3 /* include_juce_audio_processors_lv2_libs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = include_juce_audio_processors_lv2_libs.cpp; path = ../../JuceLibraryCode/include_juce_audio_processors_lv2_libs.cpp; sourceTree = SOURCE_ROOT; };
-		3A5AAF56DB59B890D6C10E36 /* PortListComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PortListComponent.cpp; path = ../../Source/PortListComponent.cpp; sourceTree = SOURCE_ROOT; };
-		3BFBD5BE9998618A28B34775 /* Theme.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Theme.cpp; path = ../../Source/Theme.cpp; sourceTree = SOURCE_ROOT; };
 		3D3044A570415BC72E611C0F /* juce_graphics */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_graphics; path = ../../JUCE/modules/juce_graphics; sourceTree = SOURCE_ROOT; };
-		3E9019794FA6C7E7AF818E39 /* SettingsComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SettingsComponent.h; path = ../../Source/SettingsComponent.h; sourceTree = SOURCE_ROOT; };
 		3F0D10A7839AE2AA878473A4 /* include_juce_data_structures.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_data_structures.mm; path = ../../JuceLibraryCode/include_juce_data_structures.mm; sourceTree = SOURCE_ROOT; };
 		4087F6C35D5E598616C584CC /* juce_audio_processors */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_audio_processors; path = ../../JUCE/modules/juce_audio_processors; sourceTree = SOURCE_ROOT; };
-		4103274634C632287BD3388D /* MidiDeviceComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MidiDeviceComponent.cpp; path = ../../Source/MidiDeviceComponent.cpp; sourceTree = SOURCE_ROOT; };
-		42FD542643C45D2C5A9A1A35 /* ChannelState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ChannelState.h; path = ../../Source/ChannelState.h; sourceTree = SOURCE_ROOT; };
 		4417A93F2384B0094F9F038F /* DiscRecording.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DiscRecording.framework; path = System/Library/Frameworks/DiscRecording.framework; sourceTree = SDKROOT; };
 		498A30EF336DA83436EF82AA /* juce_audio_plugin_client */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_audio_plugin_client; path = ../../JUCE/modules/juce_audio_plugin_client; sourceTree = SOURCE_ROOT; };
-		4C9A95265A0E0902C0045742 /* PluginProcessor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PluginProcessor.h; path = ../../Source/PluginProcessor.h; sourceTree = SOURCE_ROOT; };
 		4F7F78F0807149D173DA0F17 /* include_juce_gui_extra.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_gui_extra.mm; path = ../../JuceLibraryCode/include_juce_gui_extra.mm; sourceTree = SOURCE_ROOT; };
-		522F4183B107213ABBA95E54 /* MidiDevicesListener.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MidiDevicesListener.cpp; path = ../../Source/MidiDevicesListener.cpp; sourceTree = SOURCE_ROOT; };
-		541028D9F36EB1F495DCE2A4 /* SettingsComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SettingsComponent.cpp; path = ../../Source/SettingsComponent.cpp; sourceTree = SOURCE_ROOT; };
 		5C0EBCDDFA797BE0FCCA8763 /* settings.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; name = settings.svg; path = ../../Assets/settings.svg; sourceTree = SOURCE_ROOT; };
-		5D95151B57AB1801D775A735 /* DeviceListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DeviceListener.h; path = ../../Source/DeviceListener.h; sourceTree = SOURCE_ROOT; };
-		5E8212E205DE721CE55589C7 /* PluginEditor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PluginEditor.cpp; path = ../../Source/PluginEditor.cpp; sourceTree = SOURCE_ROOT; };
-		60846E708E1110E37B5F6334 /* DetectDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DetectDevice.h; path = ../../Source/DetectDevice.h; sourceTree = SOURCE_ROOT; };
-		60D631FC0F78AC6C198E73A8 /* Main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Main.cpp; path = ../../Source/Main.cpp; sourceTree = SOURCE_ROOT; };
 		643B5F105EE95C3831C1513D /* AppConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppConfig.h; path = ../../JuceLibraryCode/AppConfig.h; sourceTree = SOURCE_ROOT; };
-		656E427836DF54D372F75761 /* SettingsManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SettingsManager.h; path = ../../Source/SettingsManager.h; sourceTree = SOURCE_ROOT; };
 		6923FB3D37EB883BBF2ACCBC /* bar.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; name = bar.svg; path = ../../Assets/bar.svg; sourceTree = SOURCE_ROOT; };
 		6942622DD840B2BD0E5810BC /* appicon-ios.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "appicon-ios.png"; path = "../../Assets/appicon-ios.png"; sourceTree = SOURCE_ROOT; };
 		6B3C4CF0B1689E7148204025 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		6BF364219A13FFF4CE164392 /* DeviceManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DeviceManager.h; path = ../../Source/DeviceManager.h; sourceTree = SOURCE_ROOT; };
 		6C1F80976C3C2D1E3A6B58E8 /* include_juce_audio_plugin_client_AU_2.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_audio_plugin_client_AU_2.mm; path = ../../JuceLibraryCode/include_juce_audio_plugin_client_AU_2.mm; sourceTree = SOURCE_ROOT; };
-		6D77D2AB326BCCADE9CE1367 /* PopupColourSelector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PopupColourSelector.h; path = ../../Source/PopupColourSelector.h; sourceTree = SOURCE_ROOT; };
 		6D931ECF33778E1C1138B74D /* Info-Standalone_Plugin.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-Standalone_Plugin.plist"; sourceTree = SOURCE_ROOT; };
 		701B09DB73C2B2CAEB125133 /* include_juce_audio_formats.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_audio_formats.mm; path = ../../JuceLibraryCode/include_juce_audio_formats.mm; sourceTree = SOURCE_ROOT; };
 		7044C8187C93F03ACA494C1E /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		71D389B4B47E269F6BCDF779 /* include_juce_audio_plugin_client_AUv3.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_audio_plugin_client_AUv3.mm; path = ../../JuceLibraryCode/include_juce_audio_plugin_client_AUv3.mm; sourceTree = SOURCE_ROOT; };
-		74BF7243F4B5A5C89B85AE55 /* PluginSettings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PluginSettings.h; path = ../../Source/PluginSettings.h; sourceTree = SOURCE_ROOT; };
-		76626B38FEC33CD26C14D909 /* Settings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Settings.h; path = ../../Source/Settings.h; sourceTree = SOURCE_ROOT; };
 		769B7E29896F9663B5117831 /* libShowMIDI.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libShowMIDI.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		79964C8DCCC8635EB86C5470 /* MidiDeviceInfoComparator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MidiDeviceInfoComparator.h; path = ../../Source/MidiDeviceInfoComparator.h; sourceTree = SOURCE_ROOT; };
-		7C75A0F1DB0EDE6AD443D6B2 /* PropertiesSettings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PropertiesSettings.h; path = ../../Source/PropertiesSettings.h; sourceTree = SOURCE_ROOT; };
 		7D85E9B456D141CE755AB2F5 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
-		80ABD3BDC42C5FE92F7FE42C /* AboutComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = AboutComponent.cpp; path = ../../Source/AboutComponent.cpp; sourceTree = SOURCE_ROOT; };
 		83F9B8D380150F040DC55406 /* Info-VST3.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-VST3.plist"; sourceTree = SOURCE_ROOT; };
 		84B181AE7A602CF26F9C4158 /* include_juce_audio_plugin_client_Standalone.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = include_juce_audio_plugin_client_Standalone.cpp; path = ../../JuceLibraryCode/include_juce_audio_plugin_client_Standalone.cpp; sourceTree = SOURCE_ROOT; };
 		84E4E04D78A7918306B5D5CD /* Info-LV2_Manifest_Helper.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-LV2_Manifest_Helper.plist"; sourceTree = SOURCE_ROOT; };
 		857CDC7485F1A08FEB2ED994 /* close.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; name = close.svg; path = ../../Assets/close.svg; sourceTree = SOURCE_ROOT; };
 		87FB76522871D7D5EE3A2D82 /* reset.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; name = reset.svg; path = ../../Assets/reset.svg; sourceTree = SOURCE_ROOT; };
-		88AAC6E05E409AD97864C094 /* PaintedButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PaintedButton.h; path = ../../Source/PaintedButton.h; sourceTree = SOURCE_ROOT; };
 		8B4BBB72CD42AFE31F80F07A /* collapsed.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; name = collapsed.svg; path = ../../Assets/collapsed.svg; sourceTree = SOURCE_ROOT; };
 		8D2448D40030D125D995FF67 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
 		8EE9203A20244ED3DE950758 /* ShowMIDI */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ShowMIDI; sourceTree = BUILT_PRODUCTS_DIR; };
-		8EEF02F4B9640EBAC9C1B340 /* PropertiesSettings.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PropertiesSettings.cpp; path = ../../Source/PropertiesSettings.cpp; sourceTree = SOURCE_ROOT; };
 		93CD70970B7171379643BDD4 /* juce_data_structures */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_data_structures; path = ../../JUCE/modules/juce_data_structures; sourceTree = SOURCE_ROOT; };
-		9623D0212DE12AAA008CF032 /* DpiScaling.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DpiScaling.h; path = ../../Source/DpiScaling.h; sourceTree = SOURCE_ROOT; };
-		96B0712E2DE15A3B0050384E /* LayoutConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = LayoutConstants.h; path = ../../Source/LayoutConstants.h; sourceTree = SOURCE_ROOT; };
+		9647A3932EBFED76005C8C16 /* AboutComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AboutComponent.h; sourceTree = "<group>"; };
+		9647A3942EBFED76005C8C16 /* AboutComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AboutComponent.cpp; sourceTree = "<group>"; };
+		9647A3952EBFED76005C8C16 /* ChannelState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChannelState.h; sourceTree = "<group>"; };
+		9647A3962EBFED76005C8C16 /* DetectDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DetectDevice.h; sourceTree = "<group>"; };
+		9647A3972EBFED76005C8C16 /* DetectDevice.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = DetectDevice.mm; sourceTree = "<group>"; };
+		9647A3982EBFED76005C8C16 /* DeviceListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DeviceListener.h; sourceTree = "<group>"; };
+		9647A3992EBFED76005C8C16 /* DeviceListener.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DeviceListener.cpp; sourceTree = "<group>"; };
+		9647A39A2EBFED76005C8C16 /* DeviceManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DeviceManager.h; sourceTree = "<group>"; };
+		9647A39B2EBFED76005C8C16 /* DpiScaling.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DpiScaling.h; sourceTree = "<group>"; };
+		9647A39C2EBFED76005C8C16 /* LayoutConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LayoutConstants.h; sourceTree = "<group>"; };
+		9647A39D2EBFED76005C8C16 /* Main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Main.cpp; sourceTree = "<group>"; };
+		9647A39E2EBFED76005C8C16 /* MainLayoutComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainLayoutComponent.h; sourceTree = "<group>"; };
+		9647A39F2EBFED76005C8C16 /* MainLayoutComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MainLayoutComponent.cpp; sourceTree = "<group>"; };
+		9647A3A02EBFED76005C8C16 /* MidiDeviceComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MidiDeviceComponent.h; sourceTree = "<group>"; };
+		9647A3A12EBFED76005C8C16 /* MidiDeviceComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MidiDeviceComponent.cpp; sourceTree = "<group>"; };
+		9647A3A22EBFED76005C8C16 /* MidiDeviceInfoComparator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MidiDeviceInfoComparator.h; sourceTree = "<group>"; };
+		9647A3A32EBFED76005C8C16 /* MidiDevicesListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MidiDevicesListener.h; sourceTree = "<group>"; };
+		9647A3A42EBFED76005C8C16 /* MidiDevicesListener.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MidiDevicesListener.cpp; sourceTree = "<group>"; };
+		9647A3A52EBFED76005C8C16 /* PaintedButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PaintedButton.h; sourceTree = "<group>"; };
+		9647A3A62EBFED76005C8C16 /* PaintedButton.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PaintedButton.cpp; sourceTree = "<group>"; };
+		9647A3A72EBFED76005C8C16 /* PluginEditor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PluginEditor.h; sourceTree = "<group>"; };
+		9647A3A82EBFED76005C8C16 /* PluginEditor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PluginEditor.cpp; sourceTree = "<group>"; };
+		9647A3A92EBFED76005C8C16 /* PluginProcessor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PluginProcessor.h; sourceTree = "<group>"; };
+		9647A3AA2EBFED76005C8C16 /* PluginProcessor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PluginProcessor.cpp; sourceTree = "<group>"; };
+		9647A3AB2EBFED76005C8C16 /* PluginSettings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PluginSettings.h; sourceTree = "<group>"; };
+		9647A3AC2EBFED76005C8C16 /* PluginSettings.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PluginSettings.cpp; sourceTree = "<group>"; };
+		9647A3AD2EBFED76005C8C16 /* PopupColourSelector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PopupColourSelector.h; sourceTree = "<group>"; };
+		9647A3AE2EBFED76005C8C16 /* PopupColourSelector.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PopupColourSelector.cpp; sourceTree = "<group>"; };
+		9647A3AF2EBFED76005C8C16 /* PortListComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PortListComponent.h; sourceTree = "<group>"; };
+		9647A3B02EBFED76005C8C16 /* PortListComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PortListComponent.cpp; sourceTree = "<group>"; };
+		9647A3B12EBFED76005C8C16 /* PropertiesSettings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PropertiesSettings.h; sourceTree = "<group>"; };
+		9647A3B22EBFED76005C8C16 /* PropertiesSettings.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PropertiesSettings.cpp; sourceTree = "<group>"; };
+		9647A3B32EBFED76005C8C16 /* Settings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Settings.h; sourceTree = "<group>"; };
+		9647A3B42EBFED76005C8C16 /* SettingsComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SettingsComponent.h; sourceTree = "<group>"; };
+		9647A3B52EBFED76005C8C16 /* SettingsComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SettingsComponent.cpp; sourceTree = "<group>"; };
+		9647A3B62EBFED76005C8C16 /* SettingsManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SettingsManager.h; sourceTree = "<group>"; };
+		9647A3B72EBFED76005C8C16 /* ShowMidiApplication.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShowMidiApplication.h; sourceTree = "<group>"; };
+		9647A3B82EBFED76005C8C16 /* ShowMidiApplication.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ShowMidiApplication.cpp; sourceTree = "<group>"; };
+		9647A3B92EBFED76005C8C16 /* SidebarComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SidebarComponent.h; sourceTree = "<group>"; };
+		9647A3BA2EBFED76005C8C16 /* SidebarComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SidebarComponent.cpp; sourceTree = "<group>"; };
+		9647A3BB2EBFED76005C8C16 /* StandaloneDevicesComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StandaloneDevicesComponent.h; sourceTree = "<group>"; };
+		9647A3BC2EBFED76005C8C16 /* StandaloneDevicesComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StandaloneDevicesComponent.cpp; sourceTree = "<group>"; };
+		9647A3BD2EBFED76005C8C16 /* StandaloneWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StandaloneWindow.h; sourceTree = "<group>"; };
+		9647A3BE2EBFED76005C8C16 /* StandaloneWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StandaloneWindow.cpp; sourceTree = "<group>"; };
+		9647A3BF2EBFED76005C8C16 /* Theme.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Theme.h; sourceTree = "<group>"; };
+		9647A3C02EBFED76005C8C16 /* Theme.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Theme.cpp; sourceTree = "<group>"; };
+		9647A3C12EBFED76005C8C16 /* UwynLookAndFeel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UwynLookAndFeel.h; sourceTree = "<group>"; };
+		9647A3C22EBFED76005C8C16 /* UwynLookAndFeel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UwynLookAndFeel.cpp; sourceTree = "<group>"; };
 		9A2BC4DA5BB07ED9989A954E /* JuceLV2Defines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = JuceLV2Defines.h; path = ../../JuceLibraryCode/JuceLV2Defines.h; sourceTree = SOURCE_ROOT; };
 		9B35CA1CF4CBD6EC4BF5D6C5 /* juce_lv2_helper */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = juce_lv2_helper; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C19881D8BF4AD54F23350A1 /* include_juce_audio_processors.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_audio_processors.mm; path = ../../JuceLibraryCode/include_juce_audio_processors.mm; sourceTree = SOURCE_ROOT; };
 		9EFDCC15083326D21B41911D /* ShowMIDI.vst3 */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShowMIDI.vst3; sourceTree = BUILT_PRODUCTS_DIR; };
 		A55262498FFC8F4D6A9E3759 /* graph.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; name = graph.svg; path = ../../Assets/graph.svg; sourceTree = SOURCE_ROOT; };
-		A6EC2BC2B40C837D93B251BB /* MidiDeviceComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MidiDeviceComponent.h; path = ../../Source/MidiDeviceComponent.h; sourceTree = SOURCE_ROOT; };
-		A7D51DA4FAC7916144DC9C37 /* PluginEditor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PluginEditor.h; path = ../../Source/PluginEditor.h; sourceTree = SOURCE_ROOT; };
 		A986E2AB7957D33CDA092BB6 /* juce_vst3_helper */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = juce_vst3_helper; sourceTree = BUILT_PRODUCTS_DIR; };
-		A9A1766E8BB177B79C50AE1F /* UwynLookAndFeel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = UwynLookAndFeel.h; path = ../../Source/UwynLookAndFeel.h; sourceTree = SOURCE_ROOT; };
 		A9B7C49820B6A87EA4DDB498 /* include_juce_audio_utils.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_audio_utils.mm; path = ../../JuceLibraryCode/include_juce_audio_utils.mm; sourceTree = SOURCE_ROOT; };
-		A9DE540E8FB3BA18341A110B /* PluginSettings.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PluginSettings.cpp; path = ../../Source/PluginSettings.cpp; sourceTree = SOURCE_ROOT; };
 		AA9CF917ADAB3FD307C81656 /* include_juce_audio_plugin_client_VST3.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_audio_plugin_client_VST3.mm; path = ../../JuceLibraryCode/include_juce_audio_plugin_client_VST3.mm; sourceTree = SOURCE_ROOT; };
 		ADE94E7D50890D80709CA60D /* JetBrainsMono-SemiBoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file.ttf; name = "JetBrainsMono-SemiBoldItalic.ttf"; path = "../../Fonts/JetBrainsMono-SemiBoldItalic.ttf"; sourceTree = SOURCE_ROOT; };
 		ADFC4D4C01DA373375788BEB /* Icon.icns */ = {isa = PBXFileReference; lastKnownFileType = file.icns; path = Icon.icns; sourceTree = SOURCE_ROOT; };
 		B115D12C99CF013E5E832275 /* expanded.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; name = expanded.svg; path = ../../Assets/expanded.svg; sourceTree = SOURCE_ROOT; };
 		B14489F06D2BD531D0FFF376 /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
 		B29AD572554995864888DF39 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
-		B4130BDAEE02831DBC6CE268 /* ShowMidiApplication.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ShowMidiApplication.h; path = ../../Source/ShowMidiApplication.h; sourceTree = SOURCE_ROOT; };
 		B4C89F1AD3A2986B441B3312 /* include_juce_audio_plugin_client_LV2.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_audio_plugin_client_LV2.mm; path = ../../JuceLibraryCode/include_juce_audio_plugin_client_LV2.mm; sourceTree = SOURCE_ROOT; };
-		BB0B90FF903B2C484336242E /* MidiDevicesListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MidiDevicesListener.h; path = ../../Source/MidiDevicesListener.h; sourceTree = SOURCE_ROOT; };
 		C38DAA745C7DE61B6AFE626D /* BinaryData.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = BinaryData.cpp; path = ../../JuceLibraryCode/BinaryData.cpp; sourceTree = SOURCE_ROOT; };
 		C40166D6CB6EE518229C4CB6 /* juce_audio_utils */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_audio_utils; path = ../../JUCE/modules/juce_audio_utils; sourceTree = SOURCE_ROOT; };
 		C5DF18C9C40125F16925A9B1 /* JetBrainsMono-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file.ttf; name = "JetBrainsMono-Regular.ttf"; path = "../../Fonts/JetBrainsMono-Regular.ttf"; sourceTree = SOURCE_ROOT; };
@@ -447,20 +622,13 @@
 		C8040D5610A26310CBE10C1F /* juce_audio_basics */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_audio_basics; path = ../../JUCE/modules/juce_audio_basics; sourceTree = SOURCE_ROOT; };
 		CC0CB51C951EC22BC3619CA3 /* help.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; name = help.svg; path = ../../Assets/help.svg; sourceTree = SOURCE_ROOT; };
 		CD727C73DB120B2DAA3D4DB8 /* Info-VST.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-VST.plist"; sourceTree = SOURCE_ROOT; };
-		CED23DF6C8819A2B22F204F5 /* MainLayoutComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MainLayoutComponent.h; path = ../../Source/MainLayoutComponent.h; sourceTree = SOURCE_ROOT; };
 		D06DECE0E3AB7FD4855DDD55 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		D20AB9796833C8C9C4CC7993 /* Info-VST3_Manifest_Helper.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-VST3_Manifest_Helper.plist"; sourceTree = SOURCE_ROOT; };
 		D37BC26585486939C17BB1A9 /* include_juce_audio_basics.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_audio_basics.mm; path = ../../JuceLibraryCode/include_juce_audio_basics.mm; sourceTree = SOURCE_ROOT; };
-		D443EB07355FF2F422FE3CBA /* SidebarComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SidebarComponent.cpp; path = ../../Source/SidebarComponent.cpp; sourceTree = SOURCE_ROOT; };
 		D6879283EC09AA73EFF6A618 /* include_juce_events.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_events.mm; path = ../../JuceLibraryCode/include_juce_events.mm; sourceTree = SOURCE_ROOT; };
 		D6A712039451004DDBF1B630 /* juce_gui_basics */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_gui_basics; path = ../../JUCE/modules/juce_gui_basics; sourceTree = SOURCE_ROOT; };
-		D7FA88F4A6B12D91E3D015FA /* ShowMidiApplication.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ShowMidiApplication.cpp; path = ../../Source/ShowMidiApplication.cpp; sourceTree = SOURCE_ROOT; };
 		D836C4B412BD0316C8041F6C /* CoreAudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudioKit.framework; path = System/Library/Frameworks/CoreAudioKit.framework; sourceTree = SDKROOT; };
-		D8C228AC03A494A8D96BE842 /* MainLayoutComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MainLayoutComponent.cpp; path = ../../Source/MainLayoutComponent.cpp; sourceTree = SOURCE_ROOT; };
-		DE4481E7DEEF4C83EF0CB6A4 /* SidebarComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SidebarComponent.h; path = ../../Source/SidebarComponent.h; sourceTree = SOURCE_ROOT; };
 		DF270F4F863ED855E7233932 /* include_juce_audio_plugin_client_AU_1.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_audio_plugin_client_AU_1.mm; path = ../../JuceLibraryCode/include_juce_audio_plugin_client_AU_1.mm; sourceTree = SOURCE_ROOT; };
-		E071CD1AE979F36DF9BCBCCF /* PaintedButton.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PaintedButton.cpp; path = ../../Source/PaintedButton.cpp; sourceTree = SOURCE_ROOT; };
-		E13E48BEF4C0D5FDB08D7E2D /* DeviceListener.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = DeviceListener.cpp; path = ../../Source/DeviceListener.cpp; sourceTree = SOURCE_ROOT; };
 		E2D94C2B9DB292C357BD40E7 /* pause.svg */ = {isa = PBXFileReference; lastKnownFileType = file.svg; name = pause.svg; path = ../../Assets/pause.svg; sourceTree = SOURCE_ROOT; };
 		E347DB9365EFCC321B732D33 /* ShowMIDI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShowMIDI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E75F7A443620C328ACD31943 /* ShowMIDI.component */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShowMIDI.component; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -468,20 +636,15 @@
 		EB50501ACBFD373CF21296E5 /* JuceHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = JuceHeader.h; path = ../../JuceLibraryCode/JuceHeader.h; sourceTree = SOURCE_ROOT; };
 		EDEC10EA37F7981EB3DCF23E /* juce_gui_extra */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_gui_extra; path = ../../JUCE/modules/juce_gui_extra; sourceTree = SOURCE_ROOT; };
 		F0823A50303AB62A3DC1CF36 /* include_juce_graphics.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_graphics.mm; path = ../../JuceLibraryCode/include_juce_graphics.mm; sourceTree = SOURCE_ROOT; };
-		F111182164CCAFBE6F456150 /* StandaloneDevicesComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = StandaloneDevicesComponent.h; path = ../../Source/StandaloneDevicesComponent.h; sourceTree = SOURCE_ROOT; };
 		F3350340A2A48DC2084FBD90 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		F510F4D6670ABB994871EC11 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
-		F689C060A21653E6996175AB /* DetectDevice.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = DetectDevice.mm; path = ../../Source/DetectDevice.mm; sourceTree = SOURCE_ROOT; };
-		F799A4A8E205B61277558E4A /* Theme.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Theme.h; path = ../../Source/Theme.h; sourceTree = SOURCE_ROOT; };
 		FCB80B97D323AE09716A5615 /* Info-AU.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-AU.plist"; sourceTree = SOURCE_ROOT; };
 		FDB11BB7D46CFB537BD77891 /* include_juce_audio_plugin_client_ARA.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = include_juce_audio_plugin_client_ARA.cpp; path = ../../JuceLibraryCode/include_juce_audio_plugin_client_ARA.cpp; sourceTree = SOURCE_ROOT; };
-		FFA7C2D0F339BAD04C81CC73 /* PortListComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PortListComponent.h; path = ../../Source/PortListComponent.h; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		1E08B322DE4E38E24A41D66B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				A9BD6F7D2314FCD9431A8E7E /* AudioUnit.framework in Frameworks */,
 				96EFF9AC2DE10DD500EA03D1 /* Accelerate.framework in Frameworks */,
@@ -499,11 +662,9 @@
 				96EFF9B82DE10DD500EA03D1 /* Metal.framework in Frameworks */,
 				96EFF9B92DE10DD500EA03D1 /* MetalKit.framework in Frameworks */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		288C2267CA25FF7DD369A50F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				96EFF9BC2DE10DD500EA03D1 /* AudioUnit.framework in Frameworks */,
 				96EFF9BD2DE10DD500EA03D1 /* Accelerate.framework in Frameworks */,
@@ -522,11 +683,9 @@
 				96EFF9C92DE10DD500EA03D1 /* Metal.framework in Frameworks */,
 				96EFF9CA2DE10DD500EA03D1 /* MetalKit.framework in Frameworks */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		5E4788FA689CF819E575AFC5 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				96EFF98E2DE10DD500EA03D1 /* Accelerate.framework in Frameworks */,
 				96EFF98F2DE10DD500EA03D1 /* AudioToolbox.framework in Frameworks */,
@@ -543,11 +702,9 @@
 				96EFF99A2DE10DD500EA03D1 /* Metal.framework in Frameworks */,
 				96EFF99B2DE10DD500EA03D1 /* MetalKit.framework in Frameworks */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		6E3D23632B0A2D8C8486B4C1 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				96EFF99C2DE10DD500EA03D1 /* Accelerate.framework in Frameworks */,
 				96EFF99D2DE10DD500EA03D1 /* AudioToolbox.framework in Frameworks */,
@@ -564,11 +721,9 @@
 				96EFF9A82DE10DD500EA03D1 /* Metal.framework in Frameworks */,
 				96EFF9A92DE10DD500EA03D1 /* MetalKit.framework in Frameworks */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		88F07B8D5339844E34966C80 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				96EFF9DD2DE10DD500EA03D1 /* Accelerate.framework in Frameworks */,
 				96EFF9DE2DE10DD500EA03D1 /* AudioToolbox.framework in Frameworks */,
@@ -585,11 +740,9 @@
 				96EFF9E92DE10DD500EA03D1 /* Metal.framework in Frameworks */,
 				96EFF9EA2DE10DD500EA03D1 /* MetalKit.framework in Frameworks */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		9EC9FFF3F531CB742EFF7D29 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				1A6345A42B0B251C2F9EFB58 /* Accelerate.framework in Frameworks */,
 				8D65268047C04AB47CA72AB2 /* AudioToolbox.framework in Frameworks */,
@@ -606,11 +759,9 @@
 				D655D2371FA9FE4CF61AB094 /* Metal.framework in Frameworks */,
 				489E608DB817050A5D5D3162 /* MetalKit.framework in Frameworks */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		C47BF8E5CE3891FB609CFF2E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				96EFF9CD2DE10DD500EA03D1 /* Accelerate.framework in Frameworks */,
 				96EFF9CE2DE10DD500EA03D1 /* AudioToolbox.framework in Frameworks */,
@@ -627,7 +778,6 @@
 				96EFF9D92DE10DD500EA03D1 /* Metal.framework in Frameworks */,
 				96EFF9DA2DE10DD500EA03D1 /* MetalKit.framework in Frameworks */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
@@ -637,7 +787,7 @@
 			children = (
 				EB21C47AF1DF9D221BA31E3F /* Assets */,
 				82812218DE15F11217A16E58 /* Fonts */,
-				D2B48182DCDC4E3CAFC2C24A /* Source */,
+				9647A3C32EBFED76005C8C16 /* Source */,
 			);
 			name = ShowMIDI;
 			sourceTree = "<group>";
@@ -723,23 +873,61 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		9623D0222DE12AAA008CF032 /* utility */ = {
+		9647A3C32EBFED76005C8C16 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				9623D0212DE12AAA008CF032 /* DpiScaling.h */,
+				9647A3932EBFED76005C8C16 /* AboutComponent.h */,
+				9647A3942EBFED76005C8C16 /* AboutComponent.cpp */,
+				9647A3952EBFED76005C8C16 /* ChannelState.h */,
+				9647A3962EBFED76005C8C16 /* DetectDevice.h */,
+				9647A3972EBFED76005C8C16 /* DetectDevice.mm */,
+				9647A3982EBFED76005C8C16 /* DeviceListener.h */,
+				9647A3992EBFED76005C8C16 /* DeviceListener.cpp */,
+				9647A39A2EBFED76005C8C16 /* DeviceManager.h */,
+				9647A39B2EBFED76005C8C16 /* DpiScaling.h */,
+				9647A39C2EBFED76005C8C16 /* LayoutConstants.h */,
+				9647A39D2EBFED76005C8C16 /* Main.cpp */,
+				9647A39E2EBFED76005C8C16 /* MainLayoutComponent.h */,
+				9647A39F2EBFED76005C8C16 /* MainLayoutComponent.cpp */,
+				9647A3A02EBFED76005C8C16 /* MidiDeviceComponent.h */,
+				9647A3A12EBFED76005C8C16 /* MidiDeviceComponent.cpp */,
+				9647A3A22EBFED76005C8C16 /* MidiDeviceInfoComparator.h */,
+				9647A3A32EBFED76005C8C16 /* MidiDevicesListener.h */,
+				9647A3A42EBFED76005C8C16 /* MidiDevicesListener.cpp */,
+				9647A3A52EBFED76005C8C16 /* PaintedButton.h */,
+				9647A3A62EBFED76005C8C16 /* PaintedButton.cpp */,
+				9647A3A72EBFED76005C8C16 /* PluginEditor.h */,
+				9647A3A82EBFED76005C8C16 /* PluginEditor.cpp */,
+				9647A3A92EBFED76005C8C16 /* PluginProcessor.h */,
+				9647A3AA2EBFED76005C8C16 /* PluginProcessor.cpp */,
+				9647A3AB2EBFED76005C8C16 /* PluginSettings.h */,
+				9647A3AC2EBFED76005C8C16 /* PluginSettings.cpp */,
+				9647A3AD2EBFED76005C8C16 /* PopupColourSelector.h */,
+				9647A3AE2EBFED76005C8C16 /* PopupColourSelector.cpp */,
+				9647A3AF2EBFED76005C8C16 /* PortListComponent.h */,
+				9647A3B02EBFED76005C8C16 /* PortListComponent.cpp */,
+				9647A3B12EBFED76005C8C16 /* PropertiesSettings.h */,
+				9647A3B22EBFED76005C8C16 /* PropertiesSettings.cpp */,
+				9647A3B32EBFED76005C8C16 /* Settings.h */,
+				9647A3B42EBFED76005C8C16 /* SettingsComponent.h */,
+				9647A3B52EBFED76005C8C16 /* SettingsComponent.cpp */,
+				9647A3B62EBFED76005C8C16 /* SettingsManager.h */,
+				9647A3B72EBFED76005C8C16 /* ShowMidiApplication.h */,
+				9647A3B82EBFED76005C8C16 /* ShowMidiApplication.cpp */,
+				9647A3B92EBFED76005C8C16 /* SidebarComponent.h */,
+				9647A3BA2EBFED76005C8C16 /* SidebarComponent.cpp */,
+				9647A3BB2EBFED76005C8C16 /* StandaloneDevicesComponent.h */,
+				9647A3BC2EBFED76005C8C16 /* StandaloneDevicesComponent.cpp */,
+				9647A3BD2EBFED76005C8C16 /* StandaloneWindow.h */,
+				9647A3BE2EBFED76005C8C16 /* StandaloneWindow.cpp */,
+				9647A3BF2EBFED76005C8C16 /* Theme.h */,
+				9647A3C02EBFED76005C8C16 /* Theme.cpp */,
+				9647A3C12EBFED76005C8C16 /* UwynLookAndFeel.h */,
+				9647A3C22EBFED76005C8C16 /* UwynLookAndFeel.cpp */,
 			);
-			name = utility;
-			path = "";
-			sourceTree = "<group>";
-		};
-		96B0712F2DE15A3B0050384E /* layout */ = {
-			isa = PBXGroup;
-			children = (
-				96B0712E2DE15A3B0050384E /* LayoutConstants.h */,
-			);
-			name = layout;
-			path = "";
-			sourceTree = "<group>";
+			name = Source;
+			path = /Users/peternicholls/Dev/ShowMIDI.git/Source;
+			sourceTree = "<absolute>";
 		};
 		96EFF9EB2DE10DD500EA03D1 /* Recovered References */ = {
 			isa = PBXGroup;
@@ -782,61 +970,6 @@
 				1152C1391B39202DBB86C3B9 /* JucePluginDefines.h */,
 			);
 			name = "JUCE Library Code";
-			sourceTree = "<group>";
-		};
-		D2B48182DCDC4E3CAFC2C24A /* Source */ = {
-			isa = PBXGroup;
-			children = (
-				96B0712F2DE15A3B0050384E /* layout */,
-				9623D0222DE12AAA008CF032 /* utility */,
-				80ABD3BDC42C5FE92F7FE42C /* AboutComponent.cpp */,
-				32ACC42799D05A35370A20A4 /* AboutComponent.h */,
-				42FD542643C45D2C5A9A1A35 /* ChannelState.h */,
-				60846E708E1110E37B5F6334 /* DetectDevice.h */,
-				F689C060A21653E6996175AB /* DetectDevice.mm */,
-				E13E48BEF4C0D5FDB08D7E2D /* DeviceListener.cpp */,
-				5D95151B57AB1801D775A735 /* DeviceListener.h */,
-				6BF364219A13FFF4CE164392 /* DeviceManager.h */,
-				60D631FC0F78AC6C198E73A8 /* Main.cpp */,
-				D8C228AC03A494A8D96BE842 /* MainLayoutComponent.cpp */,
-				CED23DF6C8819A2B22F204F5 /* MainLayoutComponent.h */,
-				4103274634C632287BD3388D /* MidiDeviceComponent.cpp */,
-				A6EC2BC2B40C837D93B251BB /* MidiDeviceComponent.h */,
-				79964C8DCCC8635EB86C5470 /* MidiDeviceInfoComparator.h */,
-				522F4183B107213ABBA95E54 /* MidiDevicesListener.cpp */,
-				BB0B90FF903B2C484336242E /* MidiDevicesListener.h */,
-				E071CD1AE979F36DF9BCBCCF /* PaintedButton.cpp */,
-				88AAC6E05E409AD97864C094 /* PaintedButton.h */,
-				5E8212E205DE721CE55589C7 /* PluginEditor.cpp */,
-				A7D51DA4FAC7916144DC9C37 /* PluginEditor.h */,
-				2343ECC7F67FA6AD9E72214D /* PluginProcessor.cpp */,
-				4C9A95265A0E0902C0045742 /* PluginProcessor.h */,
-				A9DE540E8FB3BA18341A110B /* PluginSettings.cpp */,
-				74BF7243F4B5A5C89B85AE55 /* PluginSettings.h */,
-				29CF9CBC7CEAEDD1078E3043 /* PopupColourSelector.cpp */,
-				6D77D2AB326BCCADE9CE1367 /* PopupColourSelector.h */,
-				3A5AAF56DB59B890D6C10E36 /* PortListComponent.cpp */,
-				FFA7C2D0F339BAD04C81CC73 /* PortListComponent.h */,
-				8EEF02F4B9640EBAC9C1B340 /* PropertiesSettings.cpp */,
-				7C75A0F1DB0EDE6AD443D6B2 /* PropertiesSettings.h */,
-				76626B38FEC33CD26C14D909 /* Settings.h */,
-				541028D9F36EB1F495DCE2A4 /* SettingsComponent.cpp */,
-				3E9019794FA6C7E7AF818E39 /* SettingsComponent.h */,
-				656E427836DF54D372F75761 /* SettingsManager.h */,
-				D7FA88F4A6B12D91E3D015FA /* ShowMidiApplication.cpp */,
-				B4130BDAEE02831DBC6CE268 /* ShowMidiApplication.h */,
-				D443EB07355FF2F422FE3CBA /* SidebarComponent.cpp */,
-				DE4481E7DEEF4C83EF0CB6A4 /* SidebarComponent.h */,
-				031AE9228EBD95C338AB3D48 /* StandaloneDevicesComponent.cpp */,
-				F111182164CCAFBE6F456150 /* StandaloneDevicesComponent.h */,
-				000EE2EE2449DE5643E24358 /* StandaloneWindow.cpp */,
-				226AF0455917BA09A7EFD367 /* StandaloneWindow.h */,
-				3BFBD5BE9998618A28B34775 /* Theme.cpp */,
-				F799A4A8E205B61277558E4A /* Theme.h */,
-				2C52E4AAA54DA857A279031C /* UwynLookAndFeel.cpp */,
-				A9A1766E8BB177B79C50AE1F /* UwynLookAndFeel.h */,
-			);
-			name = Source;
 			sourceTree = "<group>";
 		};
 		EB21C47AF1DF9D221BA31E3F /* Assets */ = {
@@ -972,8 +1105,6 @@
 			);
 			buildRules = (
 			);
-			dependencies = (
-			);
 			name = "ShowMIDI - VST3 Manifest Helper";
 			productName = ShowMIDI;
 			productReference = A986E2AB7957D33CDA092BB6 /* juce_vst3_helper */;
@@ -1024,8 +1155,6 @@
 			);
 			buildRules = (
 			);
-			dependencies = (
-			);
 			name = "ShowMIDI - LV2 Manifest Helper";
 			productName = ShowMIDI;
 			productReference = 9B35CA1CF4CBD6EC4BF5D6C5 /* juce_lv2_helper */;
@@ -1039,8 +1168,6 @@
 			);
 			buildRules = (
 			);
-			dependencies = (
-			);
 			name = "ShowMIDI - Shared Code";
 			productName = ShowMIDI;
 			productReference = 769B7E29896F9663B5117831 /* libShowMIDI.a */;
@@ -1053,8 +1180,8 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 1630;
-				ORGANIZATIONNAME = Uwyn;
+				LastUpgradeCheck = 2610;
+				ORGANIZATIONNAME = "Peter Nicholls";
 				TargetAttributes = {
 					084392EE76BCAA7AE36C8A8A = {
 						SystemCapabilities = {
@@ -1290,7 +1417,6 @@
 				};
 			};
 			buildConfigurationList = C18AB6C70C292DE4CAD7CEBE /* Build configuration list for PBXProject "showmidi" */;
-			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -1298,6 +1424,7 @@
 				Base,
 			);
 			mainGroup = 67BF622F4E830DE7C469111D /* Source */;
+			preferredProjectObjectVersion = 90;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -1318,57 +1445,45 @@
 /* Begin PBXResourcesBuildPhase section */
 		56B29A3B11E61087CB547F25 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				FB7D6F530DE3F792A9A8AD3D /* RecentFilesMenuTemplate.nib in Resources */,
 				B438451537D48B85DC57EE1E /* Icon.icns in Resources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		927ECA052CAAD7E8C783AE94 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				96EFF9DB2DE10DD500EA03D1 /* RecentFilesMenuTemplate.nib in Resources */,
 				96EFF9DC2DE10DD500EA03D1 /* Icon.icns in Resources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		96B829C03FC3EBA4DF802A99 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				96EFF9AA2DE10DD500EA03D1 /* RecentFilesMenuTemplate.nib in Resources */,
 				96EFF9AB2DE10DD500EA03D1 /* Icon.icns in Resources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		BE0ED65A425F8F12552FBC68 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				96EFF98C2DE10DD500EA03D1 /* RecentFilesMenuTemplate.nib in Resources */,
 				96EFF98D2DE10DD500EA03D1 /* Icon.icns in Resources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		CF96D6B8DF6E7E8B1978ACAD /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				96EFF9CB2DE10DD500EA03D1 /* RecentFilesMenuTemplate.nib in Resources */,
 				96EFF9CC2DE10DD500EA03D1 /* Icon.icns in Resources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		E2129D314CFD36DAA2BBF646 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				96EFF9BA2DE10DD500EA03D1 /* RecentFilesMenuTemplate.nib in Resources */,
 				96EFF9BB2DE10DD500EA03D1 /* Icon.icns in Resources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
@@ -1376,186 +1491,391 @@
 		179663BE0B841C0F859B75DF /* Plugin Copy Step */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
 			name = "Plugin Copy Step";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -euo pipefail\n\nif [[ \"${CONFIGURATION}\" == \"Release\" ]]; then\n  destinationPlugin=\"${HOME}/Library/Audio/Plug-Ins/Components//$(basename \"${TARGET_BUILD_DIR}/${FULL_PRODUCT_NAME}\")\"\n  echo Running rm -rf \\\"${destinationPlugin}\\\"\n  rm -rf \"${destinationPlugin}\"\n  echo Running ditto \\\"${TARGET_BUILD_DIR}/${FULL_PRODUCT_NAME}\\\" \\\"${destinationPlugin}\\\"\n  ditto \"${TARGET_BUILD_DIR}/${FULL_PRODUCT_NAME}\" \"${destinationPlugin}\"\n\n  if [[ -n \"${EXPANDED_CODE_SIGN_IDENTITY-}\" ]]; then\n    if [[ -n \"${CODE_SIGN_ENTITLEMENTS-}\" ]]; then\n      entitlementsArg=(--entitlements \"${CODE_SIGN_ENTITLEMENTS}\")\n    fi\n\n    echo Signing Identity: \\\"${EXPANDED_CODE_SIGN_IDENTITY_NAME}\\\"\n    echo Running codesign --verbose=4 --force --sign \\\"${EXPANDED_CODE_SIGN_IDENTITY}\\\" ${entitlementsArg[*]-} ${OTHER_CODE_SIGN_FLAGS-} \\\"${HOME}/Library/Audio/Plug-Ins/Components//${FULL_PRODUCT_NAME}\\\"\n    codesign --verbose=4 --force --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" ${entitlementsArg[*]-} ${OTHER_CODE_SIGN_FLAGS-} \"${HOME}/Library/Audio/Plug-Ins/Components//${FULL_PRODUCT_NAME}\"\n  fi\nfi\n";
+			shellScript = (
+				"set -euo pipefail",
+				"",
+				"if [[ \"${CONFIGURATION}\" == \"Release\" ]]; then",
+				"  destinationPlugin=\"${HOME}/Library/Audio/Plug-Ins/Components//$(basename \"${TARGET_BUILD_DIR}/${FULL_PRODUCT_NAME}\")\"",
+				"  echo Running rm -rf \\\"${destinationPlugin}\\\"",
+				"  rm -rf \"${destinationPlugin}\"",
+				"  echo Running ditto \\\"${TARGET_BUILD_DIR}/${FULL_PRODUCT_NAME}\\\" \\\"${destinationPlugin}\\\"",
+				"  ditto \"${TARGET_BUILD_DIR}/${FULL_PRODUCT_NAME}\" \"${destinationPlugin}\"",
+				"",
+				"  if [[ -n \"${EXPANDED_CODE_SIGN_IDENTITY-}\" ]]; then",
+				"    if [[ -n \"${CODE_SIGN_ENTITLEMENTS-}\" ]]; then",
+				"      entitlementsArg=(--entitlements \"${CODE_SIGN_ENTITLEMENTS}\")",
+				"    fi",
+				"",
+				"    echo Signing Identity: \\\"${EXPANDED_CODE_SIGN_IDENTITY_NAME}\\\"",
+				"    echo Running codesign --verbose=4 --force --sign \\\"${EXPANDED_CODE_SIGN_IDENTITY}\\\" ${entitlementsArg[*]-} ${OTHER_CODE_SIGN_FLAGS-} \\\"${HOME}/Library/Audio/Plug-Ins/Components//${FULL_PRODUCT_NAME}\\\"",
+				"    codesign --verbose=4 --force --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" ${entitlementsArg[*]-} ${OTHER_CODE_SIGN_FLAGS-} \"${HOME}/Library/Audio/Plug-Ins/Components//${FULL_PRODUCT_NAME}\"",
+				"  fi",
+				"fi",
+				"",
+			);
 		};
 		26D36FF70A2D047D48BE3793 /* Update manifest */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
 			name = "Update manifest";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -euo pipefail\n\necho Running codesign --verbose=4 --force --sign - \\\"${CONFIGURATION_BUILD_DIR}/${FULL_PRODUCT_NAME}\\\"\ncodesign --verbose=4 --force --sign - \"${CONFIGURATION_BUILD_DIR}/${FULL_PRODUCT_NAME}\"\n\necho Running \\\"${CONFIGURATION_BUILD_DIR}/../juce_lv2_helper\\\" \\\"${CONFIGURATION_BUILD_DIR}/${FULL_PRODUCT_NAME}\\\"\n\"${CONFIGURATION_BUILD_DIR}/../juce_lv2_helper\" \"${CONFIGURATION_BUILD_DIR}/${FULL_PRODUCT_NAME}\"\n";
+			shellScript = (
+				"set -euo pipefail",
+				"",
+				"echo Running codesign --verbose=4 --force --sign - \\\"${CONFIGURATION_BUILD_DIR}/${FULL_PRODUCT_NAME}\\\"",
+				"codesign --verbose=4 --force --sign - \"${CONFIGURATION_BUILD_DIR}/${FULL_PRODUCT_NAME}\"",
+				"",
+				"echo Running \\\"${CONFIGURATION_BUILD_DIR}/../juce_lv2_helper\\\" \\\"${CONFIGURATION_BUILD_DIR}/${FULL_PRODUCT_NAME}\\\"",
+				"\"${CONFIGURATION_BUILD_DIR}/../juce_lv2_helper\" \"${CONFIGURATION_BUILD_DIR}/${FULL_PRODUCT_NAME}\"",
+				"",
+			);
 		};
 		394AF900165D3BA8FDE46B2C /* Plugin Copy Step */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
 			name = "Plugin Copy Step";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -euo pipefail\n\nif [[ \"${CONFIGURATION}\" == \"Release\" ]]; then\n  destinationPlugin=\"${HOME}/Library/Audio/Plug-Ins/VST//$(basename \"${TARGET_BUILD_DIR}/${FULL_PRODUCT_NAME}\")\"\n  echo Running rm -rf \\\"${destinationPlugin}\\\"\n  rm -rf \"${destinationPlugin}\"\n  echo Running ditto \\\"${TARGET_BUILD_DIR}/${FULL_PRODUCT_NAME}\\\" \\\"${destinationPlugin}\\\"\n  ditto \"${TARGET_BUILD_DIR}/${FULL_PRODUCT_NAME}\" \"${destinationPlugin}\"\n\n  if [[ -n \"${EXPANDED_CODE_SIGN_IDENTITY-}\" ]]; then\n    if [[ -n \"${CODE_SIGN_ENTITLEMENTS-}\" ]]; then\n      entitlementsArg=(--entitlements \"${CODE_SIGN_ENTITLEMENTS}\")\n    fi\n\n    echo Signing Identity: \\\"${EXPANDED_CODE_SIGN_IDENTITY_NAME}\\\"\n    echo Running codesign --verbose=4 --force --sign \\\"${EXPANDED_CODE_SIGN_IDENTITY}\\\" ${entitlementsArg[*]-} ${OTHER_CODE_SIGN_FLAGS-} \\\"${HOME}/Library/Audio/Plug-Ins/VST//${FULL_PRODUCT_NAME}\\\"\n    codesign --verbose=4 --force --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" ${entitlementsArg[*]-} ${OTHER_CODE_SIGN_FLAGS-} \"${HOME}/Library/Audio/Plug-Ins/VST//${FULL_PRODUCT_NAME}\"\n  fi\nfi\n";
+			shellScript = (
+				"set -euo pipefail",
+				"",
+				"if [[ \"${CONFIGURATION}\" == \"Release\" ]]; then",
+				"  destinationPlugin=\"${HOME}/Library/Audio/Plug-Ins/VST//$(basename \"${TARGET_BUILD_DIR}/${FULL_PRODUCT_NAME}\")\"",
+				"  echo Running rm -rf \\\"${destinationPlugin}\\\"",
+				"  rm -rf \"${destinationPlugin}\"",
+				"  echo Running ditto \\\"${TARGET_BUILD_DIR}/${FULL_PRODUCT_NAME}\\\" \\\"${destinationPlugin}\\\"",
+				"  ditto \"${TARGET_BUILD_DIR}/${FULL_PRODUCT_NAME}\" \"${destinationPlugin}\"",
+				"",
+				"  if [[ -n \"${EXPANDED_CODE_SIGN_IDENTITY-}\" ]]; then",
+				"    if [[ -n \"${CODE_SIGN_ENTITLEMENTS-}\" ]]; then",
+				"      entitlementsArg=(--entitlements \"${CODE_SIGN_ENTITLEMENTS}\")",
+				"    fi",
+				"",
+				"    echo Signing Identity: \\\"${EXPANDED_CODE_SIGN_IDENTITY_NAME}\\\"",
+				"    echo Running codesign --verbose=4 --force --sign \\\"${EXPANDED_CODE_SIGN_IDENTITY}\\\" ${entitlementsArg[*]-} ${OTHER_CODE_SIGN_FLAGS-} \\\"${HOME}/Library/Audio/Plug-Ins/VST//${FULL_PRODUCT_NAME}\\\"",
+				"    codesign --verbose=4 --force --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" ${entitlementsArg[*]-} ${OTHER_CODE_SIGN_FLAGS-} \"${HOME}/Library/Audio/Plug-Ins/VST//${FULL_PRODUCT_NAME}\"",
+				"  fi",
+				"fi",
+				"",
+			);
 		};
 		7163A4F90EB8F432C950488E /* Update manifest */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
 			name = "Update manifest";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -euo pipefail\n\necho Running codesign --verbose=4 --force --sign - \\\"${CONFIGURATION_BUILD_DIR}/${FULL_PRODUCT_NAME}\\\"\ncodesign --verbose=4 --force --sign - \"${CONFIGURATION_BUILD_DIR}/${FULL_PRODUCT_NAME}\"\n\necho Running \\\"${CONFIGURATION_BUILD_DIR}/juce_vst3_helper\\\" -create -version \\\"1.0.1\\\" -path \\\"${CONFIGURATION_BUILD_DIR}/${FULL_PRODUCT_NAME}\\\" -output \\\"${CONFIGURATION_BUILD_DIR}/${FULL_PRODUCT_NAME}/Contents/Resources/moduleinfo.json\\\"\n\"${CONFIGURATION_BUILD_DIR}/juce_vst3_helper\" -create -version \"1.0.1\" -path \"${CONFIGURATION_BUILD_DIR}/${FULL_PRODUCT_NAME}\" -output \"${CONFIGURATION_BUILD_DIR}/${FULL_PRODUCT_NAME}/Contents/Resources/moduleinfo.json\"\n";
+			shellScript = (
+				"set -euo pipefail",
+				"",
+				"echo Running codesign --verbose=4 --force --sign - \\\"${CONFIGURATION_BUILD_DIR}/${FULL_PRODUCT_NAME}\\\"",
+				"codesign --verbose=4 --force --sign - \"${CONFIGURATION_BUILD_DIR}/${FULL_PRODUCT_NAME}\"",
+				"",
+				"echo Running \\\"${CONFIGURATION_BUILD_DIR}/juce_vst3_helper\\\" -create -version \\\"1.0.1\\\" -path \\\"${CONFIGURATION_BUILD_DIR}/${FULL_PRODUCT_NAME}\\\" -output \\\"${CONFIGURATION_BUILD_DIR}/${FULL_PRODUCT_NAME}/Contents/Resources/moduleinfo.json\\\"",
+				"\"${CONFIGURATION_BUILD_DIR}/juce_vst3_helper\" -create -version \"1.0.1\" -path \"${CONFIGURATION_BUILD_DIR}/${FULL_PRODUCT_NAME}\" -output \"${CONFIGURATION_BUILD_DIR}/${FULL_PRODUCT_NAME}/Contents/Resources/moduleinfo.json\"",
+				"",
+			);
 		};
 		9F691FA44BB8EBE19E15D543 /* Plugin Copy Step */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
 			name = "Plugin Copy Step";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -euo pipefail\n\nif [[ \"${CONFIGURATION}\" == \"Release\" ]]; then\n  destinationPlugin=\"${HOME}/Library/Audio/Plug-Ins/LV2//$(basename \"${TARGET_BUILD_DIR}\")\"\n  echo Running rm -rf \\\"${destinationPlugin}\\\"\n  rm -rf \"${destinationPlugin}\"\n  echo Running ditto \\\"${TARGET_BUILD_DIR}\\\" \\\"${destinationPlugin}\\\"\n  ditto \"${TARGET_BUILD_DIR}\" \"${destinationPlugin}\"\n\n  if [[ -n \"${EXPANDED_CODE_SIGN_IDENTITY-}\" ]]; then\n    if [[ -n \"${CODE_SIGN_ENTITLEMENTS-}\" ]]; then\n      entitlementsArg=(--entitlements \"${CODE_SIGN_ENTITLEMENTS}\")\n    fi\n\n    echo Signing Identity: \\\"${EXPANDED_CODE_SIGN_IDENTITY_NAME}\\\"\n    echo Running codesign --verbose=4 --force --sign \\\"${EXPANDED_CODE_SIGN_IDENTITY}\\\" ${entitlementsArg[*]-} ${OTHER_CODE_SIGN_FLAGS-} \\\"${HOME}/Library/Audio/Plug-Ins/LV2//$(basename \\\"${TARGET_BUILD_DIR}\\\")/${FULL_PRODUCT_NAME}\\\"\n    codesign --verbose=4 --force --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" ${entitlementsArg[*]-} ${OTHER_CODE_SIGN_FLAGS-} \"${HOME}/Library/Audio/Plug-Ins/LV2//$(basename \"${TARGET_BUILD_DIR}\")/${FULL_PRODUCT_NAME}\"\n  fi\nfi\n";
+			shellScript = (
+				"set -euo pipefail",
+				"",
+				"if [[ \"${CONFIGURATION}\" == \"Release\" ]]; then",
+				"  destinationPlugin=\"${HOME}/Library/Audio/Plug-Ins/LV2//$(basename \"${TARGET_BUILD_DIR}\")\"",
+				"  echo Running rm -rf \\\"${destinationPlugin}\\\"",
+				"  rm -rf \"${destinationPlugin}\"",
+				"  echo Running ditto \\\"${TARGET_BUILD_DIR}\\\" \\\"${destinationPlugin}\\\"",
+				"  ditto \"${TARGET_BUILD_DIR}\" \"${destinationPlugin}\"",
+				"",
+				"  if [[ -n \"${EXPANDED_CODE_SIGN_IDENTITY-}\" ]]; then",
+				"    if [[ -n \"${CODE_SIGN_ENTITLEMENTS-}\" ]]; then",
+				"      entitlementsArg=(--entitlements \"${CODE_SIGN_ENTITLEMENTS}\")",
+				"    fi",
+				"",
+				"    echo Signing Identity: \\\"${EXPANDED_CODE_SIGN_IDENTITY_NAME}\\\"",
+				"    echo Running codesign --verbose=4 --force --sign \\\"${EXPANDED_CODE_SIGN_IDENTITY}\\\" ${entitlementsArg[*]-} ${OTHER_CODE_SIGN_FLAGS-} \\\"${HOME}/Library/Audio/Plug-Ins/LV2//$(basename \\\"${TARGET_BUILD_DIR}\\\")/${FULL_PRODUCT_NAME}\\\"",
+				"    codesign --verbose=4 --force --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" ${entitlementsArg[*]-} ${OTHER_CODE_SIGN_FLAGS-} \"${HOME}/Library/Audio/Plug-Ins/LV2//$(basename \"${TARGET_BUILD_DIR}\")/${FULL_PRODUCT_NAME}\"",
+				"  fi",
+				"fi",
+				"",
+			);
 		};
 		FA737632CBC55EC28F2F2EA8 /* Plugin Copy Step */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
 			name = "Plugin Copy Step";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -euo pipefail\n\nif [[ \"${CONFIGURATION}\" == \"Release\" ]]; then\n  destinationPlugin=\"${HOME}/Library/Audio/Plug-Ins/VST3//$(basename \"${TARGET_BUILD_DIR}/${FULL_PRODUCT_NAME}\")\"\n  echo Running rm -rf \\\"${destinationPlugin}\\\"\n  rm -rf \"${destinationPlugin}\"\n  echo Running ditto \\\"${TARGET_BUILD_DIR}/${FULL_PRODUCT_NAME}\\\" \\\"${destinationPlugin}\\\"\n  ditto \"${TARGET_BUILD_DIR}/${FULL_PRODUCT_NAME}\" \"${destinationPlugin}\"\n\n  if [[ -n \"${EXPANDED_CODE_SIGN_IDENTITY-}\" ]]; then\n    if [[ -n \"${CODE_SIGN_ENTITLEMENTS-}\" ]]; then\n      entitlementsArg=(--entitlements \"${CODE_SIGN_ENTITLEMENTS}\")\n    fi\n\n    echo Signing Identity: \\\"${EXPANDED_CODE_SIGN_IDENTITY_NAME}\\\"\n    echo Running codesign --verbose=4 --force --sign \\\"${EXPANDED_CODE_SIGN_IDENTITY}\\\" ${entitlementsArg[*]-} ${OTHER_CODE_SIGN_FLAGS-} \\\"${HOME}/Library/Audio/Plug-Ins/VST3//${FULL_PRODUCT_NAME}\\\"\n    codesign --verbose=4 --force --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" ${entitlementsArg[*]-} ${OTHER_CODE_SIGN_FLAGS-} \"${HOME}/Library/Audio/Plug-Ins/VST3//${FULL_PRODUCT_NAME}\"\n  fi\nfi\n";
+			shellScript = (
+				"set -euo pipefail",
+				"",
+				"if [[ \"${CONFIGURATION}\" == \"Release\" ]]; then",
+				"  destinationPlugin=\"${HOME}/Library/Audio/Plug-Ins/VST3//$(basename \"${TARGET_BUILD_DIR}/${FULL_PRODUCT_NAME}\")\"",
+				"  echo Running rm -rf \\\"${destinationPlugin}\\\"",
+				"  rm -rf \"${destinationPlugin}\"",
+				"  echo Running ditto \\\"${TARGET_BUILD_DIR}/${FULL_PRODUCT_NAME}\\\" \\\"${destinationPlugin}\\\"",
+				"  ditto \"${TARGET_BUILD_DIR}/${FULL_PRODUCT_NAME}\" \"${destinationPlugin}\"",
+				"",
+				"  if [[ -n \"${EXPANDED_CODE_SIGN_IDENTITY-}\" ]]; then",
+				"    if [[ -n \"${CODE_SIGN_ENTITLEMENTS-}\" ]]; then",
+				"      entitlementsArg=(--entitlements \"${CODE_SIGN_ENTITLEMENTS}\")",
+				"    fi",
+				"",
+				"    echo Signing Identity: \\\"${EXPANDED_CODE_SIGN_IDENTITY_NAME}\\\"",
+				"    echo Running codesign --verbose=4 --force --sign \\\"${EXPANDED_CODE_SIGN_IDENTITY}\\\" ${entitlementsArg[*]-} ${OTHER_CODE_SIGN_FLAGS-} \\\"${HOME}/Library/Audio/Plug-Ins/VST3//${FULL_PRODUCT_NAME}\\\"",
+				"    codesign --verbose=4 --force --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" ${entitlementsArg[*]-} ${OTHER_CODE_SIGN_FLAGS-} \"${HOME}/Library/Audio/Plug-Ins/VST3//${FULL_PRODUCT_NAME}\"",
+				"  fi",
+				"fi",
+				"",
+			);
 		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		0ADB2E4C7F2FAEB3A719352F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				5962D30695731C6915E8E280 /* include_juce_audio_plugin_client_AU_1.mm in Sources */,
 				DCAC176F3871A0D8EB03850A /* include_juce_audio_plugin_client_AU_2.mm in Sources */,
+				9647A4422EBFED76005C8C16 /* PropertiesSettings.cpp in Sources */,
+				9647A4432EBFED76005C8C16 /* AboutComponent.cpp in Sources */,
+				9647A4442EBFED76005C8C16 /* Main.cpp in Sources */,
+				9647A4452EBFED76005C8C16 /* SettingsComponent.cpp in Sources */,
+				9647A4462EBFED76005C8C16 /* MainLayoutComponent.cpp in Sources */,
+				9647A4472EBFED76005C8C16 /* Theme.cpp in Sources */,
+				9647A4482EBFED76005C8C16 /* UwynLookAndFeel.cpp in Sources */,
+				9647A4492EBFED76005C8C16 /* DeviceListener.cpp in Sources */,
+				9647A44A2EBFED76005C8C16 /* PopupColourSelector.cpp in Sources */,
+				9647A44B2EBFED76005C8C16 /* MidiDevicesListener.cpp in Sources */,
+				9647A44C2EBFED76005C8C16 /* PaintedButton.cpp in Sources */,
+				9647A44D2EBFED76005C8C16 /* ShowMidiApplication.cpp in Sources */,
+				9647A44E2EBFED76005C8C16 /* PortListComponent.cpp in Sources */,
+				9647A44F2EBFED76005C8C16 /* StandaloneDevicesComponent.cpp in Sources */,
+				9647A4502EBFED76005C8C16 /* SidebarComponent.cpp in Sources */,
+				9647A4512EBFED76005C8C16 /* PluginProcessor.cpp in Sources */,
+				9647A4522EBFED76005C8C16 /* PluginEditor.cpp in Sources */,
+				9647A4532EBFED76005C8C16 /* PluginSettings.cpp in Sources */,
+				9647A4542EBFED76005C8C16 /* StandaloneWindow.cpp in Sources */,
+				9647A4552EBFED76005C8C16 /* DetectDevice.mm in Sources */,
+				9647A4562EBFED76005C8C16 /* MidiDeviceComponent.cpp in Sources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		111ADCFD8DE6B9B37B75D9C5 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
+				9647A4032EBFED76005C8C16 /* PropertiesSettings.cpp in Sources */,
+				9647A4042EBFED76005C8C16 /* AboutComponent.cpp in Sources */,
+				9647A4052EBFED76005C8C16 /* Main.cpp in Sources */,
+				9647A4062EBFED76005C8C16 /* SettingsComponent.cpp in Sources */,
+				9647A4072EBFED76005C8C16 /* MainLayoutComponent.cpp in Sources */,
+				9647A4082EBFED76005C8C16 /* Theme.cpp in Sources */,
+				9647A4092EBFED76005C8C16 /* UwynLookAndFeel.cpp in Sources */,
+				9647A40A2EBFED76005C8C16 /* DeviceListener.cpp in Sources */,
+				9647A40B2EBFED76005C8C16 /* PopupColourSelector.cpp in Sources */,
+				9647A40C2EBFED76005C8C16 /* MidiDevicesListener.cpp in Sources */,
+				9647A40D2EBFED76005C8C16 /* PaintedButton.cpp in Sources */,
+				9647A40E2EBFED76005C8C16 /* ShowMidiApplication.cpp in Sources */,
+				9647A40F2EBFED76005C8C16 /* PortListComponent.cpp in Sources */,
+				9647A4102EBFED76005C8C16 /* StandaloneDevicesComponent.cpp in Sources */,
+				9647A4112EBFED76005C8C16 /* SidebarComponent.cpp in Sources */,
+				9647A4122EBFED76005C8C16 /* PluginProcessor.cpp in Sources */,
+				9647A4132EBFED76005C8C16 /* PluginEditor.cpp in Sources */,
+				9647A4142EBFED76005C8C16 /* PluginSettings.cpp in Sources */,
+				9647A4152EBFED76005C8C16 /* StandaloneWindow.cpp in Sources */,
+				9647A4162EBFED76005C8C16 /* DetectDevice.mm in Sources */,
+				9647A4172EBFED76005C8C16 /* MidiDeviceComponent.cpp in Sources */,
 				FB5E155E67C06905C0CA4DB4 /* juce_LV2ManifestHelper.cpp in Sources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		240D100E4DF133B924DA85DC /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
+				9647A4182EBFED76005C8C16 /* PropertiesSettings.cpp in Sources */,
+				9647A4192EBFED76005C8C16 /* AboutComponent.cpp in Sources */,
+				9647A41A2EBFED76005C8C16 /* Main.cpp in Sources */,
+				9647A41B2EBFED76005C8C16 /* SettingsComponent.cpp in Sources */,
+				9647A41C2EBFED76005C8C16 /* MainLayoutComponent.cpp in Sources */,
+				9647A41D2EBFED76005C8C16 /* Theme.cpp in Sources */,
+				9647A41E2EBFED76005C8C16 /* UwynLookAndFeel.cpp in Sources */,
+				9647A41F2EBFED76005C8C16 /* DeviceListener.cpp in Sources */,
+				9647A4202EBFED76005C8C16 /* PopupColourSelector.cpp in Sources */,
+				9647A4212EBFED76005C8C16 /* MidiDevicesListener.cpp in Sources */,
+				9647A4222EBFED76005C8C16 /* PaintedButton.cpp in Sources */,
+				9647A4232EBFED76005C8C16 /* ShowMidiApplication.cpp in Sources */,
+				9647A4242EBFED76005C8C16 /* PortListComponent.cpp in Sources */,
+				9647A4252EBFED76005C8C16 /* StandaloneDevicesComponent.cpp in Sources */,
+				9647A4262EBFED76005C8C16 /* SidebarComponent.cpp in Sources */,
+				9647A4272EBFED76005C8C16 /* PluginProcessor.cpp in Sources */,
+				9647A4282EBFED76005C8C16 /* PluginEditor.cpp in Sources */,
+				9647A4292EBFED76005C8C16 /* PluginSettings.cpp in Sources */,
+				9647A42A2EBFED76005C8C16 /* StandaloneWindow.cpp in Sources */,
+				9647A42B2EBFED76005C8C16 /* DetectDevice.mm in Sources */,
+				9647A42C2EBFED76005C8C16 /* MidiDeviceComponent.cpp in Sources */,
 				20E9664F68D15072D1364568 /* include_juce_audio_plugin_client_VST2.mm in Sources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		2EB90CC9BC933AB2AF3D3D97 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
+				9647A46C2EBFED76005C8C16 /* PropertiesSettings.cpp in Sources */,
+				9647A46D2EBFED76005C8C16 /* AboutComponent.cpp in Sources */,
+				9647A46E2EBFED76005C8C16 /* Main.cpp in Sources */,
+				9647A46F2EBFED76005C8C16 /* SettingsComponent.cpp in Sources */,
+				9647A4702EBFED76005C8C16 /* MainLayoutComponent.cpp in Sources */,
+				9647A4712EBFED76005C8C16 /* Theme.cpp in Sources */,
+				9647A4722EBFED76005C8C16 /* UwynLookAndFeel.cpp in Sources */,
+				9647A4732EBFED76005C8C16 /* DeviceListener.cpp in Sources */,
+				9647A4742EBFED76005C8C16 /* PopupColourSelector.cpp in Sources */,
+				9647A4752EBFED76005C8C16 /* MidiDevicesListener.cpp in Sources */,
+				9647A4762EBFED76005C8C16 /* PaintedButton.cpp in Sources */,
+				9647A4772EBFED76005C8C16 /* ShowMidiApplication.cpp in Sources */,
+				9647A4782EBFED76005C8C16 /* PortListComponent.cpp in Sources */,
+				9647A4792EBFED76005C8C16 /* StandaloneDevicesComponent.cpp in Sources */,
+				9647A47A2EBFED76005C8C16 /* SidebarComponent.cpp in Sources */,
+				9647A47B2EBFED76005C8C16 /* PluginProcessor.cpp in Sources */,
+				9647A47C2EBFED76005C8C16 /* PluginEditor.cpp in Sources */,
+				9647A47D2EBFED76005C8C16 /* PluginSettings.cpp in Sources */,
+				9647A47E2EBFED76005C8C16 /* StandaloneWindow.cpp in Sources */,
+				9647A47F2EBFED76005C8C16 /* DetectDevice.mm in Sources */,
+				9647A4802EBFED76005C8C16 /* MidiDeviceComponent.cpp in Sources */,
 				BC8A5BBF5A94353B9D461FD4 /* include_juce_audio_plugin_client_VST3.mm in Sources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		5A13FC96772E158B836ED4C8 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
+				9647A3D92EBFED76005C8C16 /* PropertiesSettings.cpp in Sources */,
+				9647A3DA2EBFED76005C8C16 /* AboutComponent.cpp in Sources */,
+				9647A3DB2EBFED76005C8C16 /* Main.cpp in Sources */,
+				9647A3DC2EBFED76005C8C16 /* SettingsComponent.cpp in Sources */,
+				9647A3DD2EBFED76005C8C16 /* MainLayoutComponent.cpp in Sources */,
+				9647A3DE2EBFED76005C8C16 /* Theme.cpp in Sources */,
+				9647A3DF2EBFED76005C8C16 /* UwynLookAndFeel.cpp in Sources */,
+				9647A3E02EBFED76005C8C16 /* DeviceListener.cpp in Sources */,
+				9647A3E12EBFED76005C8C16 /* PopupColourSelector.cpp in Sources */,
+				9647A3E22EBFED76005C8C16 /* MidiDevicesListener.cpp in Sources */,
+				9647A3E32EBFED76005C8C16 /* PaintedButton.cpp in Sources */,
+				9647A3E42EBFED76005C8C16 /* ShowMidiApplication.cpp in Sources */,
+				9647A3E52EBFED76005C8C16 /* PortListComponent.cpp in Sources */,
+				9647A3E62EBFED76005C8C16 /* StandaloneDevicesComponent.cpp in Sources */,
+				9647A3E72EBFED76005C8C16 /* SidebarComponent.cpp in Sources */,
+				9647A3E82EBFED76005C8C16 /* PluginProcessor.cpp in Sources */,
+				9647A3E92EBFED76005C8C16 /* PluginEditor.cpp in Sources */,
+				9647A3EA2EBFED76005C8C16 /* PluginSettings.cpp in Sources */,
+				9647A3EB2EBFED76005C8C16 /* StandaloneWindow.cpp in Sources */,
+				9647A3EC2EBFED76005C8C16 /* DetectDevice.mm in Sources */,
+				9647A3ED2EBFED76005C8C16 /* MidiDeviceComponent.cpp in Sources */,
 				CC33E9B4C1EFB967437EADB0 /* juce_VST3ManifestHelper.mm in Sources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		AA83790ECFA14DD4500A3EA3 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
+				9647A3C42EBFED76005C8C16 /* PropertiesSettings.cpp in Sources */,
+				9647A3C52EBFED76005C8C16 /* AboutComponent.cpp in Sources */,
+				9647A3C62EBFED76005C8C16 /* Main.cpp in Sources */,
+				9647A3C72EBFED76005C8C16 /* SettingsComponent.cpp in Sources */,
+				9647A3C82EBFED76005C8C16 /* MainLayoutComponent.cpp in Sources */,
+				9647A3C92EBFED76005C8C16 /* Theme.cpp in Sources */,
+				9647A3CA2EBFED76005C8C16 /* UwynLookAndFeel.cpp in Sources */,
+				9647A3CB2EBFED76005C8C16 /* DeviceListener.cpp in Sources */,
+				9647A3CC2EBFED76005C8C16 /* PopupColourSelector.cpp in Sources */,
+				9647A3CD2EBFED76005C8C16 /* MidiDevicesListener.cpp in Sources */,
+				9647A3CE2EBFED76005C8C16 /* PaintedButton.cpp in Sources */,
+				9647A3CF2EBFED76005C8C16 /* ShowMidiApplication.cpp in Sources */,
+				9647A3D02EBFED76005C8C16 /* PortListComponent.cpp in Sources */,
+				9647A3D12EBFED76005C8C16 /* StandaloneDevicesComponent.cpp in Sources */,
+				9647A3D22EBFED76005C8C16 /* SidebarComponent.cpp in Sources */,
+				9647A3D32EBFED76005C8C16 /* PluginProcessor.cpp in Sources */,
+				9647A3D42EBFED76005C8C16 /* PluginEditor.cpp in Sources */,
+				9647A3D52EBFED76005C8C16 /* PluginSettings.cpp in Sources */,
+				9647A3D62EBFED76005C8C16 /* StandaloneWindow.cpp in Sources */,
+				9647A3D72EBFED76005C8C16 /* DetectDevice.mm in Sources */,
+				9647A3D82EBFED76005C8C16 /* MidiDeviceComponent.cpp in Sources */,
 				210807DB7EBC56D34A5390FD /* include_juce_audio_plugin_client_LV2.mm in Sources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		B921166C1086266FDB5086B0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
+				9647A42D2EBFED76005C8C16 /* PropertiesSettings.cpp in Sources */,
+				9647A42E2EBFED76005C8C16 /* AboutComponent.cpp in Sources */,
+				9647A42F2EBFED76005C8C16 /* Main.cpp in Sources */,
+				9647A4302EBFED76005C8C16 /* SettingsComponent.cpp in Sources */,
+				9647A4312EBFED76005C8C16 /* MainLayoutComponent.cpp in Sources */,
+				9647A4322EBFED76005C8C16 /* Theme.cpp in Sources */,
+				9647A4332EBFED76005C8C16 /* UwynLookAndFeel.cpp in Sources */,
+				9647A4342EBFED76005C8C16 /* DeviceListener.cpp in Sources */,
+				9647A4352EBFED76005C8C16 /* PopupColourSelector.cpp in Sources */,
+				9647A4362EBFED76005C8C16 /* MidiDevicesListener.cpp in Sources */,
+				9647A4372EBFED76005C8C16 /* PaintedButton.cpp in Sources */,
+				9647A4382EBFED76005C8C16 /* ShowMidiApplication.cpp in Sources */,
+				9647A4392EBFED76005C8C16 /* PortListComponent.cpp in Sources */,
+				9647A43A2EBFED76005C8C16 /* StandaloneDevicesComponent.cpp in Sources */,
+				9647A43B2EBFED76005C8C16 /* SidebarComponent.cpp in Sources */,
+				9647A43C2EBFED76005C8C16 /* PluginProcessor.cpp in Sources */,
+				9647A43D2EBFED76005C8C16 /* PluginEditor.cpp in Sources */,
+				9647A43E2EBFED76005C8C16 /* PluginSettings.cpp in Sources */,
+				9647A43F2EBFED76005C8C16 /* StandaloneWindow.cpp in Sources */,
+				9647A4402EBFED76005C8C16 /* DetectDevice.mm in Sources */,
+				9647A4412EBFED76005C8C16 /* MidiDeviceComponent.cpp in Sources */,
 				712D7573805649AE18AE3A5A /* include_juce_audio_plugin_client_AUv3.mm in Sources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		DBC363A21EA1AA33BFC8F1CF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
+				9647A4572EBFED76005C8C16 /* PropertiesSettings.cpp in Sources */,
+				9647A4582EBFED76005C8C16 /* AboutComponent.cpp in Sources */,
+				9647A4592EBFED76005C8C16 /* Main.cpp in Sources */,
+				9647A45A2EBFED76005C8C16 /* SettingsComponent.cpp in Sources */,
+				9647A45B2EBFED76005C8C16 /* MainLayoutComponent.cpp in Sources */,
+				9647A45C2EBFED76005C8C16 /* Theme.cpp in Sources */,
+				9647A45D2EBFED76005C8C16 /* UwynLookAndFeel.cpp in Sources */,
+				9647A45E2EBFED76005C8C16 /* DeviceListener.cpp in Sources */,
+				9647A45F2EBFED76005C8C16 /* PopupColourSelector.cpp in Sources */,
+				9647A4602EBFED76005C8C16 /* MidiDevicesListener.cpp in Sources */,
+				9647A4612EBFED76005C8C16 /* PaintedButton.cpp in Sources */,
+				9647A4622EBFED76005C8C16 /* ShowMidiApplication.cpp in Sources */,
+				9647A4632EBFED76005C8C16 /* PortListComponent.cpp in Sources */,
+				9647A4642EBFED76005C8C16 /* StandaloneDevicesComponent.cpp in Sources */,
+				9647A4652EBFED76005C8C16 /* SidebarComponent.cpp in Sources */,
+				9647A4662EBFED76005C8C16 /* PluginProcessor.cpp in Sources */,
+				9647A4672EBFED76005C8C16 /* PluginEditor.cpp in Sources */,
+				9647A4682EBFED76005C8C16 /* PluginSettings.cpp in Sources */,
+				9647A4692EBFED76005C8C16 /* StandaloneWindow.cpp in Sources */,
+				9647A46A2EBFED76005C8C16 /* DetectDevice.mm in Sources */,
+				9647A46B2EBFED76005C8C16 /* MidiDeviceComponent.cpp in Sources */,
 				685FBF167055939EFF0BC772 /* include_juce_audio_plugin_client_Standalone.cpp in Sources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		DE4356F59D3F807E1843491D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
-				49275756321FDB8F7DC25D31 /* AboutComponent.cpp in Sources */,
-				7F2788CCDD71A91C6E237A99 /* DetectDevice.mm in Sources */,
-				2A3F29A4BBBF0F020B51B865 /* DeviceListener.cpp in Sources */,
-				E6BDA9C4B95D6F31D96F1438 /* Main.cpp in Sources */,
-				B1967F966631AED4C407CA3C /* MainLayoutComponent.cpp in Sources */,
-				74A90D33B60D692AC29558AE /* MidiDeviceComponent.cpp in Sources */,
-				2BE136F9771FD33F0C7A6703 /* MidiDevicesListener.cpp in Sources */,
-				0E37862E84E50AAAF3B36BFF /* PaintedButton.cpp in Sources */,
-				69B90CBB6BB21353587D2A97 /* PluginEditor.cpp in Sources */,
-				D782D07214CD0BF4CAEBDD92 /* PluginProcessor.cpp in Sources */,
-				EA3EC9247A3B0EDFBE548619 /* PluginSettings.cpp in Sources */,
-				F5781FB5579CABE9AB4B0E3F /* PopupColourSelector.cpp in Sources */,
-				9DCB056E1D3338694E39AC79 /* PortListComponent.cpp in Sources */,
-				353E878E2C4866F8F792ABB8 /* PropertiesSettings.cpp in Sources */,
-				FB06D6A6352BFA17ACE5F06A /* SettingsComponent.cpp in Sources */,
-				18BC972C6047CC27A142C2B8 /* ShowMidiApplication.cpp in Sources */,
-				D15701538FF51592C7A4571C /* SidebarComponent.cpp in Sources */,
-				7D4A2F5E55D62DA0F82EFDED /* StandaloneDevicesComponent.cpp in Sources */,
-				930F21046AF312901BFB919B /* StandaloneWindow.cpp in Sources */,
-				ADAC1E3AC25FA830E7BCABC5 /* Theme.cpp in Sources */,
-				1D70697182F531840C93CE15 /* UwynLookAndFeel.cpp in Sources */,
+				9647A3EE2EBFED76005C8C16 /* PropertiesSettings.cpp in Sources */,
+				9647A3EF2EBFED76005C8C16 /* AboutComponent.cpp in Sources */,
+				9647A3F02EBFED76005C8C16 /* Main.cpp in Sources */,
+				9647A3F12EBFED76005C8C16 /* SettingsComponent.cpp in Sources */,
+				9647A3F22EBFED76005C8C16 /* MainLayoutComponent.cpp in Sources */,
+				9647A3F32EBFED76005C8C16 /* Theme.cpp in Sources */,
+				9647A3F42EBFED76005C8C16 /* UwynLookAndFeel.cpp in Sources */,
+				9647A3F52EBFED76005C8C16 /* DeviceListener.cpp in Sources */,
+				9647A3F62EBFED76005C8C16 /* PopupColourSelector.cpp in Sources */,
+				9647A3F72EBFED76005C8C16 /* MidiDevicesListener.cpp in Sources */,
+				9647A3F82EBFED76005C8C16 /* PaintedButton.cpp in Sources */,
+				9647A3F92EBFED76005C8C16 /* ShowMidiApplication.cpp in Sources */,
+				9647A3FA2EBFED76005C8C16 /* PortListComponent.cpp in Sources */,
+				9647A3FB2EBFED76005C8C16 /* StandaloneDevicesComponent.cpp in Sources */,
+				9647A3FC2EBFED76005C8C16 /* SidebarComponent.cpp in Sources */,
+				9647A3FD2EBFED76005C8C16 /* PluginProcessor.cpp in Sources */,
+				9647A3FE2EBFED76005C8C16 /* PluginEditor.cpp in Sources */,
+				9647A3FF2EBFED76005C8C16 /* PluginSettings.cpp in Sources */,
+				9647A4002EBFED76005C8C16 /* StandaloneWindow.cpp in Sources */,
+				9647A4012EBFED76005C8C16 /* DetectDevice.mm in Sources */,
+				9647A4022EBFED76005C8C16 /* MidiDeviceComponent.cpp in Sources */,
 				E82687E6264A1ED71A5100DE /* BinaryData.cpp in Sources */,
 				89257B225513F271B67C2D83 /* include_juce_audio_basics.mm in Sources */,
 				7D3662134D4D4F29CE66FD36 /* include_juce_audio_devices.mm in Sources */,
@@ -1572,7 +1892,6 @@
 				C1FD2601A91E6873B440D961 /* include_juce_gui_basics.mm in Sources */,
 				A1B4D81E02C5B74676DC58E2 /* include_juce_gui_extra.mm in Sources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
@@ -1670,7 +1989,7 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		085CD1C55B6E0BE8A6873CEB /* Debug */ = {
+		085CD1C55B6E0BE8A6873CEB /* Debug configuration for PBXNativeTarget "ShowMIDI - VST3" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
@@ -1683,7 +2002,9 @@
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = P52T58LHR7;
+				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SELECTED_FILES = readwrite;
 				EXCLUDED_ARCHS = i386;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_FAST_MATH = YES;
@@ -1743,7 +2064,7 @@
 			};
 			name = Debug;
 		};
-		08D2B499B9C465C90FBEC24F /* Release */ = {
+		08D2B499B9C465C90FBEC24F /* Release configuration for PBXNativeTarget "ShowMIDI - Standalone Plugin" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
@@ -1757,7 +2078,9 @@
 				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/build/$(CONFIGURATION)";
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = P52T58LHR7;
+				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SELECTED_FILES = readwrite;
 				EXCLUDED_ARCHS = i386;
 				GCC_FAST_MATH = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
@@ -1812,7 +2135,7 @@
 			};
 			name = Release;
 		};
-		1D14946A79C8262ABA962DB4 /* Debug */ = {
+		1D14946A79C8262ABA962DB4 /* Debug configuration for PBXProject "showmidi" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -1866,13 +2189,14 @@
 				);
 				PRODUCT_NAME = ShowMIDI;
 				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				"USER_HEADER_SEARCH_PATHS[arch=*]" = "$(SRCROOT)/Source/**\n";
 				WARNING_CFLAGS = "-Wreorder";
 				ZERO_LINK = NO;
 			};
 			name = Debug;
 		};
-		327D116399ECE51B96B1CEF7 /* Debug */ = {
+		327D116399ECE51B96B1CEF7 /* Debug configuration for PBXNativeTarget "ShowMIDI - AU" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
@@ -1885,7 +2209,9 @@
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = P52T58LHR7;
+				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SELECTED_FILES = readwrite;
 				EXCLUDED_ARCHS = i386;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_FAST_MATH = YES;
@@ -1946,7 +2272,7 @@
 			};
 			name = Debug;
 		};
-		4185DDC3276C61F82E0448EA /* Release */ = {
+		4185DDC3276C61F82E0448EA /* Release configuration for PBXNativeTarget "ShowMIDI - AUv3 AppExtension" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
@@ -1959,7 +2285,9 @@
 				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/build/$(CONFIGURATION)";
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = P52T58LHR7;
+				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SELECTED_FILES = readwrite;
 				EXCLUDED_ARCHS = i386;
 				GCC_FAST_MATH = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
@@ -2014,7 +2342,7 @@
 			};
 			name = Release;
 		};
-		4394F9B73D04715C2A2F4D54 /* Debug */ = {
+		4394F9B73D04715C2A2F4D54 /* Debug configuration for PBXNativeTarget "ShowMIDI - VST3 Manifest Helper" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
@@ -2079,7 +2407,7 @@
 			};
 			name = Debug;
 		};
-		4C6829C7692DE06E4CC6D481 /* Release */ = {
+		4C6829C7692DE06E4CC6D481 /* Release configuration for PBXProject "showmidi" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -2132,13 +2460,14 @@
 				);
 				PRODUCT_NAME = ShowMIDI;
 				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				"USER_HEADER_SEARCH_PATHS[arch=*]" = "$(SRCROOT)/Source/**\n";
 				WARNING_CFLAGS = "-Wreorder";
 				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
-		50FC50AC37F90690B7D7F947 /* Release */ = {
+		50FC50AC37F90690B7D7F947 /* Release configuration for PBXNativeTarget "ShowMIDI - VST" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
@@ -2150,7 +2479,9 @@
 				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/build/$(CONFIGURATION)";
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = P52T58LHR7;
+				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SELECTED_FILES = readwrite;
 				EXCLUDED_ARCHS = i386;
 				GCC_FAST_MATH = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
@@ -2212,7 +2543,7 @@
 			};
 			name = Release;
 		};
-		616864DFB0927C2A14B72725 /* Debug */ = {
+		616864DFB0927C2A14B72725 /* Debug configuration for PBXNativeTarget "ShowMIDI - Shared Code" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
@@ -2225,7 +2556,9 @@
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = AGZT8GVS7G;
+				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SELECTED_FILES = readwrite;
 				EXCLUDED_ARCHS = i386;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_FAST_MATH = YES;
@@ -2279,7 +2612,7 @@
 			};
 			name = Debug;
 		};
-		6F171EAE96910147E8030DDA /* Release */ = {
+		6F171EAE96910147E8030DDA /* Release configuration for PBXNativeTarget "ShowMIDI - LV2 Plugin" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
@@ -2291,7 +2624,9 @@
 				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/build/$(CONFIGURATION)/ShowMIDI.lv2";
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = P52T58LHR7;
+				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SELECTED_FILES = readwrite;
 				EXCLUDED_ARCHS = i386;
 				GCC_FAST_MATH = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
@@ -2358,7 +2693,7 @@
 			};
 			name = Release;
 		};
-		76F2268E52B9732A9DB7AF87 /* Debug */ = {
+		76F2268E52B9732A9DB7AF87 /* Debug configuration for PBXAggregateTarget "ShowMIDI - All" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DEAD_CODE_STRIPPING = YES;
@@ -2367,7 +2702,7 @@
 			};
 			name = Debug;
 		};
-		87F9516CAFB6BCB60EE06108 /* Release */ = {
+		87F9516CAFB6BCB60EE06108 /* Release configuration for PBXNativeTarget "ShowMIDI - VST3" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
@@ -2379,7 +2714,9 @@
 				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/build/$(CONFIGURATION)";
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = P52T58LHR7;
+				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SELECTED_FILES = readwrite;
 				EXCLUDED_ARCHS = i386;
 				GCC_FAST_MATH = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
@@ -2441,7 +2778,7 @@
 			};
 			name = Release;
 		};
-		8961A8823C38702DB53B8DF9 /* Debug */ = {
+		8961A8823C38702DB53B8DF9 /* Debug configuration for PBXNativeTarget "ShowMIDI - VST" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
@@ -2454,7 +2791,9 @@
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = P52T58LHR7;
+				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SELECTED_FILES = readwrite;
 				EXCLUDED_ARCHS = i386;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_FAST_MATH = YES;
@@ -2514,7 +2853,7 @@
 			};
 			name = Debug;
 		};
-		A03B3456CDB32A2C837FFF3C /* Release */ = {
+		A03B3456CDB32A2C837FFF3C /* Release configuration for PBXAggregateTarget "ShowMIDI - All" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DEAD_CODE_STRIPPING = YES;
@@ -2523,7 +2862,7 @@
 			};
 			name = Release;
 		};
-		AACA99396A00580B44343861 /* Debug */ = {
+		AACA99396A00580B44343861 /* Debug configuration for PBXNativeTarget "ShowMIDI - Standalone Plugin" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
@@ -2538,7 +2877,9 @@
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = P52T58LHR7;
+				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SELECTED_FILES = readwrite;
 				EXCLUDED_ARCHS = i386;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_FAST_MATH = YES;
@@ -2592,7 +2933,7 @@
 			};
 			name = Debug;
 		};
-		C887A7904C3C0A554F932197 /* Release */ = {
+		C887A7904C3C0A554F932197 /* Release configuration for PBXNativeTarget "ShowMIDI - VST3 Manifest Helper" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
@@ -2657,7 +2998,7 @@
 			};
 			name = Release;
 		};
-		C8BFE7EB50F612ADC180E46B /* Debug */ = {
+		C8BFE7EB50F612ADC180E46B /* Debug configuration for PBXNativeTarget "ShowMIDI - AUv3 AppExtension" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
@@ -2671,7 +3012,9 @@
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = P52T58LHR7;
+				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SELECTED_FILES = readwrite;
 				EXCLUDED_ARCHS = i386;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_FAST_MATH = YES;
@@ -2725,7 +3068,7 @@
 			};
 			name = Debug;
 		};
-		D28C9A734B61EBFC1982C4C0 /* Debug */ = {
+		D28C9A734B61EBFC1982C4C0 /* Debug configuration for PBXNativeTarget "ShowMIDI - LV2 Plugin" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
@@ -2738,7 +3081,9 @@
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = P52T58LHR7;
+				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SELECTED_FILES = readwrite;
 				EXCLUDED_ARCHS = i386;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_FAST_MATH = YES;
@@ -2802,7 +3147,7 @@
 			};
 			name = Debug;
 		};
-		D4735AE949FF43984AB26A56 /* Debug */ = {
+		D4735AE949FF43984AB26A56 /* Debug configuration for PBXNativeTarget "ShowMIDI - LV2 Manifest Helper" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
@@ -2867,7 +3212,7 @@
 			};
 			name = Debug;
 		};
-		D67BC2BA37C6EC44FE923C30 /* Release */ = {
+		D67BC2BA37C6EC44FE923C30 /* Release configuration for PBXNativeTarget "ShowMIDI - LV2 Manifest Helper" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
@@ -2932,7 +3277,7 @@
 			};
 			name = Release;
 		};
-		DEA338E99511536E7FD35B2E /* Release */ = {
+		DEA338E99511536E7FD35B2E /* Release configuration for PBXNativeTarget "ShowMIDI - AU" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
@@ -2944,7 +3289,9 @@
 				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/build/$(CONFIGURATION)";
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = P52T58LHR7;
+				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SELECTED_FILES = readwrite;
 				EXCLUDED_ARCHS = i386;
 				GCC_FAST_MATH = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
@@ -3007,7 +3354,7 @@
 			};
 			name = Release;
 		};
-		E32BED2D732D6788FF1DB8FA /* Release */ = {
+		E32BED2D732D6788FF1DB8FA /* Release configuration for PBXNativeTarget "ShowMIDI - Shared Code" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
@@ -3019,7 +3366,9 @@
 				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/build/$(CONFIGURATION)";
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = AGZT8GVS7G;
+				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SELECTED_FILES = readwrite;
 				EXCLUDED_ARCHS = i386;
 				GCC_FAST_MATH = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
@@ -3080,100 +3429,89 @@
 		0F043C3AB8120B3B0E69CA35 /* Build configuration list for PBXNativeTarget "ShowMIDI - VST" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				8961A8823C38702DB53B8DF9 /* Debug */,
-				50FC50AC37F90690B7D7F947 /* Release */,
+				8961A8823C38702DB53B8DF9 /* Debug configuration for PBXNativeTarget "ShowMIDI - VST" */,
+				50FC50AC37F90690B7D7F947 /* Release configuration for PBXNativeTarget "ShowMIDI - VST" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
 		1C508D95A6AAC54A3184EA6A /* Build configuration list for PBXNativeTarget "ShowMIDI - VST3" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				085CD1C55B6E0BE8A6873CEB /* Debug */,
-				87F9516CAFB6BCB60EE06108 /* Release */,
+				085CD1C55B6E0BE8A6873CEB /* Debug configuration for PBXNativeTarget "ShowMIDI - VST3" */,
+				87F9516CAFB6BCB60EE06108 /* Release configuration for PBXNativeTarget "ShowMIDI - VST3" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
 		204B42CE7138B62FC94F1E6A /* Build configuration list for PBXNativeTarget "ShowMIDI - Shared Code" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				616864DFB0927C2A14B72725 /* Debug */,
-				E32BED2D732D6788FF1DB8FA /* Release */,
+				616864DFB0927C2A14B72725 /* Debug configuration for PBXNativeTarget "ShowMIDI - Shared Code" */,
+				E32BED2D732D6788FF1DB8FA /* Release configuration for PBXNativeTarget "ShowMIDI - Shared Code" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
 		392015D3B338797D72DEA314 /* Build configuration list for PBXNativeTarget "ShowMIDI - AUv3 AppExtension" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				C8BFE7EB50F612ADC180E46B /* Debug */,
-				4185DDC3276C61F82E0448EA /* Release */,
+				C8BFE7EB50F612ADC180E46B /* Debug configuration for PBXNativeTarget "ShowMIDI - AUv3 AppExtension" */,
+				4185DDC3276C61F82E0448EA /* Release configuration for PBXNativeTarget "ShowMIDI - AUv3 AppExtension" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
 		5358D3ED65705D3C0F8451C7 /* Build configuration list for PBXNativeTarget "ShowMIDI - LV2 Plugin" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				D28C9A734B61EBFC1982C4C0 /* Debug */,
-				6F171EAE96910147E8030DDA /* Release */,
+				D28C9A734B61EBFC1982C4C0 /* Debug configuration for PBXNativeTarget "ShowMIDI - LV2 Plugin" */,
+				6F171EAE96910147E8030DDA /* Release configuration for PBXNativeTarget "ShowMIDI - LV2 Plugin" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
 		B44354E83EE1F6D945F87686 /* Build configuration list for PBXNativeTarget "ShowMIDI - VST3 Manifest Helper" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				4394F9B73D04715C2A2F4D54 /* Debug */,
-				C887A7904C3C0A554F932197 /* Release */,
+				4394F9B73D04715C2A2F4D54 /* Debug configuration for PBXNativeTarget "ShowMIDI - VST3 Manifest Helper" */,
+				C887A7904C3C0A554F932197 /* Release configuration for PBXNativeTarget "ShowMIDI - VST3 Manifest Helper" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
 		B6721A6027B23041E913E4DC /* Build configuration list for PBXAggregateTarget "ShowMIDI - All" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				76F2268E52B9732A9DB7AF87 /* Debug */,
-				A03B3456CDB32A2C837FFF3C /* Release */,
+				76F2268E52B9732A9DB7AF87 /* Debug configuration for PBXAggregateTarget "ShowMIDI - All" */,
+				A03B3456CDB32A2C837FFF3C /* Release configuration for PBXAggregateTarget "ShowMIDI - All" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
 		C18AB6C70C292DE4CAD7CEBE /* Build configuration list for PBXProject "showmidi" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				1D14946A79C8262ABA962DB4 /* Debug */,
-				4C6829C7692DE06E4CC6D481 /* Release */,
+				1D14946A79C8262ABA962DB4 /* Debug configuration for PBXProject "showmidi" */,
+				4C6829C7692DE06E4CC6D481 /* Release configuration for PBXProject "showmidi" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
 		D7167606A72C760845FBE11E /* Build configuration list for PBXNativeTarget "ShowMIDI - Standalone Plugin" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				AACA99396A00580B44343861 /* Debug */,
-				08D2B499B9C465C90FBEC24F /* Release */,
+				AACA99396A00580B44343861 /* Debug configuration for PBXNativeTarget "ShowMIDI - Standalone Plugin" */,
+				08D2B499B9C465C90FBEC24F /* Release configuration for PBXNativeTarget "ShowMIDI - Standalone Plugin" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
 		D7F10E34BD1338C41BFF34AC /* Build configuration list for PBXNativeTarget "ShowMIDI - LV2 Manifest Helper" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				D4735AE949FF43984AB26A56 /* Debug */,
-				D67BC2BA37C6EC44FE923C30 /* Release */,
+				D4735AE949FF43984AB26A56 /* Debug configuration for PBXNativeTarget "ShowMIDI - LV2 Manifest Helper" */,
+				D67BC2BA37C6EC44FE923C30 /* Release configuration for PBXNativeTarget "ShowMIDI - LV2 Manifest Helper" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
 		DFCFF362A6EAF6453F98F8E2 /* Build configuration list for PBXNativeTarget "ShowMIDI - AU" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				327D116399ECE51B96B1CEF7 /* Debug */,
-				DEA338E99511536E7FD35B2E /* Release */,
+				327D116399ECE51B96B1CEF7 /* Debug configuration for PBXNativeTarget "ShowMIDI - AU" */,
+				DEA338E99511536E7FD35B2E /* Release configuration for PBXNativeTarget "ShowMIDI - AU" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */

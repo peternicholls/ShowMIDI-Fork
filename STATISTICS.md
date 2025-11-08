@@ -1,0 +1,170 @@
+# 📊 ShowMIDI Statistics Dashboard
+
+[![Total Downloads](https://img.shields.io/github/downloads/peternicholls/ShowMIDI-Fork/total)](https://github.com/peternicholls/ShowMIDI-Fork/releases)
+[![Latest Release](https://img.shields.io/github/v/release/peternicholls/ShowMIDI-Fork)](https://github.com/peternicholls/ShowMIDI-Fork/releases/latest)
+[![Last Update](https://img.shields.io/badge/last%20update-2025--11--08-brightgreen)]()
+
+*Last updated: 2025-11-08 19:51:37 UTC*  
+*Automated by: download-stats.yml workflow*
+
+---
+
+## 📈 Overview
+
+This dashboard provides real-time insights into ShowMIDI download patterns, platform preferences, and release performance.
+
+## 🌍 Total Downloads
+
+**All-Time Downloads:** *Calculated from GitHub Releases API*
+
+See [DOWNLOAD_STATS.md](DOWNLOAD_STATS.md) for detailed breakdown.
+
+---
+
+## 📦 Latest Release Performance
+
+| Metric | Value |
+|--------|-------|
+| Latest Version | [View Releases](https://github.com/peternicholls/ShowMIDI-Fork/releases/latest) |
+| Release Date | *Auto-updated* |
+| Downloads (7 days) | *Auto-calculated* |
+| Downloads (30 days) | *Auto-calculated* |
+| Total Downloads | *Auto-calculated* |
+
+---
+
+## 🖥️ Platform Distribution
+
+### Current Release
+
+```
+macOS:    ████████████░░░░░░░░ (updating...)
+Windows:  ████████████░░░░░░░░ (updating...)
+Linux:    ████████░░░░░░░░░░░░ (updating...)
+```
+
+### All Time
+
+```
+Windows:  ████████████████░░░░ (updating...)
+macOS:    ██████████░░░░░░░░░░ (updating...)
+Linux:    ██████░░░░░░░░░░░░░░ (updating...)
+```
+
+*Platform data is automatically updated daily by the download-stats workflow.*
+
+---
+
+## 📅 Historical Trends
+
+### Monthly Download Summary
+
+| Month | Total Downloads | Growth | Top Platform |
+|-------|----------------|--------|--------------|
+| *Auto-generated after first workflow run* | - | - | - |
+
+### Release Performance
+
+| Version | Release Date | Week 1 | Month 1 | Total | Status |
+|---------|--------------|--------|---------|-------|--------|
+| *Auto-populated by workflow* | - | - | - | - | - |
+
+---
+
+## 🎯 Milestones
+
+Track our progress toward download milestones:
+
+- [ ] 100 downloads - *Pending*
+- [ ] 500 downloads - *Pending*
+- [ ] 1,000 downloads - *Pending*
+- [ ] 5,000 downloads - *Pending*
+- [ ] 10,000 downloads - *Projected TBD*
+
+---
+
+## 📊 Top Downloads (All Time)
+
+### Most Popular Assets
+
+| Rank | File | Platform | Downloads |
+|------|------|----------|-----------|
+| *Auto-updated by download-stats.yml* | - | - | - |
+
+---
+
+## 📈 Visualizations
+
+### Download Trends Over Time
+
+![Download Trends](docs/images/download-trends.png)
+
+*Chart is automatically generated and updated daily.*
+
+### Platform Distribution Pie Chart
+
+![Platform Distribution](docs/images/platform-distribution.png)
+
+*Chart is automatically generated and updated daily.*
+
+---
+
+## 🔄 Update Frequency
+
+This dashboard is automatically updated by the `download-stats.yml` workflow:
+
+- **Schedule:** Daily at 00:00 UTC
+- **Data Source:** GitHub Releases API
+- **Historical Data:** Stored in `docs/data/stats_YYYYMMDD.json`
+- **Manual Trigger:** Available via Actions tab
+
+---
+
+## 💡 Key Insights
+
+*This section will be populated with automated insights after data collection begins.*
+
+### Platform Preferences
+- Most popular platform: *Calculating...*
+- Fastest growing platform: *Calculating...*
+
+### Release Patterns
+- Average time between releases: *Calculating...*
+- Average downloads per release: *Calculating...*
+
+### Download Patterns
+- Peak download day: *Analyzing...*
+- Peak download time (UTC): *Analyzing...*
+
+---
+
+## 📋 Data Notes
+
+- Download counts are fetched from GitHub Releases API
+- Historical data is preserved in JSON format in `docs/data/`
+- Statistics may have a delay of up to 24 hours
+- Platform detection is based on file naming conventions
+
+---
+
+## 🔗 Related Resources
+
+- [Detailed Download Statistics](DOWNLOAD_STATS.md) - Raw data tables
+- [Changelog](CHANGELOG.md) - Release history
+- [Latest Release](https://github.com/peternicholls/ShowMIDI-Fork/releases/latest) - Current version
+- [All Releases](https://github.com/peternicholls/ShowMIDI-Fork/releases) - Release archive
+
+---
+
+## 🤖 Automation Status
+
+| Workflow | Status | Last Run |
+|----------|--------|----------|
+| Download Stats Collection | [![Download Stats](https://github.com/peternicholls/ShowMIDI-Fork/actions/workflows/download-stats.yml/badge.svg)](https://github.com/peternicholls/ShowMIDI-Fork/actions/workflows/download-stats.yml) | *Auto-tracked* |
+
+---
+
+**Note:** This is a living document, automatically updated by CI/CD workflows. Manual edits may be overwritten.
+
+*Generated by ShowMIDI Statistics Tracker*  
+*Repository: [peternicholls/ShowMIDI-Fork](https://github.com/peternicholls/ShowMIDI-Fork)*

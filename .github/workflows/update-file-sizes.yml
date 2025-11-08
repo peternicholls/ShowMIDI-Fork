@@ -1,0 +1,66 @@
+name: Update File Sizes
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-sizes:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Fetch release assets and update README sizes
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        python3 - <<'PY'
+        import os, requests, re
+        repo="peternicholls/ShowMIDI-Fork"
+        tag=os.getenv('TAG', '')
+        if not tag:
+          tag=os.getenv('GITHUB_REF_NAME','')
+        if not tag:
+          # fallback to latest
+          info = requests.get(f"https://api.github.com/repos/{repo}/releases/latest", headers={"Authorization":f"token {os.getenv('GITHUB_TOKEN','')}"})
+          tag = info.json().get('tag_name','')
+        url=f"https://api.github.com/repos/{repo}/releases/tags/{tag}"
+        r=requests.get(url, headers={"Authorization":f"token {os.getenv('GITHUB_TOKEN','')}"})
+        if r.status_code!=200:
+          print('Release not found')
+          raise SystemExit(0)
+        rel=r.json()
+        assets=rel.get('assets',[])
+        def fmt(n):
+          for unit in ['B','KB','MB','GB']:
+            if n<1024:
+              return f\"{n:.1f} {unit}\"
+            n/=1024
+          return f\"{n:.1f} TB\"
+        with open('README.md','r') as f:
+          content=f.read()
+        for a in assets:
+          name=a['name']
+          size=fmt(a['size'])
+          content=re.sub(r'('+re.escape(name)+r'.*?\\|)\\s*~?[0-9\\.]*\\s*[KMGT]?B', lambda m: m.group(0).rsplit('|',1)[0]+'| '+size, content, flags=re.M)
+        with open('README.md','w') as f:
+          f.write(content)
+        print('README.md updated with sizes')
+        PY
+
+    - name: Commit changes
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git add README.md
+        if ! git diff --staged --quiet; then
+          git commit -m "📏 Update file sizes for release"
+          git push
+        fi

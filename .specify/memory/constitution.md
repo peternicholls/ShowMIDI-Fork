@@ -139,32 +139,84 @@ Code MUST be maintainable for the long term:
 
 ## Development Workflow
 
+ShowMIDI follows **Atlassian GitFlow Workflow** for version control and continuous integration. See [GitFlow Workflow Documentation](./.specify/memory/gitflow-workflow.md) for complete details.
+
+### Branch Strategy Summary
+
+- **`main`**: Production releases only (tagged with semantic versions)
+- **`develop`**: Integration branch for features
+- **`feature/*`**: Individual feature development (one per feature)
+- **`release/*`**: Release stabilization (bug fixes only, no new features)
+- **`hotfix/*`**: Critical production fixes (fork from `main`)
+
+**Key Principles**:
+- All features merge to `develop` via Pull Request
+- Only `release/*` and `hotfix/*` branches merge to `main`
+- Never commit directly to `main` or `develop`
+- Use [Conventional Commits](https://www.conventionalcommits.org/) for all commit messages
+
+### Continuous Integration
+
+GitHub Actions CI pipeline (`.github/workflows/ci.yml`) validates code at strategic integration points:
+
+**CI Triggers**:
+- ✅ Pull Requests to `develop` or `main` (full validation)
+- ✅ Pushes to `main`, `release/**`, `hotfix/**` (full validation)
+- ❌ Pushes to `develop` or `feature/**` (validated at PR time only)
+
+**Pipeline Jobs**:
+1. **code-quality**: GPL-3.0 headers, compiler warnings as errors
+2. **build-and-test-macos**: Xcode builds (Standalone, VST3, AU), smoke tests
+3. **build-windows**: Visual Studio 2022 builds (Standalone, VST3)
+4. **build-linux**: CMake builds (Standalone, VST3, LV2)
+5. **build-ios**: AUv3 plugin build (optional)
+
+See [GitFlow Workflow - CI/CD Section](./.specify/memory/gitflow-workflow.md#continuous-integration-and-delivery) for detailed pipeline architecture.
+
 ### Feature Development Process
 
 1. **Specification**: Define user scenarios and acceptance criteria using `.specify/templates/spec-template.md`
 2. **Planning**: Document technical approach and architecture using `.specify/templates/plan-template.md`
-3. **Implementation**: Follow task breakdown from `.specify/templates/tasks-template.md`
-4. **Testing**: Manual testing across platforms (automated tests currently limited to dependency libraries)
-5. **Documentation**: Update README.md for user-facing features; inline docs for code
+3. **Branch Creation**: Create `feature/<number>-<description>` from `develop` (use `.specify/scripts/bash/create-feature.sh`)
+4. **Implementation**: Follow task breakdown from `.specify/templates/tasks-template.md`
+5. **Local Testing**: Build on macOS/Linux, verify no JUCE leak warnings
+6. **Pull Request**: Open PR to `develop`, wait for CI validation (all jobs must pass)
+7. **Merge**: Squash and merge to `develop` after approval
+8. **Documentation**: Update README.md for user-facing features; inline docs for code
 
-### Branching Strategy
+### Version Management
 
-- `main`: Stable release branch (currently upstream: gbevin/ShowMIDI)
-- `feature/*`: Feature development branches (e.g., `feature/DPI-Scaling`)
-- Version tags: Match release versions (e.g., v1.0.1)
+ShowMIDI uses **Semantic Versioning 2.0.0** ([semver.org](https://semver.org/spec/v2.0.0.html)) (`MAJOR.MINOR.PATCH`):
+- **MAJOR**: Breaking changes to file formats, plugin API, or UI paradigm
+- **MINOR**: New features (backward compatible)
+- **PATCH**: Bug fixes only
+
+Version MUST be synchronized in two locations:
+1. `CMakeLists.txt` (line ~14): `project(ShowMIDI VERSION X.Y.Z)`
+2. `showmidi.jucer`: `<VERSION value="X.Y.Z"/>`
+
+Release process managed via `release/*` branches (see GitFlow workflow).
 
 ### Quality Gates
 
-**Pre-Commit**:
+**Pre-Commit** (developer responsibility):
 - Code compiles on macOS and Linux (minimum)
 - No JUCE leak detector warnings
-- License headers present on new files
+- GPL-3.0 license headers present on new files
+- Conventional Commit format for commit messages
 
-**Pre-Release**:
+**Pre-PR** (automated via CI):
+- All platform builds pass (macOS, Windows, Linux)
+- No compiler warnings (warnings treated as errors)
+- GPL-3.0 header check passes
+- Smoke tests pass (basic app launch and validation)
+
+**Pre-Release** (manual verification):
 - Test on all supported platforms and plugin formats
 - Verify theme loading and customization
 - Confirm keyboard shortcuts function correctly
 - Check memory usage under high MIDI throughput
+- Version synchronized in CMakeLists.txt and .jucer
 
 ### Issue Management
 
