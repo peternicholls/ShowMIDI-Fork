@@ -1,0 +1,155 @@
+name: Test Build Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: 'Platform to test'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - macos
+          - windows
+          - linux
+      build_type:
+        description: 'Build configuration'
+        required: true
+        default: 'Release'
+        type: choice
+        options:
+          - Debug
+          - Release
+      verbose:
+        description: 'Enable verbose output'
+        required: false
+        type: boolean
+        default: false
+
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - '**.cpp'
+      - '**.h'
+      - '**.mm'
+      - '**.cmake'
+      - 'CMakeLists.txt'
+      - '.github/workflows/test-build.yml'
+
+env:
+  BUILD_DIR: build
+  JUCE_VERSION: 7.0.5
+
+jobs:
+  test-macos:
+    name: Test macOS Build
+    if: ${{ github.event.inputs.platform == 'all' || github.event.inputs.platform == 'macos' || github.event_name == 'pull_request' }}
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Workflow info
+      run: |
+        echo "Running macOS test build"
+        echo "Build type: ${{ github.event.inputs.build_type }}"
+
+    - name: Install tools
+      run: |
+        brew update
+        brew install cmake ninja || true
+
+    - name: Configure
+      run: |
+        BUILD_TYPE="${{ github.event.inputs.build_type }}"
+        cmake -B ${{ env.BUILD_DIR }} -G Ninja -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" -DCMAKE_OSX_DEPLOYMENT_TARGET=10.13
+
+    - name: Build
+      run: cmake --build ${{ env.BUILD_DIR }} --config ${{ github.event.inputs.build_type }}
+
+    - name: Find artifacts
+      run: |
+        find ${{ env.BUILD_DIR }} -maxdepth 4 -type d -name "*.app" || true
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: test-build-macos-${{ github.run_number }}
+        path: ${{ env.BUILD_DIR }}/**/*.app
+        retention-days: 3
+
+  test-windows:
+    name: Test Windows Build
+    if: ${{ github.event.inputs.platform == 'all' || github.event.inputs.platform == 'windows' || github.event_name == 'pull_request' }}
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Setup MSVC
+      uses: ilammy/msvc-dev-cmd@v1
+
+    - name: Install tools
+      run: |
+        choco install cmake ninja -y || true
+
+    - name: Configure & build
+      run: |
+        cmake -B ${{ env.BUILD_DIR }} -G Ninja -DCMAKE_BUILD_TYPE=${{ github.event.inputs.build_type }}
+        cmake --build ${{ env.BUILD_DIR }} --config ${{ github.event.inputs.build_type }}
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: test-build-windows-${{ github.run_number }}
+        path: ${{ env.BUILD_DIR }}/**/*.exe
+        retention-days: 3
+
+  test-linux:
+    name: Test Linux Build
+    if: ${{ github.event.inputs.platform == 'all' || github.event.inputs.platform == 'linux' || github.event_name == 'pull_request' }}
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential cmake ninja-build libasound2-dev libx11-dev libfreetype6-dev || true
+
+    - name: Configure & build
+      run: |
+        cmake -B ${{ env.BUILD_DIR }} -G Ninja -DCMAKE_BUILD_TYPE=${{ github.event.inputs.build_type }}
+        cmake --build ${{ env.BUILD_DIR }} --config ${{ github.event.inputs.build_type }}
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: test-build-linux-${{ github.run_number }}
+        path: ${{ env.BUILD_DIR }}/**/ShowMIDI*
+        retention-days: 3
+
+  test-summary:
+    name: Test Summary
+    if: always()
+    needs: [test-macos, test-windows, test-linux]
+    runs-on: ubuntu-latest
+    steps:
+    - name: Summary
+      run: |
+        echo "# Test Build Summary" >> $GITHUB_STEP_SUMMARY
+        for job in test-macos test-windows test-linux; do
+          result=$(jq -n '${{ needs[$job].result }}' 2>/dev/null || true)
+        done
+        echo "Completed"

@@ -17,6 +17,12 @@ Join the Forums: https://forum.uwyn.com
 
 Chat on Discord: https://discord.gg/TgsCnwqWTf
 
+## Documentation
+
+- **[Changelog](CHANGELOG.md)** - Version history and release notes
+- **[Contributing Guide](CONTRIBUTING.md)** - How to contribute to ShowMIDI
+- **[Statistics Dashboard](STATISTICS.md)** - Download statistics and metrics
+
 ## Purpose
 
 This application fills a void in the available MIDI monitoring solutions.

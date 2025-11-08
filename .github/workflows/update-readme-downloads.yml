@@ -1,0 +1,83 @@
+name: Update README Downloads
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Release tag to update links for'
+        required: true
+        default: 'latest'
+
+permissions:
+  contents: write
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        ref: main
+
+    - name: Determine release
+      id: release_info
+      run: |
+        if [ "${{ github.event_name }}" = "release" ]; then
+          echo "tag=${{ github.event.release.tag_name }}" >> $GITHUB_OUTPUT
+          echo "name=${{ github.event.release.name }}" >> $GITHUB_OUTPUT
+          echo "url=${{ github.event.release.html_url }}" >> $GITHUB_OUTPUT
+        else
+          TAG="${{ github.event.inputs.release_tag }}"
+          if [ "$TAG" = "latest" ]; then
+            TAG=$(gh release view --json tagName -q .tagName)
+          fi
+          INFO=$(gh release view "$TAG" --json tagName,name,url)
+          echo "tag=$(echo $INFO | jq -r .tagName)" >> $GITHUB_OUTPUT
+          echo "name=$(echo $INFO | jq -r .name)" >> $GITHUB_OUTPUT
+          echo "url=$(echo $INFO | jq -r .url)" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Generate download section
+      run: |
+        TAG=${{ steps.release_info.outputs.tag }}
+        REPO_URL="https://github.com/${{ github.repository }}"
+        cat > download_section.md <<EOF
+        ## 📥 Download ShowMIDI
+
+        **Latest Release:** [${{ steps.release_info.outputs.name }}](${{ steps.release_info.outputs.url }}) • Released: $(date -u +"%Y-%m-%d")
+
+        | Platform | Download |
+        |----------|---------|
+        | macOS | [ShowMIDI-macOS.dmg]($REPO_URL/releases/download/$TAG/ShowMIDI-macOS-$TAG.dmg) |
+        | Windows | [ShowMIDI-Setup.exe]($REPO_URL/releases/download/$TAG/ShowMIDI-Windows-$TAG-Setup.exe) |
+        | Linux | [ShowMIDI.AppImage]($REPO_URL/releases/download/$TAG/ShowMIDI-Linux-$TAG.AppImage) |
+
+        EOF
+
+    - name: Update README
+      run: |
+        if grep -q "## 📥 Download ShowMIDI" README.md; then
+          awk '/## 📥 Download ShowMIDI/{exit}1' README.md > before.md
+          awk '1;/## 📥 Download ShowMIDI/,0{if (NR>1) exit}' README.md > after.md || true
+          cat before.md > README.new.md
+          cat download_section.md >> README.new.md
+          echo >> README.new.md
+          [ -f after.md ] && cat after.md >> README.new.md
+          mv README.new.md README.md
+        else
+          cat download_section.md >> README.md
+        fi
+
+    - name: Create PR
+      uses: peter-evans/create-pull-request@v5
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        commit-message: "📥 Update download links for ${{ steps.release_info.outputs.tag }}"
+        title: "📥 Update README with ${{ steps.release_info.outputs.tag }} download links"
+        branch: auto-update-readme-${{ steps.release_info.outputs.tag }}
+        body: "Automated update of download links"
+        labels: documentation, automated

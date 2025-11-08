@@ -1,0 +1,26 @@
+name: Release + README update
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  release:
+    name: Release (placeholder)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Placeholder
+        run: echo "Release job runs in release.yml"
+
+  update-readme:
+    name: Trigger README update
+    needs: release
+    runs-on: ubuntu-latest
+    steps:
+    - name: Call update-readme workflow via repository dispatch
+      uses: peter-evans/repository-dispatch@v2
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        event-type: update-readme
+        client-payload: '{"tag":"${{ github.ref_name }}"}'

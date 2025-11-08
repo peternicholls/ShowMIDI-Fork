@@ -1,0 +1,111 @@
+name: Release Build
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version number (e.g., 1.0.0)'
+        required: true
+        default: 'latest'
+
+env:
+  BUILD_TYPE: Release
+  BUILD_DIR: build
+
+jobs:
+  build-macos:
+    name: Build macOS
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Install deps
+      run: |
+        brew update
+        brew install cmake ninja create-dmg || true
+
+    - name: Configure CMake
+      run: |
+        cmake -B ${{ env.BUILD_DIR }} -G Ninja -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
+
+    - name: Build
+      run: cmake --build ${{ env.BUILD_DIR }} --config ${{ env.BUILD_TYPE }}
+
+    - name: Package DMG
+      run: |
+        APP=$(find ${{ env.BUILD_DIR }} -name "*.app" -type d | head -n1)
+        if [ -n "$APP" ]; then
+          cp -R "$APP" ShowMIDI.app
+          create-dmg --volname "ShowMIDI" "ShowMIDI-macOS-${{ github.ref_name }}.dmg" ShowMIDI.app || true
+          ls -lh ShowMIDI-macOS-*.dmg || true
+        fi
+
+    - name: Upload DMG
+      uses: actions/upload-artifact@v3
+      with:
+        name: ShowMIDI-macOS
+        path: ShowMIDI-macOS-${{ github.ref_name }}.dmg
+
+  build-windows:
+    name: Build Windows
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Setup MSVC
+      uses: ilammy/msvc-dev-cmd@v1
+
+    - name: Configure & Build
+      run: |
+        cmake -B ${{ env.BUILD_DIR }} -G "Ninja" -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
+        cmake --build ${{ env.BUILD_DIR }} --config ${{ env.BUILD_TYPE }}
+
+    - name: Create Portable ZIP
+      run: |
+        powershell -Command "Compress-Archive -Path '${{ env.BUILD_DIR }}\\**\\*' -DestinationPath ShowMIDI-Windows-${{ github.ref_name }}-Portable.zip -Force"
+
+    - name: Upload Windows artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: ShowMIDI-Windows
+        path: |
+          ShowMIDI-Windows-${{ github.ref_name }}-Portable.zip
+
+  build-linux:
+    name: Build Linux
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Install dependencies
+      run: sudo apt-get update && sudo apt-get install -y build-essential cmake ninja-build libasound2-dev libx11-dev || true
+
+    - name: Configure & Build
+      run: |
+        cmake -B ${{ env.BUILD_DIR }} -G Ninja -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
+        cmake --build ${{ env.BUILD_DIR }} --config ${{ env.BUILD_TYPE }}
+
+    - name: Create AppImage (basic)
+      run: |
+        mkdir -p AppDir/usr/bin
+        cp ${{ env.BUILD_DIR }}/ShowMIDI AppDir/usr/bin/ || true
+        echo "[Desktop Entry]" > ShowMIDI.desktop
+        echo "Name=ShowMIDI" >> ShowMIDI.desktop
+        echo "Exec=ShowMIDI" >> ShowMIDI.desktop
+        chmod +x AppDir/usr/bin/ShowMIDI || true
+
+    - name: Upload Linux artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: ShowMIDI-Linux
+        path: |
+          ${{ env.BUILD_DIR }}/**/ShowMIDI
