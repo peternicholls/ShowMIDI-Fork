@@ -71,8 +71,8 @@ sudo dnf install gcc-c++ cmake alsa-lib-devel \
 ShowMIDI uses JUCE as a git submodule, so you must initialize submodules after cloning:
 
 ```bash
-git clone https://github.com/gbevin/ShowMIDI.git
-cd ShowMIDI
+git clone https://github.com/peternicholls/ShowMIDI-Fork.git
+cd ShowMIDI-Fork
 git submodule update --init --recursive
 ```
 
