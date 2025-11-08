@@ -149,7 +149,10 @@ jobs:
     - name: Summary
       run: |
         echo "# Test Build Summary" >> $GITHUB_STEP_SUMMARY
-        for job in test-macos test-windows test-linux; do
-          result=$(jq -n '${{ needs[$job].result }}' 2>/dev/null || true)
-        done
-        echo "Completed"
+        echo "| Platform | Result |" >> $GITHUB_STEP_SUMMARY
+        echo "|----------|--------|" >> $GITHUB_STEP_SUMMARY
+        echo "| macOS | ${{ needs.test-macos.result }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| Windows | ${{ needs.test-windows.result }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| Linux | ${{ needs.test-linux.result }} |" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "Test build completed"
