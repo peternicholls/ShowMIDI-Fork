@@ -35,6 +35,8 @@ This directory contains comprehensive documentation of the ShowMIDI codebase:
 
 ShowMIDI is a **cross-platform MIDI visualization application** that provides real-time, glanceable views of MIDI activity. It runs as both a **standalone application** and as **audio plugin** (VST3, AU, AAX, LV2, CLAP).
 
+**Note:** VST3 SDK is now open source (Steinberg) and bundled with JUCE - no separate download or licensing required.
+
 ### Key Statistics
 
 - **Total Code:** 7,277 lines
@@ -233,9 +235,9 @@ Screen Display
 
 ### Dependencies
 
-- **JUCE** (git submodule)
+- **JUCE** (git submodule - includes VST3 SDK since Steinberg open-sourced it)
 - **clap-juce-extensions** (for CLAP plugin)
-- **VST2 SDK** (optional, user-provided)
+- **VST2 SDK** (optional, user-provided, deprecated - use VST3 instead)
 
 ---
 

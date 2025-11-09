@@ -442,11 +442,14 @@ class ShowMIDIPluginAudioProcessor : public AudioProcessor
 
 ### Plugin Formats Supported
 
-- **VST3** (Windows, macOS, Linux)
+- **VST3** (Windows, macOS, Linux) - Open source, bundled with JUCE
+- **VST2** (Legacy, deprecated) - Requires user-provided SDK
 - **AU** (Audio Units - macOS only)
 - **AAX** (Pro Tools - requires AAX SDK)
 - **LV2** (Linux)
 - **CLAP** (via CMake build)
+
+**Note on VST3:** Since Steinberg open-sourced the VST3 SDK, it is now bundled with JUCE and requires no additional downloads or licensing. VST3 is the recommended plugin format for cross-platform deployment.
 
 ### State Persistence
 
@@ -635,11 +638,15 @@ make CONFIG=Release
 
 ```
 ShowMIDI/
-├── JUCE/                    # Git submodule
+├── JUCE/                      # Git submodule (includes VST3 SDK)
 ├── libs/
 │   ├── clap-juce-extensions/  # CLAP plugin support
-│   └── vst2/                  # VST2 SDK (not included - user-provided)
+│   └── vst2/                  # VST2 SDK (optional, user-provided, deprecated)
 ```
+
+**VST3 SDK:** Since Steinberg open-sourced VST3, the SDK is now bundled with JUCE. No separate download or license is required for VST3 plugin development.
+
+**VST2 SDK:** VST2 is deprecated and requires a user-provided SDK if needed for legacy compatibility.
 
 **Required packages (Linux):**
 ```bash
@@ -818,7 +825,7 @@ StandaloneWindow
 
 1. **Plugin format expansion:**
    - Consider AUv3 (iOS)
-   - Consider VST2 deprecation timeline
+   - VST2 is deprecated; VST3 is now the standard (open source, bundled with JUCE)
 
 2. **Feature additions:**
    - MIDI export/recording

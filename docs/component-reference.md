@@ -97,7 +97,7 @@ bool isMidiEffect() const override { return true; }
 **Plugin Metadata:**
 - Name: "ShowMIDI"
 - Type: MIDI Effect
-- Formats: VST3, AU, AAX, LV2, CLAP
+- Formats: VST3 (open source, bundled with JUCE), VST2 (deprecated), AU, AAX, LV2, CLAP
 
 ---
 
