@@ -5,6 +5,8 @@ Auto-generated from all feature plans. Last updated: 2025-11-08
 ## Active Technologies
 - Markdown, YAML, EditorConfig, clang-format configuration (no programming language - documentation only) (002-dev-housekeeping)
 - Text files in repository root and .github/ directory (version controlled via git) (002-dev-housekeeping)
+- YAML (GitHub Actions workflow syntax), CMake 3.15+, Shell scripting (Bash/PowerShell) + GitHub Actions runners (ubuntu-latest, macos-latest, windows-latest), JUCE 7.0.5, CMake, Xcode (macOS), Visual Studio 2022 (Windows), system libraries (ALSA, X11, Freetype on Linux) (003-ci-build-fix)
+- N/A (CI/CD configuration only) (003-ci-build-fix)
 
 - C++17 (JUCE framework requirements)
 - JUCE framework (audio plugin framework)
@@ -244,6 +246,7 @@ git push origin release/1.1.0
 ```
 
 ## Recent Changes
+- 003-ci-build-fix: Added YAML (GitHub Actions workflow syntax), CMake 3.15+, Shell scripting (Bash/PowerShell) + GitHub Actions runners (ubuntu-latest, macos-latest, windows-latest), JUCE 7.0.5, CMake, Xcode (macOS), Visual Studio 2022 (Windows), system libraries (ALSA, X11, Freetype on Linux)
 - 002-dev-housekeeping: Completed development housekeeping infrastructure
   - Added configuration files (.editorconfig, .clang-format, updated .gitignore)
   - Added documentation (CHANGELOG.md, CONTRIBUTING.md, DOWNLOAD_STATS.md, PR template)
