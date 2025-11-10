@@ -83,3 +83,6 @@ CMakeCache.txt
 # Core dumps
 core
 core.*
+
+# Walker (temporary JUCE checkout directory)
+walker/

@@ -56,6 +56,31 @@ Fixes #
 - [ ] No blocking operations on MIDI thread
 - [ ] Code is documented (comments for complex logic)
 
+## CI/CD Status
+
+<!-- CI workflows run automatically when you open/update this PR -->
+<!-- Expected CI jobs: code-quality, build-macos, build-windows, build-linux -->
+
+### CI Troubleshooting
+
+If CI jobs fail, consult the **[CI/CD Pipeline](../CONTRIBUTING.md#cicd-pipeline)** section in CONTRIBUTING.md for:
+
+- **Common failure scenarios** and solutions
+- **Local testing** commands to reproduce failures
+- **Interpreting CI results** and error messages
+
+**Quick Checks for Common Failures**:
+
+- [ ] **JUCE submodules initialized**: `git submodule update --init --recursive`
+- [ ] **Local build succeeds**: Test on at least one platform before pushing
+- [ ] **No compiler warnings**: ShowMIDI builds with `-Werror` (warnings as errors)
+- [ ] **GPL headers present**: All new `.cpp`/`.h` files include GPL-3.0 header
+
+**Getting Help**: If CI failures persist after checking above, post in [GitHub Discussions](https://github.com/gbevin/ShowMIDI/discussions) with:
+- Full error message from failing CI job
+- Platform (Linux/macOS/Windows)
+- Link to this PR
+
 ## Related Issues
 
 <!-- Link related issues or discussions -->
