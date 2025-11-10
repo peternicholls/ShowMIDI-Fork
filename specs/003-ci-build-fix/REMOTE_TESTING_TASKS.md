@@ -39,14 +39,14 @@ Each phase delivers measurable validation of specific success criteria.
 
 ### Tasks
 
-- [ ] T001 [P] Install validation tools (yamllint, markdownlint)
-- [ ] T002 [P] Validate YAML syntax for .github/workflows/ci.yml
-- [ ] T003 [P] Validate YAML syntax for .github/workflows/test-build.yml
-- [ ] T004 [P] Validate YAML syntax for .github/workflows/changelog.yml
-- [ ] T005 Test CMake configuration locally (mkdir build_test_local && cmake ..)
-- [ ] T006 [P] Validate Markdown syntax for specs/003-ci-build-fix/*.md
-- [ ] T007 [P] Validate Markdown syntax for CONTRIBUTING.md
-- [ ] T008 Verify git status is clean (no uncommitted changes)
+- [X] T001 [P] Install validation tools (yamllint, markdownlint)
+- [X] T002 [P] Validate YAML syntax for .github/workflows/ci.yml
+- [X] T003 [P] Validate YAML syntax for .github/workflows/test-build.yml
+- [X] T004 [P] Validate YAML syntax for .github/workflows/changelog.yml
+- [X] T005 Test CMake configuration locally (mkdir build_test_local && cmake ..)
+- [X] T006 [P] Validate Markdown syntax for specs/003-ci-build-fix/*.md
+- [X] T007 [P] Validate Markdown syntax for CONTRIBUTING.md
+- [X] T008 Verify git status is clean (no uncommitted changes)
 
 ---
 
