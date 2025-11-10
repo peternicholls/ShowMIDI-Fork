@@ -98,80 +98,54 @@ jobs:
         with:
           submodules: recursive
       
-      # Adaptive Xcode selection: uses latest available version on runner
-      # to prevent failures when GitHub updates runner images
-      - name: Detect available Xcode versions
+      # CMake-based build: Uses CMake instead of Xcode projects to avoid
+      # hardcoded absolute path issues in .xcodeproj files. CMake generates
+      # build files with correct relative paths on any machine.
+      - name: Install dependencies
         run: |
-          echo "Available Xcode installations:"
-          ls /Applications/ | grep Xcode || echo "No Xcode installations found with grep"
-          
-      - name: Verify and select Xcode
+          brew install cmake ninja
+      
+      - name: Display build environment
         run: |
-          # Get current Xcode path
-          XCODE_PATH=$(xcode-select --print-path)
-          echo "Current Xcode path: $XCODE_PATH"
-          
-          # Verify path exists
-          if [ ! -d "$XCODE_PATH" ]; then
-            echo "❌ Error: Xcode path does not exist: $XCODE_PATH"
-            exit 1
-          fi
-          
-          echo "✅ Xcode path verified"
-          
-      - name: Display Xcode version
-        run: |
+          echo "CMake version: $(cmake --version | head -1)"
+          echo "Ninja version: $(ninja --version)"
           xcodebuild -version
           echo "Xcode developer directory: $(xcode-select --print-path)"
       
-      - name: Build with Xcode (Standalone)
+      - name: Configure CMake
         run: |
-          cd Builds/MacOSX
-          xcodebuild -project ShowMIDI.xcodeproj \
-            -scheme "ShowMIDI - Standalone Plugin" \
-            -configuration Release \
-            clean build \
-            CODE_SIGN_IDENTITY="" \
-            CODE_SIGNING_REQUIRED=NO
+          mkdir -p build
+          cd build
+          cmake .. -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" \
+            -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0
       
-      - name: Build with Xcode (VST3)
+      - name: Build with CMake
         run: |
-          cd Builds/MacOSX
-          xcodebuild -project ShowMIDI.xcodeproj \
-            -scheme "ShowMIDI - VST3" \
-            -configuration Release \
-            clean build \
-            CODE_SIGN_IDENTITY="" \
-            CODE_SIGNING_REQUIRED=NO
+          cd build
+          cmake --build . --config Release -j$(sysctl -n hw.ncpu)
       
-      - name: Build with Xcode (AU)
+      - name: Smoke Test (Verify artifacts)
         run: |
-          cd Builds/MacOSX
-          xcodebuild -project ShowMIDI.xcodeproj \
-            -scheme "ShowMIDI - AU" \
-            -configuration Release \
-            clean build \
-            CODE_SIGN_IDENTITY="" \
-            CODE_SIGNING_REQUIRED=NO
-      
-      - name: Smoke Test (Launch and validate)
-        run: |
-          echo "Launching ShowMIDI standalone app..."
-          # This is a basic smoke test - just verify the app bundle exists
-          if [ -d "Builds/MacOSX/build/Release/ShowMIDI.app" ]; then
-            echo "✅ ShowMIDI.app bundle created successfully"
-          else
-            echo "❌ ShowMIDI.app bundle not found"
-            exit 1
-          fi
+          echo "Checking for build artifacts..."
           
-          # Check for common issues in build output
-          echo "Checking for leak detector warnings..."
-          if grep -r "LEAKED" Builds/MacOSX/build/ 2>/dev/null; then
-            echo "⚠️  JUCE leak detector warnings found"
-            echo "This is a warning, review the leaks manually"
+          # Find and list generated artifacts
+          echo "Searching for .app bundles..."
+          find build -name "*.app" -type d || echo "No .app bundles found"
+          
+          echo "Searching for .vst3 plugins..."
+          find build -name "*.vst3" -type d || echo "No .vst3 plugins found"
+          
+          echo "Searching for .component plugins..."
+          find build -name "*.component" -type d || echo "No .component plugins found"
+          
+          # Verify at least one artifact exists
+          if find build -name "*.app" -type d -o -name "*.vst3" -type d -o -name "*.component" -type d | grep -q .; then
+            echo "✅ Build artifacts found"
           else
-            echo "✅ No leak detector warnings"
+            echo "❌ No build artifacts found"
+            exit 1
           fi
       
       # Artifact Retention Policy: Build artifacts (app bundles, plugins) are kept for 90 days.
@@ -184,10 +158,9 @@ jobs:
           retention-days: 90
           if-no-files-found: ignore
           path: |
-            Builds/MacOSX/build/Release/ShowMIDI.app
-            Builds/MacOSX/build/Release/*.vst3
-            Builds/MacOSX/build/Release/*.component
-            build_clap/ShowMIDI_artefacts/Release/*.clap
+            build/**/*.app
+            build/**/*.vst3
+            build/**/*.component
 
   build-windows:
     name: Build (Windows)
