@@ -129,12 +129,14 @@ file(GLOB_RECURSE SOURCE_FILES
 
 target_sources(ShowMIDI PRIVATE ${SOURCE_FILES})
 
-# Add binary resources (fonts, themes)
+# Add binary resources (fonts, themes, icons)
 juce_add_binary_data(ShowMIDIData SOURCES
+    # Fonts
     Fonts/JetBrainsMono-Italic.ttf
     Fonts/JetBrainsMono-Regular.ttf
     Fonts/JetBrainsMono-SemiBold.ttf
     Fonts/JetBrainsMono-SemiBoldItalic.ttf
+    # Themes
     "Themes/classic light.svg"
     Themes/bstation.svg
     Themes/darcula.svg
@@ -142,6 +144,21 @@ juce_add_binary_data(ShowMIDIData SOURCES
     Themes/disco.svg
     Themes/light.svg
     Themes/mouha.svg
+    # Icons and assets
+    Assets/appicon-ios.png
+    Assets/appicon.png
+    Assets/bar.svg
+    Assets/close.svg
+    Assets/collapsed.svg
+    Assets/expanded.svg
+    Assets/graph.svg
+    Assets/help.svg
+    Assets/hidden.svg
+    Assets/pause.svg
+    Assets/play.svg
+    Assets/reset.svg
+    Assets/settings.svg
+    Assets/visible.svg
 )
 
 # Link libraries
