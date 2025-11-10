@@ -1,5 +1,7 @@
 # ShowMIDI - Development Fork
 
+<!-- Test 1.2: Documentation-only change to validate paths-ignore filter (SC-005) -->
+
 <p><img align="right" src="https://github.com/user-attachments/assets/ad3e7647-c768-4817-a8bf-6fa65707389f" width="160px" /><br /></p>
 
 ShowMIDI is a multi-platform GUI application to effortlessly visualize MIDI activity.
