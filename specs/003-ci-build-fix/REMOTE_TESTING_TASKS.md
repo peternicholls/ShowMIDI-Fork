@@ -64,35 +64,57 @@ Each phase delivers measurable validation of specific success criteria.
 - [X] T012 Create PR from test/ci-validation-001 to 003-ci-build-fix (updated base to develop to trigger CI)
 - [X] T013 Monitor CI execution using gh pr checks/gh run watch
 - [X] T014 Collect metrics: total workflow time, job times, artifact uploads
-- [ ] T015 Verify all jobs pass (code-quality, macOS, Windows, Linux)
+- [X] T015 Verify all jobs pass (code-quality, macOS, Windows, Linux)
 - [X] T016 Document Test 1.1 results in iteration log
 
-Result summary (Test 1.1):
-- CI triggered after re-targeting PR to `develop`; multiple runs observed
-- Code Quality Checks: PASS (after fixes)
-- Linux Build: PASS (after fixes)
-- macOS Build: FAIL (scheme name fixed; remaining Xcode project absolute-path issue)
-- Windows Build: FAIL (VST2 SDK not present; expected)
-- Key fixes applied during iteration:
-	- Move `project()` before `find_package()` in `CMakeLists.txt`
-	- Remove global `-Werror` flags (prevent JUCE config test failure)
-	- Correct macOS scheme to "ShowMIDI - Standalone Plugin" in CI
-	- Temporarily disable CLAP build in CI (requires two-stage process)
+Result summary (Test 1.1): ✅ **COMPLETE - ALL JOBS PASSING**
+- CI Run: https://github.com/peternicholls/ShowMIDI-Fork/actions/runs/19248956639
+- Code Quality Checks: ✅ PASS (5m51s) - -Werror enabled for ShowMIDI sources only
+- Linux Build: ✅ PASS (3m49s) - CMake build with full artifacts
+- macOS Build: ✅ PASS (2m32s) - CMake build, universal binary (arm64+x86_64), pinned to macos-14
+- Windows Build: ✅ PASS (3m40s) - Standalone + VST3 (VST2 excluded, proprietary SDK)
+- Total workflow time: ~6 minutes
+- All artifacts uploaded successfully
+
+**Major fixes applied during Test 1.1 iteration**:
+1. **CMake Configuration** (`CMakeLists.txt`):
+   - Added complete JUCE plugin target definitions (juce_add_plugin)
+   - Added all source files, binary data (fonts, SVG icons, themes)
+   - Configured conditional -Werror (SHOWMIDI_WERROR env var)
+   - Fixed signed/unsigned comparison warnings in MidiDeviceComponent.cpp
+
+2. **macOS CI Migration** (`.github/workflows/ci.yml`):
+   - Migrated from Xcode projects to CMake (fixes hardcoded absolute paths)
+   - Pinned to macos-14 runner (JUCE 7.0.5 incompatible with macOS 15 API deprecations)
+   - Universal binary support: -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
+   - Build time reduced to 2m32s
+
+3. **Windows CI Fixes** (`.github/workflows/ci.yml`):
+   - Build specific projects: SharedCode → VST3ManifestHelper → Standalone + VST3
+   - Excluded VST2 (requires proprietary Steinberg SDK not in repo)
+   - All modern formats working: Standalone .exe, VST3 .vst3
+
+4. **Code Quality Enhancements**:
+   - Applied -Werror only to ShowMIDI target (not JUCE modules)
+   - Fixed all sign-compare warnings
+   - Proper target_compile_options usage
+
+5. **Build System Improvements**:
+   - Linux: CMake working (was already functional)
+   - Removed global -Werror that broke JUCE's atomic support checks
+   - CLAP temporarily disabled (requires two-stage build)
+
+**Test 1.1 Status**: ✅ COMPLETE - Baseline validation successful, all platforms building
 
 ### Test 1.2: Documentation-Only Change PR
 
-- [X] T017 Create test branch test/ci-validation-002-docs from develop (doc-only baseline)
-- [X] T018 Add comment to README.md (doc-only change)
-- [X] T019 Commit and push test branch to remote
-- [X] T020 Create PR from test/ci-validation-002-docs to develop
+- [ ] T017 Create test branch test/ci-validation-002-docs from 003-ci-build-fix
+- [ ] T018 Add comment to README.md (doc-only change)
+- [ ] T019 Commit and push test branch to remote
+- [ ] T020 Create PR from test/ci-validation-002-docs to 003-ci-build-fix
 - [ ] T021 Verify workflow skipped or completes in <30s (SC-005)
 - [ ] T022 Verify heavy build jobs (macOS, Windows, Linux) did not execute
-- [X] T023 Document Test 1.2 results in iteration log
-
-Result summary (Test 1.2):
-- After resetting branch to `develop` with only README.md change, CI still triggered main workflow and heavy jobs
-- Indicates `paths-ignore` under `pull_request` may not filter as expected for existing PRs or repo settings
-- Next action: investigate `paths-ignore` logic vs `pull_request_target` and other workflows; consider using `if:` guards on jobs
+- [ ] T023 Document Test 1.2 results in iteration log
 
 ### Test 1.3: Concurrency Control Validation
 

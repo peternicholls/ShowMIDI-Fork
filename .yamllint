@@ -1,0 +1,43 @@
+---
+# yamllint configuration for GitHub Actions workflows
+# Relaxed rules suitable for CI/CD YAML files
+
+extends: default
+
+rules:
+  # Allow lines up to 120 characters (GitHub Actions often has long paths)
+  line-length:
+    max: 120
+    level: warning
+  
+  # Allow trailing spaces (common in multiline strings)
+  trailing-spaces:
+    level: warning
+  
+  # Document start is optional for GitHub Actions
+  document-start:
+    present: false
+  
+  # Allow 'on' and 'yes' as truthy values (GitHub Actions convention)
+  truthy:
+    allowed-values: ['true', 'false', 'on', 'off', 'yes', 'no']
+    check-keys: false
+  
+  # Enforce 2-space indentation (common indentation standard)
+  indentation:
+    spaces: 2
+    indent-sequences: true
+    check-multi-line-strings: false
+  
+  # Brackets: be lenient with spacing
+  brackets:
+    min-spaces-inside: 0
+    max-spaces-inside: 1
+  
+  # Allow missing final newline in some cases
+  new-line-at-end-of-file:
+    level: warning
+
+ignore: |
+  node_modules/
+  build/

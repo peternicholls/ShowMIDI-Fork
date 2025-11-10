@@ -152,4 +152,8 @@ The resulting binary will be in the `Build/LinuxMakefile/build` directory and ca
 ```
 sudo mv build/ShowMIDI /usr/local/bin
 ```
+<<<<<<< HEAD
 <!-- CI doc-only validation: 2025-11-10T16:44:14Z -->
+=======
+# Testing CMake build
+>>>>>>> 003-ci-build-fix
