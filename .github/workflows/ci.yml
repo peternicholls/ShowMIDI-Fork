@@ -180,9 +180,10 @@ jobs:
       - name: Build with Visual Studio 2022
         run: |
           cd Builds\VisualStudio2022
-          # Build shared code library first (required by plugin targets)
+          # Build shared code and helpers first
           msbuild ShowMIDI_SharedCode.vcxproj /p:Configuration=Release /p:Platform=x64
-          # Build only Standalone and VST3 (skip VST2 - requires proprietary SDK)
+          msbuild ShowMIDI_VST3ManifestHelper.vcxproj /p:Configuration=Release /p:Platform=x64
+          # Build plugin targets (skip VST2 - requires proprietary SDK)
           msbuild ShowMIDI_StandalonePlugin.vcxproj /p:Configuration=Release /p:Platform=x64
           msbuild ShowMIDI_VST3.vcxproj /p:Configuration=Release /p:Platform=x64
       
