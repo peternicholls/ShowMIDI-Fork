@@ -135,8 +135,8 @@ juce_add_binary_data(ShowMIDIData SOURCES
     Fonts/JetBrainsMono-Regular.ttf
     Fonts/JetBrainsMono-SemiBold.ttf
     Fonts/JetBrainsMono-SemiBoldItalic.ttf
+    "Themes/classic light.svg"
     Themes/bstation.svg
-    Themes/classic_light.svg
     Themes/darcula.svg
     Themes/dark.svg
     Themes/disco.svg
