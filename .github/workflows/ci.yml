@@ -160,10 +160,12 @@ jobs:
         with:
           name: ShowMIDI-macOS
           retention-days: 90
+          if-no-files-found: ignore
           path: |
             Builds/MacOSX/build/Release/ShowMIDI.app
             Builds/MacOSX/build/Release/*.vst3
             Builds/MacOSX/build/Release/*.component
+            build_clap/ShowMIDI_artefacts/Release/*.clap
 
   build-windows:
     name: Build (Windows)
