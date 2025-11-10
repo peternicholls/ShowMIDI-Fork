@@ -200,9 +200,11 @@ jobs:
         with:
           name: ShowMIDI-Windows
           retention-days: 90
+          if-no-files-found: ignore
           path: |
             Builds/VisualStudio2022/x64/Release/**/*.exe
             Builds/VisualStudio2022/x64/Release/**/*.vst3
+            build_clap/ShowMIDI_artefacts/Release/*.clap
 
   build-linux:
     name: Build (Linux)
@@ -248,8 +250,10 @@ jobs:
         with:
           name: ShowMIDI-Linux
           retention-days: 90
+          if-no-files-found: ignore
           path: |
             build/ShowMIDI_artefacts/Release/**/*
+            build_clap/ShowMIDI_artefacts/Release/*.clap
 
   build-ios:
     name: Build (iOS AUv3)

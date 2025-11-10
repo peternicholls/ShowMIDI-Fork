@@ -10,9 +10,33 @@ cmake_minimum_required(VERSION 3.15)
 #
 # For this to work a couple of things need to be configured
 
-# Next adjust these paths to point to your JUCE and the current checkout of ClapJuce Extensions
-set(PATH_TO_JUCE "$ENV{PATH_TO_JUCE}")
-set(PATH_TO_CLAP_EXTENSIONS libs/clap-juce-extensions)
+# JUCE path resolution with priority: PATH_TO_JUCE env var → submodule → FATAL_ERROR
+if(DEFINED ENV{PATH_TO_JUCE})
+    set(PATH_TO_JUCE "$ENV{PATH_TO_JUCE}")
+    message(STATUS "Using JUCE from PATH_TO_JUCE environment variable: ${PATH_TO_JUCE}")
+elseif(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/JUCE/CMakeLists.txt")
+    set(PATH_TO_JUCE "${CMAKE_CURRENT_SOURCE_DIR}/JUCE")
+    message(STATUS "Using JUCE from submodule: ${PATH_TO_JUCE}")
+else()
+    message(FATAL_ERROR "JUCE not found. Please either:\n"
+        "  1. Set PATH_TO_JUCE environment variable to point to your JUCE installation, OR\n"
+        "  2. Initialize the JUCE submodule: git submodule update --init --recursive")
+endif()
+
+# CLAP extensions - OPTIONAL dependency
+# CLAP is an optional plugin format. If the clap-juce-extensions submodule is not initialized,
+# the build will continue successfully but skip the CLAP plugin format with a warning.
+# To enable CLAP: git submodule update --init --recursive
+set(PATH_TO_CLAP_EXTENSIONS "${CMAKE_CURRENT_SOURCE_DIR}/libs/clap-juce-extensions")
+
+if(EXISTS "${PATH_TO_CLAP_EXTENSIONS}/cmake/JucerClap.cmake")
+    message(STATUS "CLAP extensions found at: ${PATH_TO_CLAP_EXTENSIONS}")
+    set(BUILD_CLAP ON)
+else()
+    message(WARNING "CLAP extensions not found at ${PATH_TO_CLAP_EXTENSIONS}. CLAP plugin format will be skipped.\n"
+        "  To enable CLAP: git submodule update --init --recursive")
+    set(BUILD_CLAP OFF)
+endif()
 
 # Make sure to set the same C++ version as you have set in the Projucer
 set(CMAKE_CXX_STANDARD 17)
@@ -40,21 +64,24 @@ else () # Linux
     set(JUCER_GENERATOR "LinuxMakefile")
 endif ()
 
-include(${PATH_TO_CLAP_EXTENSIONS}/cmake/JucerClap.cmake)
-create_jucer_clap_target(
-        TARGET ShowMIDI 
-        PLUGIN_NAME "ShowMIDI"
-        BINARY_NAME "ShowMIDI" 
+# Conditionally build CLAP plugin format (only if clap-juce-extensions available)
+if(BUILD_CLAP)
+    include(${PATH_TO_CLAP_EXTENSIONS}/cmake/JucerClap.cmake)
+    create_jucer_clap_target(
+            TARGET ShowMIDI 
+            PLUGIN_NAME "ShowMIDI"
+            BINARY_NAME "ShowMIDI" 
 
-        # You will want to check all this information
-        MANUFACTURER_NAME "Uwyn"
-        MANUFACTURER_CODE Uwyn
-        PLUGIN_CODE shmi
-        VERSION_STRING "$ENV{RELEASE_VERSION}"
-        CLAP_ID "com.uwyn.showmidi.clap"
-        CLAP_FEATURES note-effect utility
-        CLAP_MANUAL_URL "https://www.uwyn.com"
-        CLAP_SUPPORT_URL "https://www.uwyn.com"
-        EDITOR_NEEDS_KEYBOARD_FOCUS TRUE
-)
+            # You will want to check all this information
+            MANUFACTURER_NAME "Uwyn"
+            MANUFACTURER_CODE Uwyn
+            PLUGIN_CODE shmi
+            VERSION_STRING "$ENV{RELEASE_VERSION}"
+            CLAP_ID "com.uwyn.showmidi.clap"
+            CLAP_FEATURES note-effect utility
+            CLAP_MANUAL_URL "https://www.uwyn.com"
+            CLAP_SUPPORT_URL "https://www.uwyn.com"
+            EDITOR_NEEDS_KEYBOARD_FOCUS TRUE
+    )
+endif()
 
