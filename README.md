@@ -150,3 +150,4 @@ The resulting binary will be in the `Build/LinuxMakefile/build` directory and ca
 ```
 sudo mv build/ShowMIDI /usr/local/bin
 ```
+# Testing CMake build
