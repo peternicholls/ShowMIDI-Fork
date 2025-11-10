@@ -79,8 +79,31 @@ jobs:
         with:
           submodules: recursive
       
-      - name: Select Xcode version
-        run: sudo xcode-select -s /Applications/Xcode_15.2.app/Contents/Developer
+      # Adaptive Xcode selection: uses latest available version on runner
+      # to prevent failures when GitHub updates runner images
+      - name: Detect available Xcode versions
+        run: |
+          echo "Available Xcode installations:"
+          ls /Applications/ | grep Xcode || echo "No Xcode installations found with grep"
+          
+      - name: Verify and select Xcode
+        run: |
+          # Get current Xcode path
+          XCODE_PATH=$(xcode-select --print-path)
+          echo "Current Xcode path: $XCODE_PATH"
+          
+          # Verify path exists
+          if [ ! -d "$XCODE_PATH" ]; then
+            echo "❌ Error: Xcode path does not exist: $XCODE_PATH"
+            exit 1
+          fi
+          
+          echo "✅ Xcode path verified"
+          
+      - name: Display Xcode version
+        run: |
+          xcodebuild -version
+          echo "Xcode developer directory: $(xcode-select --print-path)"
       
       - name: Build with Xcode (Standalone)
         run: |
@@ -136,6 +159,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ShowMIDI-macOS
+          retention-days: 90
           path: |
             Builds/MacOSX/build/Release/ShowMIDI.app
             Builds/MacOSX/build/Release/*.vst3
@@ -173,6 +197,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ShowMIDI-Windows
+          retention-days: 90
           path: |
             Builds/VisualStudio2022/x64/Release/**/*.exe
             Builds/VisualStudio2022/x64/Release/**/*.vst3
@@ -220,6 +245,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ShowMIDI-Linux
+          retention-days: 90
           path: |
             build/ShowMIDI_artefacts/Release/**/*
 
