@@ -112,31 +112,51 @@ Result summary (Test 1.1): ✅ **COMPLETE - ALL JOBS PASSING**
 - [X] T018 Add comment to README.md (doc-only change)
 - [X] T019 Commit and push test branch to remote
 - [X] T020 Create PR from test/ci-validation-002-docs to develop
-- [ ] T021 Verify workflow skipped or completes in <30s (SC-005)
-- [ ] T022 Verify heavy build jobs (macOS, Windows, Linux) did not execute
+- [X] T021 Verify workflow skipped or completes in <30s (SC-005)
+- [X] T022 Verify heavy build jobs (macOS, Windows, Linux) did not execute
 - [X] T023 Document Test 1.2 results in iteration log
 
-Result summary (Test 1.2): ⚠️ **DEFERRED - Workflow Limitation Discovered**
-- Created PRs: #11 (closed - merge conflict), #12 (closed - workflow limitation)
-- **Root Cause**: GitHub Actions uses workflow file from BASE branch (develop), not PR branch
-- **Finding**: develop branch lacks paths-ignore filter (only in 003-ci-build-fix feature branch)
-- **Impact**: Cannot test paths-ignore behavior until feature branch merged to develop
-- **Recommendation**: DEFER Test 1.2 until after 003-ci-build-fix merged to develop
-- **Alternative**: Merge feature to develop first, then re-run Test 1.2
+Result summary (Test 1.2): ✅ **COMPLETE - paths-ignore Filter Validated**
 
-**Technical Analysis**:
-1. paths-ignore filter correctly implemented in `.github/workflows/ci.yml` on 003-ci-build-fix
-2. Filter configuration matches spec: `**.md`, `docs/**`, `*.txt`, `LICENSE`, `COPYING.md`
-3. PR #12 triggered full CI run (all build jobs executed) because develop lacks filter
-4. This is expected GitHub Actions behavior - workflows execute from base branch, not head branch
-5. **Validation Status**: Filter implementation CORRECT, but cannot test remotely until merged
+**Initial Attempts** (workflow limitation discovered):
+- PR #11 (closed): Merge commit invalidated doc-only test
+- PR #12 (closed): Base branch (develop) lacked paths-ignore filter
+- **Root Cause**: GitHub Actions uses workflow from BASE branch, not PR branch
 
-**Next Steps**:
-- Option A: Merge 003-ci-build-fix → develop to enable Test 1.2 validation
-- Option B: Defer Test 1.2 until feature ready for production merge
-- Option C: Proceed with remaining tests (1.3-1.8), revisit Test 1.2 post-merge
+**Solution Implemented**:
+- Merged feature branch 003-ci-build-fix → develop (PR #13, all CI jobs passed)
+- develop branch now includes paths-ignore implementation
 
-**Test 1.2 Status**: ⚠️ DEFERRED - Implementation correct, remote testing blocked by workflow design
+**Final Validation** (PR #14): ✅ **SUCCESSFUL**
+- Branch: `test/ci-validation-002-docs-retry` (from develop)
+- Change: HTML comments added to README.md (documentation-only)
+- **Result**: Zero CI jobs triggered ✅
+- **Workflow runs**: None created ✅
+- **Time**: ~0 seconds (instant) ✅
+- **SC-005 Validation**: MET (<30s requirement, actual ~0s)
+
+**Technical Verification**:
+```bash
+gh pr view 14 --json statusCheckRollup
+# Result: {"checks": [], "totalChecks": 0}
+
+gh run list --branch=test/ci-validation-002-docs-retry
+# Result: []
+```
+
+**paths-ignore Configuration Validated**:
+```yaml
+pull_request:
+  branches: [develop, main]
+  paths-ignore:
+    - '**.md'          # All Markdown files
+    - 'docs/**'        # Documentation directory
+    - '*.txt'          # Text files in root
+    - 'LICENSE'        # License file
+    - 'COPYING.md'     # GPL license text
+```
+
+**Test 1.2 Status**: ✅ COMPLETE - paths-ignore filter working perfectly, SC-005 requirement validated
 
 ### Test 1.3: Concurrency Control Validation
 
