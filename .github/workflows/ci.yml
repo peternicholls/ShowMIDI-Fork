@@ -128,7 +128,7 @@ jobs:
         run: |
           cd Builds/MacOSX
           xcodebuild -project ShowMIDI.xcodeproj \
-            -scheme ShowMIDI \
+            -scheme "ShowMIDI - Standalone Plugin" \
             -configuration Release \
             clean build \
             CODE_SIGN_IDENTITY="" \
