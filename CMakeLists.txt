@@ -97,6 +97,78 @@ else () # Linux
     set(JUCER_GENERATOR "LinuxMakefile")
 endif ()
 
+# Add JUCE framework
+add_subdirectory(${PATH_TO_JUCE} JUCE)
+
+# Add ShowMIDI plugin target
+juce_add_plugin(ShowMIDI
+    COMPANY_NAME "Uwyn"
+    PLUGIN_MANUFACTURER_CODE Uwyn
+    PLUGIN_CODE shmi
+    FORMATS AU VST3 Standalone
+    PRODUCT_NAME "ShowMIDI"
+    BUNDLE_ID com.uwyn.showmidi
+    IS_SYNTH FALSE
+    NEEDS_MIDI_INPUT TRUE
+    NEEDS_MIDI_OUTPUT FALSE
+    IS_MIDI_EFFECT TRUE
+    EDITOR_WANTS_KEYBOARD_FOCUS TRUE
+    COPY_PLUGIN_AFTER_BUILD FALSE
+    VST3_CATEGORIES "Fx" "Tools"
+    AU_MAIN_TYPE kAudioUnitType_MIDIProcessor
+)
+
+# Generate JUCE header
+juce_generate_juce_header(ShowMIDI)
+
+# Add source files
+file(GLOB_RECURSE SOURCE_FILES
+    "Source/*.cpp"
+    "Source/*.h"
+)
+
+target_sources(ShowMIDI PRIVATE ${SOURCE_FILES})
+
+# Add binary resources (fonts, themes)
+juce_add_binary_data(ShowMIDIData SOURCES
+    Fonts/JetBrainsMono-Italic.ttf
+    Fonts/JetBrainsMono-Regular.ttf
+    Fonts/JetBrainsMono-SemiBold.ttf
+    Fonts/JetBrainsMono-SemiBoldItalic.ttf
+    Themes/bstation.svg
+    Themes/classic_light.svg
+    Themes/darcula.svg
+    Themes/dark.svg
+    Themes/disco.svg
+    Themes/light.svg
+    Themes/mouha.svg
+)
+
+# Link libraries
+target_link_libraries(ShowMIDI PRIVATE
+    ShowMIDIData
+    juce::juce_audio_basics
+    juce::juce_audio_devices
+    juce::juce_audio_formats
+    juce::juce_audio_processors
+    juce::juce_audio_utils
+    juce::juce_core
+    juce::juce_data_structures
+    juce::juce_events
+    juce::juce_graphics
+    juce::juce_gui_basics
+    juce::juce_gui_extra
+)
+
+# Compiler definitions
+target_compile_definitions(ShowMIDI PUBLIC
+    JUCE_WEB_BROWSER=0
+    JUCE_USE_CURL=0
+    JUCE_VST3_CAN_REPLACE_VST2=0
+    JUCE_DISPLAY_SPLASH_SCREEN=0
+    JUCE_REPORT_APP_USAGE=0
+)
+
 # Conditionally build CLAP plugin format (only if clap-juce-extensions available)
 if(BUILD_CLAP)
     include(${PATH_TO_CLAP_EXTENSIONS}/cmake/JucerClap.cmake)
