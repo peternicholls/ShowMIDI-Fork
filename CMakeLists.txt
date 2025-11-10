@@ -29,16 +29,24 @@ endif()
 # CLAP is an optional plugin format. If the clap-juce-extensions submodule is not initialized,
 # the build will continue successfully but skip the CLAP plugin format with a warning.
 # To enable CLAP: git submodule update --init --recursive
+#
+# NOTE: CLAP requires a two-stage build process (see file header comments).
+# Temporarily disabled in CI until proper two-stage build is implemented.
 set(PATH_TO_CLAP_EXTENSIONS "${CMAKE_CURRENT_SOURCE_DIR}/libs/clap-juce-extensions")
 
-if(EXISTS "${PATH_TO_CLAP_EXTENSIONS}/cmake/JucerClap.cmake")
-    message(STATUS "CLAP extensions found at: ${PATH_TO_CLAP_EXTENSIONS}")
-    set(BUILD_CLAP ON)
-else()
-    message(WARNING "CLAP extensions not found at ${PATH_TO_CLAP_EXTENSIONS}. CLAP plugin format will be skipped.\n"
-        "  To enable CLAP: git submodule update --init --recursive")
-    set(BUILD_CLAP OFF)
-endif()
+set(BUILD_CLAP OFF)
+message(WARNING "CLAP plugin format temporarily disabled. CLAP requires two-stage build (see CMakeLists.txt header).\n"
+    "  To enable CLAP locally: Follow instructions in CMakeLists.txt header")
+
+# TODO: Implement proper two-stage CLAP build in CI workflow
+# if(EXISTS "${PATH_TO_CLAP_EXTENSIONS}/cmake/JucerClap.cmake")
+#     message(STATUS "CLAP extensions found at: ${PATH_TO_CLAP_EXTENSIONS}")
+#     set(BUILD_CLAP ON)
+# else()
+#     message(WARNING "CLAP extensions not found at ${PATH_TO_CLAP_EXTENSIONS}. CLAP plugin format will be skipped.\n"
+#         "  To enable CLAP: git submodule update --init --recursive")
+#     set(BUILD_CLAP OFF)
+# endif()
 
 # Linux: Detect required system libraries with clear error messages
 # JUCE requires ALSA, X11, and Freetype on Linux. These checks provide actionable error messages
