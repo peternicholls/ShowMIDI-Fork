@@ -75,12 +75,13 @@ jobs:
             echo "✅ All source files have GPL-3.0 headers"
           fi
       
-      - name: Configure CMake (with warnings as errors)
+      - name: Configure CMake
         run: |
           mkdir -p build
           cd build
-          cmake .. -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_CXX_FLAGS="-Wall -Wextra -Werror"
+          cmake .. -DCMAKE_BUILD_TYPE=Release
+        env:
+          SHOWMIDI_WERROR: "1"  # Enable warnings-as-errors for ShowMIDI code
       
       - name: Build (warnings as errors)
         run: |

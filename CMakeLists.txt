@@ -186,6 +186,18 @@ target_compile_definitions(ShowMIDI PUBLIC
     JUCE_REPORT_APP_USAGE=0
 )
 
+# Compiler warnings (ShowMIDI sources only, not JUCE)
+target_compile_options(ShowMIDI PRIVATE
+    $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Wall -Wextra>
+)
+
+# Enable warnings-as-errors in CI (Code Quality job sets this variable)
+if(DEFINED ENV{SHOWMIDI_WERROR})
+    target_compile_options(ShowMIDI PRIVATE
+        $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Werror>
+    )
+endif()
+
 # Conditionally build CLAP plugin format (only if clap-juce-extensions available)
 if(BUILD_CLAP)
     include(${PATH_TO_CLAP_EXTENSIONS}/cmake/JucerClap.cmake)
