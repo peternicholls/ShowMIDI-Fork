@@ -83,11 +83,11 @@ graph TD
 
 ### Tasks
 
-- [ ] T001 Verify JUCE framework submodule initialized at ./JUCE
-- [ ] T002 [P] Verify clap-juce-extensions submodule exists at ./libs/clap-juce-extensions (note if missing - optional)
-- [ ] T003 [P] Review existing .github/workflows/ci.yml to understand current structure
-- [ ] T004 [P] Review existing .github/workflows/test-build.yml to understand current structure
-- [ ] T005 [P] Review existing CMakeLists.txt to understand current dependency detection
+- [X] T001 Verify JUCE framework submodule initialized at ./JUCE
+- [X] T002 [P] Verify clap-juce-extensions submodule exists at ./libs/clap-juce-extensions (note if missing - optional)
+- [X] T003 [P] Review existing .github/workflows/ci.yml to understand current structure
+- [X] T004 [P] Review existing .github/workflows/test-build.yml to understand current structure
+- [X] T005 [P] Review existing CMakeLists.txt to understand current dependency detection
 
 ---
 
@@ -101,9 +101,9 @@ graph TD
 
 ### Tasks
 
-- [ ] T006 Implement JUCE path resolution priority in CMakeLists.txt (PATH_TO_JUCE env var → submodule → FATAL_ERROR with clear message)
-- [ ] T007 [P] Add STATUS messages for JUCE path detection in CMakeLists.txt showing which source used
-- [ ] T008 [P] Improve FATAL_ERROR message for missing JUCE in CMakeLists.txt to include resolution steps
+- [X] T006 Implement JUCE path resolution priority in CMakeLists.txt (PATH_TO_JUCE env var → submodule → FATAL_ERROR with clear message)
+- [X] T007 [P] Add STATUS messages for JUCE path detection in CMakeLists.txt showing which source used
+- [X] T008 [P] Improve FATAL_ERROR message for missing JUCE in CMakeLists.txt to include resolution steps
 
 ---
 
@@ -156,16 +156,16 @@ graph TD
 
 #### Adaptive Xcode Selection
 
-- [ ] T022 [US2] Add Xcode version detection step in .github/workflows/ci.yml macOS job to list available Xcode installations
-- [ ] T023 [US2] Implement Xcode path verification in .github/workflows/ci.yml macOS job using xcode-select --print-path
-- [ ] T024 [US2] Add explicit path existence check in .github/workflows/ci.yml macOS job before using Xcode
-- [ ] T025 [US2] Add xcodebuild -version output step in .github/workflows/ci.yml macOS job for visibility
+- [X] T022 [US2] Add Xcode version detection step in .github/workflows/ci.yml macOS job to list available Xcode installations
+- [X] T023 [US2] Implement Xcode path verification in .github/workflows/ci.yml macOS job using xcode-select --print-path
+- [X] T024 [US2] Add explicit path existence check in .github/workflows/ci.yml macOS job before using Xcode
+- [X] T025 [US2] Add xcodebuild -version output step in .github/workflows/ci.yml macOS job for visibility
 
 #### macOS Build Configuration
 
-- [ ] T026 [US2] Verify .github/workflows/ci.yml macOS job checks out submodules recursively
-- [ ] T027 [US2] Verify code signing disabled in .github/workflows/ci.yml macOS job
-- [ ] T028 [P] [US2] Configure artifact upload for macOS builds in .github/workflows/ci.yml (Standalone, VST3, AU)
+- [X] T026 [US2] Verify .github/workflows/ci.yml macOS job checks out submodules recursively
+- [X] T027 [US2] Verify code signing disabled in .github/workflows/ci.yml macOS job
+- [X] T028 [P] [US2] Configure artifact upload for macOS builds in .github/workflows/ci.yml (Standalone, VST3, AU)
 
 ---
 
