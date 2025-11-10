@@ -215,16 +215,16 @@ graph TD
 
 #### CLAP CMake Detection
 
-- [ ] T039 [P] [US4] Add CLAP extensions directory detection in CMakeLists.txt (libs/clap-juce-extensions)
-- [ ] T040 [P] [US4] Implement conditional BUILD_CLAP flag in CMakeLists.txt based on directory existence
-- [ ] T041 [US4] Add WARNING message when CLAP extensions missing in CMakeLists.txt (not FATAL_ERROR)
-- [ ] T042 [US4] Add STATUS message when CLAP extensions found in CMakeLists.txt
-- [ ] T043 [US4] Add conditional CLAP plugin format target in CMakeLists.txt (only if BUILD_CLAP=ON)
+- [X] T039 [P] [US4] Add CLAP extensions directory detection in CMakeLists.txt (libs/clap-juce-extensions)
+- [X] T040 [P] [US4] Implement conditional BUILD_CLAP flag in CMakeLists.txt based on directory existence
+- [X] T041 [US4] Add WARNING message when CLAP extensions missing in CMakeLists.txt (not FATAL_ERROR)
+- [X] T042 [US4] Add STATUS message when CLAP extensions found in CMakeLists.txt
+- [X] T043 [US4] Add conditional CLAP plugin format target in CMakeLists.txt (only if BUILD_CLAP=ON)
 
 #### CLAP Workflow Integration
 
-- [ ] T044 [P] [US4] Update artifact upload in .github/workflows/ci.yml to include CLAP artifacts if built
-- [ ] T045 [US4] Add inline comment in CMakeLists.txt explaining CLAP optional dependency handling
+- [X] T044 [P] [US4] Update artifact upload in .github/workflows/ci.yml to include CLAP artifacts if built
+- [X] T045 [US4] Add inline comment in CMakeLists.txt explaining CLAP optional dependency handling
 
 ---
 
