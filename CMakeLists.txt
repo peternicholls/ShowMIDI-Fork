@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
 
+project(ShowMIDI VERSION 1.1.1)
+
 # To build a CLAP you need to do the following in addition to editing this file
 #
 # - First do the native build of at least the ShowMIDI_shared target on your platform as Debug or Release
@@ -82,8 +84,6 @@ set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded" CACHE STRING "Runtime")
 # xcode signing.
 set(CMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED "NO")
 set(CMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED "NO")
-
-project(ShowMIDI VERSION 1.1.1)
 
 # define the exporter types used in your Projucer configuration
 if (APPLE)
