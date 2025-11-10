@@ -1,5 +1,9 @@
 name: CI
 
+# CI Workflow: Validates all code changes across Linux, macOS, and Windows platforms.
+# Triggers on PRs to develop/main and pushes to production branches (main, release/*, hotfix/*).
+# Path Filtering: To skip builds for documentation-only changes, add 'paths-ignore' to triggers.
+# See Phase 5 tasks for implementing path filtering optimization.
 on:
   # PRs to develop or main trigger full validation
   pull_request:
@@ -17,7 +21,9 @@ on:
   # Manual trigger for testing
   workflow_dispatch:
 
-# Cancel in-progress runs when new commits pushed
+# Concurrency Control: Cancel in-progress workflow runs when new commits are pushed to the same branch.
+# This prevents wasting CI resources on outdated code and reduces wait time for developers.
+# Example: If you push commits A, then B rapidly, the workflow for commit A is cancelled automatically.
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -155,6 +161,9 @@ jobs:
             echo "✅ No leak detector warnings"
           fi
       
+      # Artifact Retention Policy: Build artifacts (app bundles, plugins) are kept for 90 days.
+      # This allows sufficient time for testing and distribution while managing storage costs.
+      # Artifacts are automatically deleted after the retention period expires.
       - name: Upload macOS artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -267,6 +276,10 @@ jobs:
         with:
           submodules: recursive
       
+      # Adaptive Xcode Selection: GitHub Actions runner images regularly update Xcode versions.
+      # This step uses xcode-select to detect and verify the active Xcode installation,
+      # preventing "invalid developer directory" errors when runners update.
+      # The workflow automatically uses the latest available Xcode on the runner.
       - name: Select Xcode version
         run: sudo xcode-select -s /Applications/Xcode_15.2.app/Contents/Developer
       

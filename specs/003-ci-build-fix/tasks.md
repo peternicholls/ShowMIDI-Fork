@@ -240,24 +240,24 @@ graph TD
 
 #### CONTRIBUTING.md Documentation
 
-- [ ] T046 [US5] Create new "CI/CD Pipeline" section in CONTRIBUTING.md
-- [ ] T047 [P] [US5] Add workflow triggers table to CONTRIBUTING.md (which workflows run when)
-- [ ] T048 [P] [US5] Add local testing instructions to CONTRIBUTING.md (macOS/Linux/Windows build commands)
-- [ ] T049 [P] [US5] Add common failure scenarios section to CONTRIBUTING.md ("JUCE not found", "invalid developer directory", compiler warnings)
-- [ ] T050 [P] [US5] Add troubleshooting steps with resolutions to CONTRIBUTING.md
-- [ ] T051 [P] [US5] Add CI results interpretation guide to CONTRIBUTING.md (timeline, job purposes)
+- [X] T046 [US5] Create new "CI/CD Pipeline" section in CONTRIBUTING.md
+- [X] T047 [P] [US5] Add workflow triggers table to CONTRIBUTING.md (which workflows run when)
+- [X] T048 [P] [US5] Add local testing instructions to CONTRIBUTING.md (macOS/Linux/Windows build commands)
+- [X] T049 [P] [US5] Add common failure scenarios section to CONTRIBUTING.md ("JUCE not found", "invalid developer directory", compiler warnings)
+- [X] T050 [P] [US5] Add troubleshooting steps with resolutions to CONTRIBUTING.md
+- [X] T051 [P] [US5] Add CI results interpretation guide to CONTRIBUTING.md (timeline, job purposes)
 
 #### Inline Workflow Comments
 
-- [ ] T052 [P] [US5] Add inline comments to .github/workflows/ci.yml explaining Xcode adaptive selection
-- [ ] T053 [P] [US5] Add inline comments to .github/workflows/ci.yml explaining path filtering strategy
-- [ ] T054 [P] [US5] Add inline comments to .github/workflows/ci.yml explaining concurrency control
-- [ ] T055 [P] [US5] Add inline comments to .github/workflows/ci.yml explaining artifact retention policy
+- [X] T052 [P] [US5] Add inline comments to .github/workflows/ci.yml explaining Xcode adaptive selection
+- [X] T053 [P] [US5] Add inline comments to .github/workflows/ci.yml explaining path filtering strategy
+- [X] T054 [P] [US5] Add inline comments to .github/workflows/ci.yml explaining concurrency control
+- [X] T055 [P] [US5] Add inline comments to .github/workflows/ci.yml explaining artifact retention policy
 
 #### Pull Request Template
 
-- [ ] T056 [US5] Review .github/PULL_REQUEST_TEMPLATE.md for CI troubleshooting guidance section
-- [ ] T057 [US5] Add CI troubleshooting checklist to .github/PULL_REQUEST_TEMPLATE.md if needed
+- [X] T056 [US5] Review .github/PULL_REQUEST_TEMPLATE.md for CI troubleshooting guidance section
+- [X] T057 [US5] Add CI troubleshooting checklist to .github/PULL_REQUEST_TEMPLATE.md if needed
 
 ---
 

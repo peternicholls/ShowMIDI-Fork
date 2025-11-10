@@ -8,6 +8,7 @@ Thank you for your interest in contributing to ShowMIDI! This document provides 
 - [Development Workflow](#development-workflow)
 - [Code Style](#code-style)
 - [Testing](#testing)
+- [CI/CD Pipeline](#cicd-pipeline)
 - [Pull Request Process](#pull-request-process)
 - [Community](#community)
 
@@ -333,6 +334,231 @@ cmake --build build
 # 3. Verify visualization appears correctly
 # 4. Check for any console warnings or errors
 ```
+
+---
+
+## CI/CD Pipeline
+
+ShowMIDI uses GitHub Actions for continuous integration and delivery. Understanding how workflows behave helps you troubleshoot build failures and optimize your development workflow.
+
+### Workflow Triggers
+
+GitHub Actions workflows run automatically based on branch activity and file changes:
+
+| Workflow | Triggers | Purpose | Skips on |
+|----------|----------|---------|----------|
+| **CI Build** (`ci.yml`) | PR → `develop`/`main`<br>Push → `main`/`release/*`/`hotfix/*` | Full platform validation (Linux, macOS, Windows) | Documentation-only changes (`**.md`, `docs/**`, `*.txt`) |
+| **Test Build** (`test-build.yml`) | Push → `develop` | Quick build matrix test | N/A |
+| **Changelog** (`changelog.yml`) | Tags `v*.*.*` only | Generate release notes | All non-tag pushes |
+
+**Path Filtering Optimization**: The CI Build workflow skips heavy builds when only documentation files change, completing in under 30 seconds instead of 15+ minutes. This saves CI minutes and reduces wait time for doc-only PRs.
+
+**Concurrency Control**: When you push multiple commits rapidly to the same branch, GitHub Actions automatically cancels in-progress workflow runs to avoid wasting resources on outdated code.
+
+### Local Testing Before Pushing
+
+**Always build locally before opening a PR** to catch errors early and reduce CI failures:
+
+#### macOS (Xcode)
+
+```bash
+# Build Standalone
+cd Builds/MacOSX
+xcodebuild -project ShowMIDI.xcodeproj \
+  -scheme ShowMIDI \
+  -configuration Release \
+  clean build
+
+# Build VST3
+xcodebuild -project ShowMIDI.xcodeproj \
+  -scheme "ShowMIDI - VST3" \
+  -configuration Release \
+  clean build
+
+# Build AU (Audio Unit)
+xcodebuild -project ShowMIDI.xcodeproj \
+  -scheme "ShowMIDI - AU" \
+  -configuration Release \
+  clean build
+```
+
+#### Linux (CMake)
+
+```bash
+# Configure CMake (first time or after CMakeLists.txt changes)
+mkdir -p build && cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release
+
+# Build all targets
+cmake --build . --config Release -j$(nproc)
+
+# Verify artifacts created
+ls -lh ShowMIDI_artefacts/Release/
+```
+
+**Common CMake Issues**:
+- **JUCE not found**: Run `git submodule update --init --recursive`
+- **Missing system libraries**: Install dependencies (see [Platform-Specific Setup](#platform-specific-setup))
+- **Slow builds**: Use `-j$(nproc)` to parallelize compilation
+
+#### Windows (Visual Studio 2022)
+
+```powershell
+# Using MSBuild from Developer Command Prompt
+cd Builds\VisualStudio2022
+msbuild ShowMIDI.sln /p:Configuration=Release /p:Platform=x64
+
+# Or open ShowMIDI.sln in Visual Studio and build via IDE
+```
+
+### Common CI Failure Scenarios
+
+Understanding frequent failures helps you resolve issues faster:
+
+#### "JUCE not found" (Linux/macOS/Windows)
+
+**Cause**: Git submodules not initialized or `PATH_TO_JUCE` environment variable pointing to invalid location.
+
+**Error Message**:
+```
+CMake Error: JUCE not found. Please either:
+  1. Set PATH_TO_JUCE environment variable to point to your JUCE installation, OR
+  2. Initialize the JUCE submodule: git submodule update --init --recursive
+```
+
+**Solution**:
+1. **Local fix**: `git submodule update --init --recursive`
+2. **CI fix**: Workflow already runs `checkout` with `submodules: recursive` - if this fails, check if `.gitmodules` is corrupted
+3. **Verification**: `ls -la JUCE/CMakeLists.txt` should show JUCE's CMake file
+
+#### "invalid developer directory" (macOS)
+
+**Cause**: Hardcoded Xcode version doesn't exist on GitHub Actions runner (runner images update regularly).
+
+**Error Message**:
+```
+xcrun: error: unable to find utility "xcodebuild", not a developer tool or in PATH
+xcode-select: error: tool 'xcodebuild' requires Xcode, but active developer directory
+'/Applications/Xcode_15.2.app/Contents/Developer' does not exist
+```
+
+**Solution**:
+- **CI handles this automatically**: Workflow now uses adaptive Xcode selection (detects latest available version)
+- **Local verification**: `xcode-select --print-path` shows active Xcode
+- **Switch Xcode**: `sudo xcode-select -s /Applications/Xcode_15.4.app/Contents/Developer`
+
+#### Compiler Warnings Treated as Errors
+
+**Cause**: ShowMIDI builds with `-Werror` (warnings as errors) to maintain code quality.
+
+**Error Example**:
+```
+error: unused variable 'midiMessage' [-Werror,-Wunused-variable]
+```
+
+**Solution**:
+1. Fix the warning in your code (remove unused variables, add casts, etc.)
+2. **Do NOT disable** `-Werror` - it's a project requirement
+3. Use `clang-format` to catch style issues before CI
+
+#### Missing System Dependencies (Linux)
+
+**Cause**: Required libraries (ALSA, X11, Freetype) not installed on runner.
+
+**Error Message**:
+```
+Could NOT find ALSA (missing: ALSA_LIBRARY ALSA_INCLUDE_DIR)
+```
+
+**Solution**:
+- **CI fix**: Workflow installs dependencies via `apt-get install`
+- **Local fix**: Follow [Linux setup instructions](#linux) to install build dependencies
+
+#### CLAP Plugin Build Warnings
+
+**Cause**: `clap-juce-extensions` submodule not initialized (CLAP is optional).
+
+**Expected Behavior**: Build continues successfully, emits warning:
+```
+CMake Warning: CLAP extensions not found at libs/clap-juce-extensions.
+CLAP plugin format will be skipped.
+  To enable CLAP: git submodule update --init --recursive
+```
+
+**Solution**:
+- This is **not a failure** - CLAP is optional
+- To enable CLAP: `git submodule update --init libs/clap-juce-extensions`
+
+### Interpreting CI Results
+
+When you open a PR, GitHub Actions runs 4 jobs in parallel:
+
+#### Job Timeline and Expected Duration
+
+| Job | Platform | Duration | Purpose |
+|-----|----------|----------|---------|
+| **code-quality** | Ubuntu | 2-5 min | Check GPL headers, build with warnings-as-errors |
+| **build-and-test-macos** | macOS 13+ | 10-15 min | Build Standalone, VST3, AU, run smoke tests |
+| **build-windows** | Windows Server 2022 | 15-20 min | Build Standalone, VST3 with MSVC 2022 |
+| **build-linux** | Ubuntu 22.04 | 5-10 min | Build all formats via CMake, fast parallel build |
+
+**Total PR validation time**: ~15-20 minutes (jobs run in parallel)
+
+#### Reading the GitHub Actions UI
+
+**Green checkmark (✓)**: Job passed - no action needed
+
+**Red X (✗)**: Job failed - click to see error logs:
+1. Click the red X next to the job name
+2. Expand the failing step (e.g., "Build with Xcode")
+3. Look for `error:` or `Error:` lines
+4. Match error to [Common Failure Scenarios](#common-ci-failure-scenarios) above
+
+**Yellow dot (●)**: Job in progress - wait for completion
+
+**Gray circle (○)**: Job queued - GitHub Actions runners are busy, will start soon
+
+#### Artifact Downloads
+
+After successful builds, CI uploads artifacts you can download for testing:
+
+- **ShowMIDI-macOS**: `.app` bundle, `.vst3`, `.component` (AU)
+- **ShowMIDI-Windows**: `.exe`, `.vst3`
+- **ShowMIDI-Linux**: Standalone binary, `.vst3`, `.so` files
+
+**How to Download**:
+1. Open your PR on GitHub
+2. Click "Checks" tab
+3. Select a successful workflow run
+4. Scroll to "Artifacts" section at bottom
+5. Click artifact name to download ZIP
+
+**Retention**: Artifacts are kept for 90 days, then automatically deleted.
+
+### Troubleshooting CI Failures
+
+**Step 1: Identify the failing job**
+- Look for red X in PR "Checks" tab
+- Note which platform failed (code-quality, macOS, Windows, Linux)
+
+**Step 2: Read the error message**
+- Click the failing job name
+- Expand the failing step
+- Copy the error message (starting with `error:` or `Error:`)
+
+**Step 3: Match to common scenarios**
+- Compare error to [Common Failure Scenarios](#common-ci-failure-scenarios)
+- Follow the solution steps for that scenario
+
+**Step 4: Reproduce locally**
+- Use [Local Testing](#local-testing-before-pushing) commands for your platform
+- Fix the issue until local build succeeds
+- Push updated code to trigger new CI run
+
+**Step 5: Ask for help if stuck**
+- If error doesn't match common scenarios, post in [GitHub Discussions](https://github.com/gbevin/ShowMIDI/discussions)
+- Include: full error message, platform, PR link
+- Maintainers typically respond within 24 hours
 
 ---
 
