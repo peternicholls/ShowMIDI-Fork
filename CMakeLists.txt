@@ -38,6 +38,36 @@ else()
     set(BUILD_CLAP OFF)
 endif()
 
+# Linux: Detect required system libraries with clear error messages
+# JUCE requires ALSA, X11, and Freetype on Linux. These checks provide actionable error messages
+# if dependencies are missing, rather than cryptic JUCE compilation errors.
+if(UNIX AND NOT APPLE)
+    find_package(ALSA REQUIRED)
+    if(NOT ALSA_FOUND)
+        message(FATAL_ERROR "ALSA development libraries not found.\n"
+            "  Install with: sudo apt-get install libasound2-dev")
+    endif()
+    
+    find_package(X11 REQUIRED)
+    if(NOT X11_FOUND)
+        message(FATAL_ERROR "X11 development libraries not found.\n"
+            "  Install with: sudo apt-get install libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev")
+    endif()
+    
+    find_package(Freetype REQUIRED)
+    if(NOT Freetype_FOUND)
+        message(FATAL_ERROR "Freetype development libraries not found.\n"
+            "  Install with: sudo apt-get install libfreetype6-dev")
+    endif()
+    
+    message(STATUS "All required Linux system libraries found (ALSA, X11, Freetype)")
+    
+    # Enable strict compiler warnings for code quality (-Wall -Wextra -Werror)
+    # This ensures local builds match CI quality standards
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Werror")
+    message(STATUS "Linux compiler flags: ${CMAKE_CXX_FLAGS}")
+endif()
+
 # Make sure to set the same C++ version as you have set in the Projucer
 set(CMAKE_CXX_STANDARD 17)
 

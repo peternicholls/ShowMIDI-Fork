@@ -119,28 +119,28 @@ graph TD
 
 #### Linux CMake Configuration
 
-- [ ] T009 [P] [US1] Add system dependency detection for ALSA in CMakeLists.txt with clear error message if missing
-- [ ] T010 [P] [US1] Add system dependency detection for X11 in CMakeLists.txt with clear error message if missing
-- [ ] T011 [P] [US1] Add system dependency detection for Freetype2 in CMakeLists.txt with clear error message if missing
-- [ ] T012 [US1] Configure Linux compiler flags in CMakeLists.txt: -Wall -Wextra -Werror
+- [X] T009 [P] [US1] Add system dependency detection for ALSA in CMakeLists.txt with clear error message if missing
+- [X] T010 [P] [US1] Add system dependency detection for X11 in CMakeLists.txt with clear error message if missing
+- [X] T011 [P] [US1] Add system dependency detection for Freetype2 in CMakeLists.txt with clear error message if missing
+- [X] T012 [US1] Configure Linux compiler flags in CMakeLists.txt: -Wall -Wextra -Werror
 
 #### Workflow Configuration - Linux
 
-- [ ] T013 [US1] Update .github/workflows/ci.yml Linux job to install system dependencies (libasound2-dev, libx11-dev, libxrandr-dev, libxinerama-dev, libxcursor-dev, libfreetype6-dev)
-- [ ] T014 [US1] Verify .github/workflows/ci.yml Linux job checks out submodules recursively
-- [ ] T015 [US1] Set PATH_TO_JUCE environment variable in .github/workflows/ci.yml Linux job to ${{ github.workspace }}/JUCE
+- [X] T013 [US1] Update .github/workflows/ci.yml Linux job to install system dependencies (libasound2-dev, libx11-dev, libxrandr-dev, libxinerama-dev, libxcursor-dev, libfreetype6-dev)
+- [X] T014 [US1] Verify .github/workflows/ci.yml Linux job checks out submodules recursively
+- [X] T015 [US1] Set PATH_TO_JUCE environment variable in .github/workflows/ci.yml Linux job to ${{ github.workspace }}/JUCE
 
 #### Workflow Configuration - Windows
 
-- [ ] T016 [US1] Verify .github/workflows/ci.yml Windows job checks out submodules recursively
-- [ ] T017 [US1] Verify MSVC environment setup in .github/workflows/ci.yml Windows job
-- [ ] T018 [US1] Set consistent build type (Release) in .github/workflows/ci.yml Windows job
+- [X] T016 [US1] Verify .github/workflows/ci.yml Windows job checks out submodules recursively
+- [X] T017 [US1] Verify MSVC environment setup in .github/workflows/ci.yml Windows job
+- [X] T018 [US1] Set consistent build type (Release) in .github/workflows/ci.yml Windows job
 
 #### Artifact Upload
 
-- [ ] T019 [P] [US1] Configure artifact upload for Linux builds in .github/workflows/ci.yml (Standalone, VST3, LV2 if built)
-- [ ] T020 [P] [US1] Configure artifact upload for Windows builds in .github/workflows/ci.yml (Standalone, VST3)
-- [ ] T021 [US1] Set artifact retention to 90 days in .github/workflows/ci.yml
+- [X] T019 [P] [US1] Configure artifact upload for Linux builds in .github/workflows/ci.yml (Standalone, VST3, LV2 if built)
+- [X] T020 [P] [US1] Configure artifact upload for Windows builds in .github/workflows/ci.yml (Standalone, VST3)
+- [X] T021 [US1] Set artifact retention to 90 days in .github/workflows/ci.yml
 
 ---
 
@@ -181,25 +181,25 @@ graph TD
 
 #### Path Filtering
 
-- [ ] T029 [P] [US3] Add paths-ignore filter to .github/workflows/ci.yml pull_request trigger (**.md, docs/**, *.txt, LICENSE, COPYING.md)
-- [ ] T030 [P] [US3] Add paths-ignore filter to .github/workflows/ci.yml push trigger (**.md, docs/**, *.txt)
-- [ ] T031 [US3] Add inline comment explaining path filter rationale in .github/workflows/ci.yml
+- [X] T029 [P] [US3] Add paths-ignore filter to .github/workflows/ci.yml pull_request trigger (**.md, docs/**, *.txt, LICENSE, COPYING.md)
+- [X] T030 [P] [US3] Add paths-ignore filter to .github/workflows/ci.yml push trigger (**.md, docs/**, *.txt)
+- [X] T031 [US3] Add inline comment explaining path filter rationale in .github/workflows/ci.yml
 
 #### Concurrency Control
 
-- [ ] T032 [US3] Add concurrency group to .github/workflows/ci.yml (group: ci-${{ github.ref }})
-- [ ] T033 [US3] Enable cancel-in-progress in .github/workflows/ci.yml concurrency configuration
-- [ ] T034 [US3] Add inline comment explaining concurrency control in .github/workflows/ci.yml
+- [X] T032 [US3] Add concurrency group to .github/workflows/ci.yml (group: ci-${{ github.ref }})
+- [X] T033 [US3] Enable cancel-in-progress in .github/workflows/ci.yml concurrency configuration
+- [X] T034 [US3] Add inline comment explaining concurrency control in .github/workflows/ci.yml
 
 #### Changelog Workflow Optimization
 
-- [ ] T035 [P] [US3] Update .github/workflows/changelog.yml triggers to only run on tags (v*.*.*)
-- [ ] T036 [P] [US3] Verify .github/workflows/changelog.yml does not run on regular develop pushes
+- [X] T035 [P] [US3] Update .github/workflows/changelog.yml triggers to only run on tags (v*.*.*)
+- [X] T036 [P] [US3] Verify .github/workflows/changelog.yml does not run on regular develop pushes
 
 #### Test Build Workflow
 
-- [ ] T037 [P] [US3] Review .github/workflows/test-build.yml for consistency with ci.yml changes
-- [ ] T038 [US3] Add workflow summary generation step to .github/workflows/test-build.yml showing pass/fail status table
+- [X] T037 [P] [US3] Review .github/workflows/test-build.yml for consistency with ci.yml changes
+- [X] T038 [US3] Add workflow summary generation step to .github/workflows/test-build.yml showing pass/fail status table
 
 ---
 
@@ -271,9 +271,9 @@ graph TD
 
 #### Timeout and Retry Configuration
 
-- [ ] T058 [P] Add timeout-minutes: 30 to .github/workflows/ci.yml macOS job
-- [ ] T059 [P] Add timeout-minutes: 25 to .github/workflows/ci.yml Windows job
-- [ ] T060 [P] Add timeout-minutes: 20 to .github/workflows/ci.yml Linux job
+- [X] T058 [P] Add timeout-minutes: 30 to .github/workflows/ci.yml macOS job
+- [X] T059 [P] Add timeout-minutes: 25 to .github/workflows/ci.yml Windows job
+- [X] T060 [P] Add timeout-minutes: 20 to .github/workflows/ci.yml Linux job
 
 #### Final Validation
 
