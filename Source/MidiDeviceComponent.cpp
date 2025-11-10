@@ -238,7 +238,7 @@ struct MidiDeviceComponent::Pimpl : public MidiInputCallback
             // calculate the average across all the queued timestamps
             // this will be used to filter out outliers
             auto avg_ts = 0.0;
-            for (auto i = 0; i < midiTimeStamps_.size(); i++)
+            for (size_t i = 0; i < midiTimeStamps_.size(); i++)
             {
                 avg_ts += midiTimeStamps_[i];
             }
@@ -246,7 +246,7 @@ struct MidiDeviceComponent::Pimpl : public MidiInputCallback
             
             // only keep timestamps that are within 1% deviation of the average
             std::vector<double> keep;
-            for (auto i = 0; i < midiTimeStamps_.size(); i++)
+            for (size_t i = 0; i < midiTimeStamps_.size(); i++)
             {
                 if (fabs(avg_ts - midiTimeStamps_[i]) < avg_ts * 0.01)
                 {

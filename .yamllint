@@ -23,7 +23,7 @@ rules:
     allowed-values: ['true', 'false', 'on', 'off', 'yes', 'no']
     check-keys: false
   
-  # Allow 4-space indentation (common in GitHub Actions)
+  # Enforce 2-space indentation (common indentation standard)
   indentation:
     spaces: 2
     indent-sequences: true
@@ -39,6 +39,5 @@ rules:
     level: warning
 
 ignore: |
-  .github/
   node_modules/
   build/
