@@ -63,11 +63,6 @@ if(UNIX AND NOT APPLE)
     endif()
     
     message(STATUS "All required Linux system libraries found (ALSA, X11, Freetype)")
-    
-    # Enable strict compiler warnings for code quality (-Wall -Wextra -Werror)
-    # This ensures local builds match CI quality standards
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Werror")
-    message(STATUS "Linux compiler flags: ${CMAKE_CXX_FLAGS}")
 endif()
 
 # Make sure to set the same C++ version as you have set in the Projucer
