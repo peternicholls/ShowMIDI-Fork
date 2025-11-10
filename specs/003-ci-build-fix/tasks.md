@@ -277,14 +277,14 @@ graph TD
 
 #### Final Validation
 
-- [ ] T061 Test complete workflow by creating PR with trivial change, verify all jobs pass
-- [ ] T062 Test documentation-only PR (update README.md), verify builds skipped
-- [ ] T063 Test concurrency control by pushing two commits rapidly, verify first run cancelled
-- [ ] T064 Verify all artifact uploads work correctly (check GitHub Actions UI)
-- [ ] T065 Verify CMake configuration time on Linux <2 minutes
-- [ ] T066 Verify macOS build time <15 minutes
-- [ ] T067 Verify Windows build time <20 minutes
-- [ ] T068 Update specs/003-ci-build-fix/plan.md Phase 2 status to complete
+- [X] T061 Test complete workflow by creating PR with trivial change, verify all jobs pass
+- [X] T062 Test documentation-only PR (update README.md), verify builds skipped
+- [X] T063 Test concurrency control by pushing two commits rapidly, verify first run cancelled
+- [X] T064 Verify all artifact uploads work correctly (check GitHub Actions UI)
+- [X] T065 Verify CMake configuration time on Linux <2 minutes
+- [X] T066 Verify macOS build time <15 minutes
+- [X] T067 Verify Windows build time <20 minutes
+- [X] T068 Update specs/003-ci-build-fix/plan.md Phase 2 status to complete
 
 ---
 
