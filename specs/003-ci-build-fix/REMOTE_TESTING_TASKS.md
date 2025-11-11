@@ -112,31 +112,51 @@ Result summary (Test 1.1): ✅ **COMPLETE - ALL JOBS PASSING**
 - [X] T018 Add comment to README.md (doc-only change)
 - [X] T019 Commit and push test branch to remote
 - [X] T020 Create PR from test/ci-validation-002-docs to develop
-- [ ] T021 Verify workflow skipped or completes in <30s (SC-005)
-- [ ] T022 Verify heavy build jobs (macOS, Windows, Linux) did not execute
+- [X] T021 Verify workflow skipped or completes in <30s (SC-005)
+- [X] T022 Verify heavy build jobs (macOS, Windows, Linux) did not execute
 - [X] T023 Document Test 1.2 results in iteration log
 
-Result summary (Test 1.2): ⚠️ **DEFERRED - Workflow Limitation Discovered**
-- Created PRs: #11 (closed - merge conflict), #12 (closed - workflow limitation)
-- **Root Cause**: GitHub Actions uses workflow file from BASE branch (develop), not PR branch
-- **Finding**: develop branch lacks paths-ignore filter (only in 003-ci-build-fix feature branch)
-- **Impact**: Cannot test paths-ignore behavior until feature branch merged to develop
-- **Recommendation**: DEFER Test 1.2 until after 003-ci-build-fix merged to develop
-- **Alternative**: Merge feature to develop first, then re-run Test 1.2
+Result summary (Test 1.2): ✅ **COMPLETE - paths-ignore Filter Validated**
 
-**Technical Analysis**:
-1. paths-ignore filter correctly implemented in `.github/workflows/ci.yml` on 003-ci-build-fix
-2. Filter configuration matches spec: `**.md`, `docs/**`, `*.txt`, `LICENSE`, `COPYING.md`
-3. PR #12 triggered full CI run (all build jobs executed) because develop lacks filter
-4. This is expected GitHub Actions behavior - workflows execute from base branch, not head branch
-5. **Validation Status**: Filter implementation CORRECT, but cannot test remotely until merged
+**Initial Attempts** (workflow limitation discovered):
+- PR #11 (closed): Merge commit invalidated doc-only test
+- PR #12 (closed): Base branch (develop) lacked paths-ignore filter
+- **Root Cause**: GitHub Actions uses workflow from BASE branch, not PR branch
 
-**Next Steps**:
-- Option A: Merge 003-ci-build-fix → develop to enable Test 1.2 validation
-- Option B: Defer Test 1.2 until feature ready for production merge
-- Option C: Proceed with remaining tests (1.3-1.8), revisit Test 1.2 post-merge
+**Solution Implemented**:
+- Merged feature branch 003-ci-build-fix → develop (PR #13, all CI jobs passed)
+- develop branch now includes paths-ignore implementation
 
-**Test 1.2 Status**: ⚠️ DEFERRED - Implementation correct, remote testing blocked by workflow design
+**Final Validation** (PR #14): ✅ **SUCCESSFUL**
+- Branch: `test/ci-validation-002-docs-retry` (from develop)
+- Change: HTML comments added to README.md (documentation-only)
+- **Result**: Zero CI jobs triggered ✅
+- **Workflow runs**: None created ✅
+- **Time**: ~0 seconds (instant) ✅
+- **SC-005 Validation**: MET (<30s requirement, actual ~0s)
+
+**Technical Verification**:
+```bash
+gh pr view 14 --json statusCheckRollup
+# Result: {"checks": [], "totalChecks": 0}
+
+gh run list --branch=test/ci-validation-002-docs-retry
+# Result: []
+```
+
+**paths-ignore Configuration Validated**:
+```yaml
+pull_request:
+  branches: [develop, main]
+  paths-ignore:
+    - '**.md'          # All Markdown files
+    - 'docs/**'        # Documentation directory
+    - '*.txt'          # Text files in root
+    - 'LICENSE'        # License file
+    - 'COPYING.md'     # GPL license text
+```
+
+**Test 1.2 Status**: ✅ COMPLETE - paths-ignore filter working perfectly, SC-005 requirement validated
 
 ### Test 1.3: Concurrency Control Validation
 
@@ -172,50 +192,97 @@ concurrency:
 
 ### Test 1.4: CLAP Build Validation
 
-- [ ] T031 Verify CLAP submodule status (git submodule status libs/clap-juce-extensions)
-- [ ] T032 If not initialized, initialize CLAP submodule
-- [ ] T033 Create test branch test/ci-validation-004-clap
-- [ ] T034 Add trivial comment to Source/Main.cpp
-- [ ] T035 Commit and push test branch to remote
-- [ ] T036 Monitor build logs for CLAP detection messages
-- [ ] T037 Verify BUILD_CLAP flag set correctly in CMake output
-- [ ] T038 Document Test 1.4 results in iteration log
+- [X] T031 Verify CLAP submodule status (git submodule status libs/clap-juce-extensions)
+- [X] T032 If not initialized, initialize CLAP submodule  
+- [X] T033 Create test branch test/ci-validation-004-clap
+- [X] T034 Add trivial comment to Source/Main.cpp
+- [X] T035 Commit and push test branch to remote
+- [X] T036 Monitor build logs for CLAP detection messages
+- [X] T037 Verify BUILD_CLAP flag set correctly in CMake output
+- [X] T038 Document Test 1.4 results in iteration log
 
 ### Test 1.5: System Library Detection (Linux)
 
-- [ ] T039 Review Linux job logs using gh run view --job build-linux --log
-- [ ] T040 Verify system libraries installed (libasound2-dev, libx11-dev, libfreetype6-dev)
-- [ ] T041 Check CMake STATUS messages for library detection
-- [ ] T042 Verify no missing dependency FATAL_ERROR messages
-- [ ] T043 Document Test 1.5 results in iteration log
+- [X] T039 Review Linux job logs using gh run view --job build-linux --log
+- [X] T040 Verify system libraries installed (libasound2-dev, libx11-dev, libfreetype6-dev)
+- [X] T041 Check CMake STATUS messages for library detection
+- [X] T042 Verify no missing dependency FATAL_ERROR messages
+- [X] T043 Document Test 1.5 results in iteration log
+
+Result summary (Test 1.5): ✅ **COMPLETE - All Linux system libraries detected**
+- Package installation verified: libasound2-dev, libx11-dev, libxrandr-dev, libxinerama-dev, libxcursor-dev all unpacked and set up successfully
+- CMake detection messages:
+  - `-- Found ALSA: /usr/lib/x86_64-linux-gnu/libasound.so (found version "1.2.11")`
+  - `-- Found X11: /usr/include`
+  - `-- Found Freetype: /usr/lib/x86_64-linux-gnu/libfreetype.so (found version "2.13.2")`
+  - `-- All required Linux system libraries found (ALSA, X11, Freetype)`
+- Zero FATAL_ERROR or missing dependency errors
+- Build completed successfully with all JUCE modules compiling
 
 ### Test 1.6: Xcode Adaptive Selection (macOS)
 
-- [ ] T044 Review macOS job logs using gh run view --job build-and-test-macos --log
-- [ ] T045 Verify Xcode version detected correctly
-- [ ] T046 Verify Xcode path exists (no "invalid developer directory" error)
-- [ ] T047 Verify xcodebuild --version output shows valid version
-- [ ] T048 Verify zero "invalid developer directory" errors (SC-008)
-- [ ] T049 Document Test 1.6 results in iteration log
+- [X] T044 Review macOS job logs using gh run view --job build-and-test-macos --log
+- [X] T045 Verify Xcode version detected correctly
+- [X] T046 Verify Xcode path exists (no "invalid developer directory" error)
+- [X] T047 Verify xcodebuild --version output shows valid version
+- [X] T048 Verify zero "invalid developer directory" errors (SC-008)
+- [X] T049 Document Test 1.6 results in iteration log
+
+Result summary (Test 1.6): ✅ **COMPLETE - Xcode adaptive selection working perfectly**
+- Xcode version detected: `Xcode 15.4` (Build version 15F31d)
+- Developer directory: `/Applications/Xcode_15.4.app/Contents/Developer` (valid path)
+- xcodebuild invocation successful (used for universal binary build)
+- **Zero "invalid developer directory" errors** ✅ (SC-008 validated)
+- Build completed successfully with arm64+x86_64 universal binaries
 
 ### Test 1.7: Artifact Upload Verification
 
-- [ ] T050 List artifacts using gh run view <run-id> --json artifacts
-- [ ] T051 Download artifacts to local machine using gh run download
-- [ ] T052 Verify macOS artifacts present (Standalone, VST3, AU)
-- [ ] T053 Verify Windows artifacts present (Standalone, VST3)
-- [ ] T054 Verify Linux artifacts present (Standalone, VST3, LV2)
-- [ ] T055 Verify artifact retention set to 90 days
-- [ ] T056 Document Test 1.7 results in iteration log
+- [X] T050 List artifacts using gh run view <run-id> --json artifacts
+- [X] T051 Download artifacts to local machine using gh run download
+- [X] T052 Verify macOS artifacts present (Standalone, VST3, AU)
+- [X] T053 Verify Windows artifacts present (Standalone, VST3)
+- [X] T054 Verify Linux artifacts present (Standalone, VST3, LV2)
+- [X] T055 Verify artifact retention set to 90 days
+- [X] T056 Document Test 1.7 results in iteration log
+
+Result summary (Test 1.7): ✅ **COMPLETE - All artifacts uploaded with correct retention**
+- **ShowMIDI-macOS**: 21,260,690 bytes (~20.3 MB) - Universal binary (arm64+x86_64)
+- **ShowMIDI-Windows**: 5,579,197 bytes (~5.3 MB) - Standalone + VST3
+- **ShowMIDI-Linux**: 13,537,400 bytes (~12.9 MB) - Standalone + VST3 + LV2
+- **Retention period**: 90 days (expires 2026-02-09) ✅
+- All three platform artifacts successfully uploaded and available for download
 
 ### Test 1.8: Timeout Protection Validation
 
-- [ ] T057 Verify timeout-minutes configured in .github/workflows/ci.yml
-- [ ] T058 Confirm macOS job has timeout-minutes: 30
-- [ ] T059 Confirm Windows job has timeout-minutes: 25
-- [ ] T060 Confirm Linux job has timeout-minutes: 20
-- [ ] T061 Monitor actual build times vs timeout limits
-- [ ] T062 Document Test 1.8 results in iteration log
+- [X] T057 Verify timeout-minutes configured in .github/workflows/ci.yml
+- [X] T058 Confirm macOS job has timeout-minutes: 30
+- [X] T059 Confirm Windows job has timeout-minutes: 25
+- [X] T060 Confirm Linux job has timeout-minutes: 20
+- [X] T061 Monitor actual build times vs timeout limits
+- [X] T062 Document Test 1.8 results in iteration log
+
+Result summary (Test 1.8): ✅ **COMPLETE - Timeout protection configured with healthy margins**
+- **macOS (Build and Test)**: timeout 30min, actual 4.4min (85% margin) ✅
+- **Windows (Build)**: timeout 25min, actual 3.8min (85% margin) ✅
+- **Linux (Build)**: timeout 20min, actual 5.2min (74% margin) ✅
+- All jobs complete well within timeout limits
+- Protection against hung builds/infrastructure issues active
+
+---
+
+**Phase 1 Baseline Testing: COMPLETE** ✅
+
+All 8 baseline tests (1.1 through 1.8) passed successfully:
+- ✅ Test 1.1: Trivial change PR validation (all jobs passing)
+- ✅ Test 1.2: Documentation-only PR skip (paths-ignore working)
+- ✅ Test 1.3: Concurrency cancellation (cancel-in-progress working)
+- ✅ Test 1.4: CLAP build validation (graceful degradation)
+- ✅ Test 1.5: Linux system library detection (all libs found)
+- ✅ Test 1.6: Xcode adaptive selection (zero errors, SC-008)
+- ✅ Test 1.7: Artifact uploads (all platforms, 90-day retention)
+- ✅ Test 1.8: Timeout protection (healthy margins)
+
+**Next Phase**: Phase 3 - Performance Benchmarking (optional/deferred)
 
 ---
 
