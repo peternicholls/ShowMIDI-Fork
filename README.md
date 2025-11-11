@@ -4,6 +4,8 @@
 
 ShowMIDI is a multi-platform GUI application to effortlessly visualize MIDI activity.
 
+<!-- Edge Case 4.3 Test: Documentation change as part of mixed PR -->
+
 All the heavy lifting is done by the wonderful JUCE library.
 
 This is a development fork of the original ShowMIDI project. The original project website is https://github.com/gbevin/ShowMIDI

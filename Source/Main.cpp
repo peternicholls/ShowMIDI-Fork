@@ -20,7 +20,7 @@
 
 #include "ShowMidiApplication.h"
 
-// Test 1.4: CLAP build validation marker (trivial change to trigger CI)
+// Edge Case 4.3: Code change as part of mixed documentation+code PR
 
 ApplicationCommandManager* commandManager = 0;
 JUCE_BEGIN_IGNORE_WARNINGS_GCC_LIKE ("-Wmissing-prototypes")
