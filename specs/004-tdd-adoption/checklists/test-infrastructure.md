@@ -54,6 +54,36 @@
 - [ ] CHK026 - Are component documentation requirements for complex test fixtures defined? [Gap, Constitution §V]
 - [ ] CHK027 - Are CMake build hygiene requirements specified (no hardcoded paths, BUILD_TESTS option, relative paths)? [Completeness, Plan Phase 0]
 
+### Constitution Compliance Validation Notes
+
+- CHK001: Validated — `spec.md` FR-002 and `plan.md` Phase 0 explicitly require cross-platform test execution and CI matrix entries for macOS/Windows/Linux/iOS. Evidence: `spec.md` FR-002; `plan.md` CI Matrix and `contracts/ci-matrix.yml` referenced.
+- CHK002: Validated — `spec.md` FR-006 and `plan.md` describe platform-conditional tests; tasks include T071-T074 for iOS and T097-T098 for AU/LV2. Evidence: `spec.md` FR-006; `tasks.md` T071, T073.
+- CHK003: Validated — Plan emphasizes platform parity and phased plugin test inclusion; see `plan.md` "Platform Parity Maintained" and constitution check sections.
+- CHK004: Validated — `spec.md` and `contracts/test-protocol.md` (referenced in plan) require use of `#if JUCE_*` patterns and test labels. Evidence references added to plan and tasks (T031, T032).
+- CHK005: Validated (scope defined) — Plan Phase 1 lists iOS simulator tests as smoke-only initially; documented in `plan.md` Phase 1 deliverables and tasks T071-T074.
+- CHK006: Partially Validated — Plan phases VST3→AU→LV2 are specified; AAX is noted as deferred (Plan Risk Assessment). Evidence: `plan.md` Phase 2/3 descriptions.
+- CHK007: Gap — AAX status is inconsistent between spec and constitution; action: resolve by updating constitution or marking AAX deferred. See CHK104.
+- CHK008: Validated — `plan.md` explicitly selects JUCE UnitTest framework as primary (Research + Plan Technical Context).
+- CHK009: Validated — Plan and research reference JUCE types for test fixtures (juce::MidiBuffer, juce::File). Evidence: `plan.md` Test Fixtures section.
+- CHK010: Validated — GPL-3.0 header requirement enforced in constitution and repeated in `plan.md` test-protocol references.
+- CHK011: Validated — Leak detector usage is documented as requirement in plan's constitution check.
+- CHK012: Validated — Adapter pattern is primary mocking strategy; FakeIt may be used sparingly per plan.
+- CHK013: Partially Validated — Plan suggests FakeIt as backup; specify limits (MIT license compatibility) in contracts/test-protocol.md.
+- CHK014: Validated — Latency targets (<10ms, preferred <5ms) present in `spec.md` and `plan.md` Performance Goals.
+- CHK015: Validated — Plan specifies no allocations on MIDI thread and pre-allocation strategies in fixtures.
+- CHK016: Validated — SimulatedTimeProvider is in `plan.md` and Tasks (T011-T013) reference time provider fixtures.
+- CHK017: Gap — Thread-safety test requirements could be expanded with explicit test strategies; recommend adding a task to enumerate thread-safety acceptance checks.
+- CHK018: Validated — High-throughput MIDI test requirements included in Plan Phase 0/2 and tasks (T048, T094-T095).
+- CHK019: Validated — Test suite performance budgets defined in `plan.md` Performance Goals.
+- CHK020: Partially Validated — `spec.md` SC-006 gives 30-minute onboarding goal; needs explicit measurement method (add to quickstart.md).
+- CHK021: Validated — Test output clarity requirements appear in plan's user-centric design section; recommend adding explicit format examples to quickstart.md.
+- CHK022: Validated — Quickstart and `plan.md` include 5-minute quick start and filtering examples; evidence: `quickstart.md` reference.
+- CHK023: Validated — Naming conventions documented in `contracts/test-protocol.md` and plan.
+- CHK024: Validated — Test folder structure is in `plan.md` Project Structure and tasks T002/T003.
+- CHK025: Validated — Plan prescribes mirroring test-to-source structure.
+- CHK026: Gap — Component documentation requirements for complex fixtures should be formalized; add task to author fixture docstrings.
+- CHK027: Validated — CMake hygiene (BUILD_TESTS option, relative paths) specified in `plan.md` and tasks T001-T005.
+
 ---
 
 ## Platform Parity & Determinism Requirements
