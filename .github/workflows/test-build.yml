@@ -45,7 +45,7 @@ jobs:
   test-macos:
     name: Test macOS Build
     if: ${{ github.event.inputs.platform == 'all' || github.event.inputs.platform == 'macos' || github.event_name == 'pull_request' }}
-    runs-on: macos-latest
+    runs-on: macos-14  # Pin to macOS 14 - JUCE 7.0.5 incompatible with macOS 15 APIs
 
     steps:
     - name: Checkout code
@@ -65,18 +65,18 @@ jobs:
 
     - name: Configure
       run: |
-        BUILD_TYPE="${{ github.event.inputs.build_type }}"
-        cmake -B ${{ env.BUILD_DIR }} -G Ninja -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" -DCMAKE_OSX_DEPLOYMENT_TARGET=10.13
+        BUILD_TYPE="${{ github.event.inputs.build_type || 'Release' }}"
+        cmake -B ${{ env.BUILD_DIR }} -G Ninja -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0
 
     - name: Build
-      run: cmake --build ${{ env.BUILD_DIR }} --config ${{ github.event.inputs.build_type }}
+      run: cmake --build ${{ env.BUILD_DIR }}
 
     - name: Find artifacts
       run: |
         find ${{ env.BUILD_DIR }} -maxdepth 4 -type d -name "*.app" || true
 
     - name: Upload artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: test-build-macos-${{ github.run_number }}
         path: ${{ env.BUILD_DIR }}/**/*.app
@@ -93,23 +93,40 @@ jobs:
       with:
         submodules: recursive
 
-    - name: Setup MSVC
-      uses: ilammy/msvc-dev-cmd@v1
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v2
 
-    - name: Install tools
+    - name: Build with Visual Studio 2022
       run: |
-        choco install cmake ninja -y || true
+        cd Builds\VisualStudio2022
+        $CONFIG = "${{ github.event.inputs.build_type }}"
+        if ([string]::IsNullOrEmpty($CONFIG)) { $CONFIG = "Release" }
+        # Build shared code and helpers first
+        msbuild ShowMIDI_SharedCode.vcxproj /p:Configuration=$CONFIG /p:Platform=x64
+        msbuild ShowMIDI_VST3ManifestHelper.vcxproj /p:Configuration=$CONFIG /p:Platform=x64
+        # Build plugin targets (skip VST2 - requires proprietary SDK)
+        msbuild ShowMIDI_StandalonePlugin.vcxproj /p:Configuration=$CONFIG /p:Platform=x64
+        msbuild ShowMIDI_VST3.vcxproj /p:Configuration=$CONFIG /p:Platform=x64
 
-    - name: Configure & build
+    - name: Verify build artifacts
       run: |
-        cmake -B ${{ env.BUILD_DIR }} -G Ninja -DCMAKE_BUILD_TYPE=${{ github.event.inputs.build_type }}
-        cmake --build ${{ env.BUILD_DIR }} --config ${{ github.event.inputs.build_type }}
+        $CONFIG = "${{ github.event.inputs.build_type }}"
+        if ([string]::IsNullOrEmpty($CONFIG)) { $CONFIG = "Release" }
+        $exePath = "Builds\VisualStudio2022\x64\$CONFIG\Standalone Plugin\ShowMIDI.exe"
+        if (Test-Path $exePath) {
+          Write-Host "✅ Build succeeded: $exePath"
+        } else {
+          Write-Host "❌ Build artifact not found: $exePath"
+          exit 1
+        }
 
     - name: Upload artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: test-build-windows-${{ github.run_number }}
-        path: ${{ env.BUILD_DIR }}/**/*.exe
+        path: |
+          Builds/VisualStudio2022/x64/**/*.exe
+          Builds/VisualStudio2022/x64/**/*.vst3
         retention-days: 3
 
   test-linux:
@@ -126,15 +143,18 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y build-essential cmake ninja-build libasound2-dev libx11-dev libfreetype6-dev || true
+        sudo apt-get install -y build-essential cmake ninja-build \
+          libasound2-dev libx11-dev libfreetype6-dev \
+          libxrandr-dev libxinerama-dev libxcursor-dev || true
 
     - name: Configure & build
       run: |
-        cmake -B ${{ env.BUILD_DIR }} -G Ninja -DCMAKE_BUILD_TYPE=${{ github.event.inputs.build_type }}
-        cmake --build ${{ env.BUILD_DIR }} --config ${{ github.event.inputs.build_type }}
+        BUILD_TYPE="${{ github.event.inputs.build_type || 'Release' }}"
+        cmake -B ${{ env.BUILD_DIR }} -G Ninja -DCMAKE_BUILD_TYPE=${BUILD_TYPE}
+        cmake --build ${{ env.BUILD_DIR }}
 
     - name: Upload artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: test-build-linux-${{ github.run_number }}
         path: ${{ env.BUILD_DIR }}/**/ShowMIDI*
