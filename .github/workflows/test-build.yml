@@ -94,6 +94,7 @@ jobs:
     needs: code-quality  # Only run builds if code quality checks pass (fail-fast)
     if: ${{ github.event.inputs.platform == 'all' || github.event.inputs.platform == 'macos' || github.event_name == 'pull_request' }}
     runs-on: macos-14  # Pin to macOS 14 - JUCE 7.0.5 incompatible with macOS 15 APIs
+    timeout-minutes: 30
 
     steps:
     - name: Checkout code
@@ -135,6 +136,7 @@ jobs:
     needs: code-quality  # Only run builds if code quality checks pass (fail-fast)
     if: ${{ github.event.inputs.platform == 'all' || github.event.inputs.platform == 'windows' || github.event_name == 'pull_request' }}
     runs-on: windows-latest
+    timeout-minutes: 25
 
     steps:
     - name: Checkout code
@@ -183,6 +185,7 @@ jobs:
     needs: code-quality  # Only run builds if code quality checks pass (fail-fast)
     if: ${{ github.event.inputs.platform == 'all' || github.event.inputs.platform == 'linux' || github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
+    timeout-minutes: 20
 
     steps:
     - name: Checkout code
