@@ -1,0 +1,318 @@
+name: Phase 5 CI Monitoring
+
+on:
+  schedule:
+    # Run every Monday at 00:00 UTC (weekly monitoring)
+    - cron: '0 0 * * 1'
+  workflow_dispatch:
+    inputs:
+      week_number:
+        description: 'Week number (1-4)'
+        required: false
+        default: 'auto'
+
+permissions:
+  contents: write
+  actions: read
+  issues: write
+
+jobs:
+  collect-metrics:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests pytz
+
+      - name: Collect CI metrics
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          WEEK_INPUT: ${{ github.event.inputs.week_number }}
+        run: |
+          python3 << 'PYTHON_SCRIPT'
+          import os
+          import json
+          import requests
+          from datetime import datetime, timedelta
+          from collections import defaultdict
+          import pytz
+
+          # Configuration
+          REPO = os.environ['REPO']
+          TOKEN = os.environ['GITHUB_TOKEN']
+          WEEK_INPUT = os.environ.get('WEEK_INPUT', 'auto')
+          
+          # Phase 5 monitoring period: 2025-11-11 to 2025-12-11
+          PHASE5_START = datetime(2025, 11, 11, tzinfo=pytz.UTC)
+          PHASE5_END = datetime(2025, 12, 11, tzinfo=pytz.UTC)
+          
+          headers = {
+              'Authorization': f'token {TOKEN}',
+              'Accept': 'application/vnd.github.v3+json'
+          }
+          
+          # Determine current week
+          now = datetime.now(pytz.UTC)
+          if WEEK_INPUT == 'auto':
+              days_since_start = (now - PHASE5_START).days
+              current_week = min((days_since_start // 7) + 1, 4)
+          else:
+              current_week = int(WEEK_INPUT)
+          
+          # Calculate week date range
+          week_start = PHASE5_START + timedelta(weeks=current_week - 1)
+          week_end = min(week_start + timedelta(days=7), PHASE5_END)
+          
+          print(f"📊 Phase 5 Monitoring - Week {current_week}")
+          print(f"Period: {week_start.strftime('%Y-%m-%d')} to {week_end.strftime('%Y-%m-%d')}")
+          print("=" * 60)
+          
+          # Fetch workflow runs for ci.yml during the week
+          url = f'https://api.github.com/repos/{REPO}/actions/workflows/ci.yml/runs'
+          params = {
+              'created': f'{week_start.strftime("%Y-%m-%d")}..{week_end.strftime("%Y-%m-%d")}',
+              'per_page': 100
+          }
+          
+          response = requests.get(url, headers=headers, params=params)
+          response.raise_for_status()
+          runs = response.json()['workflow_runs']
+          
+          # Metrics collection
+          total_runs = len(runs)
+          successful_runs = 0
+          failed_runs = 0
+          code_failures = []
+          infrastructure_failures = []
+          
+          for run in runs:
+              run_id = run['id']
+              conclusion = run['conclusion']
+              
+              if conclusion == 'success':
+                  successful_runs += 1
+              elif conclusion == 'failure':
+                  failed_runs += 1
+                  
+                  # Fetch jobs to categorize failure
+                  jobs_url = f'https://api.github.com/repos/{REPO}/actions/runs/{run_id}/jobs'
+                  jobs_response = requests.get(jobs_url, headers=headers)
+                  jobs_response.raise_for_status()
+                  jobs = jobs_response.json()['jobs']
+                  
+                  # Categorize failure
+                  code_quality_failed = False
+                  build_failed = False
+                  
+                  for job in jobs:
+                      if job['conclusion'] == 'failure':
+                          if 'code-quality' in job['name'].lower():
+                              code_quality_failed = True
+                          else:
+                              build_failed = True
+                  
+                  failure_info = {
+                      'run_id': run_id,
+                      'html_url': run['html_url'],
+                      'created_at': run['created_at'],
+                      'head_sha': run['head_sha'][:7]
+                  }
+                  
+                  if code_quality_failed:
+                      code_failures.append(failure_info)
+                  elif build_failed:
+                      infrastructure_failures.append(failure_info)
+          
+          # Calculate metrics
+          success_rate = (successful_runs / total_runs * 100) if total_runs > 0 else 0
+          infrastructure_failure_rate = (len(infrastructure_failures) / total_runs * 100) if total_runs > 0 else 0
+          
+          # Generate report
+          report = f"""# Phase 5 Monitoring - Week {current_week}
+
+          **Period**: {week_start.strftime('%Y-%m-%d')} to {week_end.strftime('%Y-%m-%d')}  
+          **Generated**: {now.strftime('%Y-%m-%d %H:%M:%S UTC')}
+
+          ## Summary Metrics
+
+          | Metric | Value | Target | Status |
+          |--------|------:|-------:|--------|
+          | Total CI Runs | {total_runs} | - | - |
+          | Successful Runs | {successful_runs} | - | ✅ |
+          | Failed Runs | {failed_runs} | - | - |
+          | **Success Rate** | **{success_rate:.1f}%** | **100%** | {'✅ PASS' if success_rate == 100 else '⚠️ REVIEW'} |
+          | Code Failures | {len(code_failures)} | - | - |
+          | Infrastructure Failures | {len(infrastructure_failures)} | - | - |
+          | **Infrastructure Failure Rate** | **{infrastructure_failure_rate:.1f}%** | **<5%** | {'✅ PASS' if infrastructure_failure_rate < 5 else '❌ FAIL'} |
+
+          ## Success Criteria Evaluation
+
+          ### SC-001: CI Success Rate (Target: 100% for clean code)
+          - **Result**: {success_rate:.1f}%
+          - **Status**: {'✅ PASS - All clean code builds succeeded' if success_rate == 100 else f'⚠️ REVIEW - {failed_runs} failures detected'}
+
+          ### SC-011: Infrastructure Failure Rate (Target: <5%)
+          - **Result**: {infrastructure_failure_rate:.1f}%
+          - **Status**: {'✅ PASS - Infrastructure reliability within target' if infrastructure_failure_rate < 5 else '❌ FAIL - Infrastructure issues above acceptable threshold'}
+
+          ## Failure Analysis
+
+          ### Code Quality Failures ({len(code_failures)})
+          """
+          
+          if code_failures:
+              report += "\n| Run | SHA | Date | Link |\n|-----|-----|------|------|\n"
+              for f in code_failures:
+                  date = datetime.fromisoformat(f['created_at'].replace('Z', '+00:00')).strftime('%Y-%m-%d %H:%M')
+                  report += f"| {f['run_id']} | `{f['head_sha']}` | {date} | [View]({f['html_url']}) |\n"
+          else:
+              report += "\n✅ No code quality failures this week.\n"
+          
+          report += f"\n### Infrastructure Failures ({len(infrastructure_failures)})\n"
+          
+          if infrastructure_failures:
+              report += "\n| Run | SHA | Date | Link |\n|-----|-----|------|------|\n"
+              for f in infrastructure_failures:
+                  date = datetime.fromisoformat(f['created_at'].replace('Z', '+00:00')).strftime('%Y-%m-%d %H:%M')
+                  report += f"| {f['run_id']} | `{f['head_sha']}` | {date} | [View]({f['html_url']}) |\n"
+          else:
+              report += "\n✅ No infrastructure failures this week.\n"
+          
+          report += f"""
+          ## Recommendations
+
+          """
+          
+          if success_rate < 100:
+              report += f"- ⚠️ Investigate {len(code_failures)} code quality failures\n"
+          if infrastructure_failure_rate >= 5:
+              report += f"- ❌ URGENT: Infrastructure failure rate ({infrastructure_failure_rate:.1f}%) exceeds 5% threshold\n"
+              report += f"- Action required: Review {len(infrastructure_failures)} infrastructure failures\n"
+          if success_rate == 100 and infrastructure_failure_rate < 5:
+              report += "- ✅ All metrics within target ranges - continue monitoring\n"
+          
+          report += f"""
+          ---
+
+          **Next Steps**:
+          - Week {current_week + 1 if current_week < 4 else 'Final'} monitoring: {(week_end).strftime('%Y-%m-%d')} to {min(week_end + timedelta(days=7), PHASE5_END).strftime('%Y-%m-%d')}
+          - {'Final 30-day analysis after Week 4 completion' if current_week == 4 else f'Continue weekly monitoring'}
+          """
+          
+          # Write report
+          report_file = f'specs/003-ci-build-fix/PHASE5_WEEK{current_week}_REPORT.md'
+          with open(report_file, 'w') as f:
+              f.write(report)
+          
+          print(f"\n✅ Report generated: {report_file}")
+          print(f"\nSuccess Rate: {success_rate:.1f}% (Target: 100%)")
+          print(f"Infrastructure Failure Rate: {infrastructure_failure_rate:.1f}% (Target: <5%)")
+          
+          # Update task completion in REMOTE_TESTING_TASKS.md
+          task_base = 116 + (current_week - 1) * 4
+          print(f"\n📋 Tasks completed: T{task_base}-T{task_base+3}")
+          
+          # Export metrics for next step
+          with open('metrics.json', 'w') as f:
+              json.dump({
+                  'week': current_week,
+                  'total_runs': total_runs,
+                  'success_rate': success_rate,
+                  'infrastructure_failure_rate': infrastructure_failure_rate,
+                  'report_file': report_file,
+                  'tasks': [task_base, task_base+1, task_base+2, task_base+3]
+              }, f)
+          
+          PYTHON_SCRIPT
+
+      - name: Update task tracking
+        run: |
+          # Read metrics
+          WEEK=$(jq -r '.week' metrics.json)
+          TASK_START=$(jq -r '.tasks[0]' metrics.json)
+          REPORT_FILE=$(jq -r '.report_file' metrics.json)
+          
+          # Update REMOTE_TESTING_TASKS.md to mark week tasks as complete
+          sed -i.bak "s/^- \[ \] T${TASK_START} /- [X] T${TASK_START} /" specs/003-ci-build-fix/REMOTE_TESTING_TASKS.md
+          sed -i.bak "s/^- \[ \] T$((TASK_START+1)) /- [X] T$((TASK_START+1)) /" specs/003-ci-build-fix/REMOTE_TESTING_TASKS.md
+          sed -i.bak "s/^- \[ \] T$((TASK_START+2)) /- [X] T$((TASK_START+2)) /" specs/003-ci-build-fix/REMOTE_TESTING_TASKS.md
+          sed -i.bak "s/^- \[ \] T$((TASK_START+3)) /- [X] T$((TASK_START+3)) /" specs/003-ci-build-fix/REMOTE_TESTING_TASKS.md
+          
+          rm -f specs/003-ci-build-fix/REMOTE_TESTING_TASKS.md.bak
+          
+          echo "✅ Updated task tracking for Week ${WEEK}"
+
+      - name: Create issue if metrics fail
+        if: always()
+        run: |
+          SUCCESS_RATE=$(jq -r '.success_rate' metrics.json)
+          INFRA_RATE=$(jq -r '.infrastructure_failure_rate' metrics.json)
+          WEEK=$(jq -r '.week' metrics.json)
+          REPORT_FILE=$(jq -r '.report_file' metrics.json)
+          
+          # Check if we need to create an issue
+          NEEDS_ISSUE=false
+          ISSUE_BODY="## Phase 5 Week ${WEEK} Metrics Alert\n\n"
+          
+          if (( $(echo "$SUCCESS_RATE < 100" | bc -l) )); then
+            NEEDS_ISSUE=true
+            ISSUE_BODY="${ISSUE_BODY}⚠️ **Success Rate Below Target**: ${SUCCESS_RATE}% (Target: 100%)\n\n"
+          fi
+          
+          if (( $(echo "$INFRA_RATE >= 5" | bc -l) )); then
+            NEEDS_ISSUE=true
+            ISSUE_BODY="${ISSUE_BODY}❌ **Infrastructure Failure Rate Exceeds Threshold**: ${INFRA_RATE}% (Target: <5%)\n\n"
+          fi
+          
+          if [ "$NEEDS_ISSUE" = true ]; then
+            ISSUE_BODY="${ISSUE_BODY}📊 **Full Report**: [\`${REPORT_FILE}\`](https://github.com/${{ github.repository }}/blob/develop/${REPORT_FILE})\n\n"
+            ISSUE_BODY="${ISSUE_BODY}**Action Required**: Review failures and address infrastructure issues.\n\n"
+            ISSUE_BODY="${ISSUE_BODY}**Labels**: \`ci\`, \`monitoring\`, \`phase-5\`"
+            
+            echo -e "$ISSUE_BODY" | gh issue create \
+              --title "🚨 Phase 5 Week ${WEEK}: CI Metrics Below Target" \
+              --body-file - \
+              --label "ci,monitoring,phase-5" \
+              --assignee "@me" || true
+            
+            echo "⚠️ Issue created for failed metrics"
+          else
+            echo "✅ All metrics within targets - no issue needed"
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit and push reports
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          git add specs/003-ci-build-fix/PHASE5_WEEK*.md
+          git add specs/003-ci-build-fix/REMOTE_TESTING_TASKS.md
+          
+          WEEK=$(jq -r '.week' metrics.json)
+          
+          if ! git diff --staged --quiet; then
+            git commit -m "chore(monitoring): Phase 5 Week ${WEEK} metrics collection
+
+          - Collected CI run data for week ${WEEK}
+          - Generated monitoring report
+          - Updated task tracking (T$(jq -r '.tasks[0]' metrics.json)-T$(jq -r '.tasks[3]' metrics.json))
+          - Success rate: $(jq -r '.success_rate' metrics.json)%
+          - Infrastructure failure rate: $(jq -r '.infrastructure_failure_rate' metrics.json)%"
+            
+            git push
+            echo "✅ Reports committed and pushed"
+          else
+            echo "ℹ️ No changes to commit"
+          fi
