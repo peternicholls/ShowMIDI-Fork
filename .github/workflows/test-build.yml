@@ -42,8 +42,56 @@ env:
   JUCE_VERSION: 7.0.5
 
 jobs:
+  code-quality:
+    name: Code Quality Checks
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential pkg-config \
+          libasound2-dev libfreetype6-dev libx11-dev \
+          libxrandr-dev libxinerama-dev libxcursor-dev
+    
+    - name: Check GPL-3.0 headers
+      run: |
+        echo "Checking for GPL-3.0 license headers in source files..."
+        missing_headers=0
+        for file in $(find Source -name "*.cpp" -o -name "*.h"); do
+          if ! grep -q "GNU General Public License" "$file"; then
+            echo "❌ Missing GPL-3.0 header: $file"
+            missing_headers=$((missing_headers + 1))
+          fi
+        done
+        if [ $missing_headers -gt 0 ]; then
+          echo "⚠️  Found $missing_headers files without GPL-3.0 headers"
+          echo "This is a warning, not blocking the build"
+        else
+          echo "✅ All source files have GPL-3.0 headers"
+        fi
+    
+    - name: Configure CMake
+      run: |
+        mkdir -p build
+        cd build
+        cmake .. -DCMAKE_BUILD_TYPE=Release
+      env:
+        SHOWMIDI_WERROR: "1"  # Enable warnings-as-errors for ShowMIDI code
+    
+    - name: Build (warnings as errors)
+      run: |
+        cd build
+        cmake --build . --config Release
+
   test-macos:
     name: Test macOS Build
+    needs: code-quality  # Only run builds if code quality checks pass (fail-fast)
     if: ${{ github.event.inputs.platform == 'all' || github.event.inputs.platform == 'macos' || github.event_name == 'pull_request' }}
     runs-on: macos-14  # Pin to macOS 14 - JUCE 7.0.5 incompatible with macOS 15 APIs
 
@@ -84,6 +132,7 @@ jobs:
 
   test-windows:
     name: Test Windows Build
+    needs: code-quality  # Only run builds if code quality checks pass (fail-fast)
     if: ${{ github.event.inputs.platform == 'all' || github.event.inputs.platform == 'windows' || github.event_name == 'pull_request' }}
     runs-on: windows-latest
 
@@ -131,6 +180,7 @@ jobs:
 
   test-linux:
     name: Test Linux Build
+    needs: code-quality  # Only run builds if code quality checks pass (fail-fast)
     if: ${{ github.event.inputs.platform == 'all' || github.event.inputs.platform == 'linux' || github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
 
