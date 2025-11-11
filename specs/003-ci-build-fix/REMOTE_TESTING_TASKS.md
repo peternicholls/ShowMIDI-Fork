@@ -170,50 +170,97 @@ pull_request:
 
 ### Test 1.4: CLAP Build Validation
 
-- [ ] T031 Verify CLAP submodule status (git submodule status libs/clap-juce-extensions)
-- [ ] T032 If not initialized, initialize CLAP submodule
-- [ ] T033 Create test branch test/ci-validation-004-clap
-- [ ] T034 Add trivial comment to Source/Main.cpp
-- [ ] T035 Commit and push test branch to remote
-- [ ] T036 Monitor build logs for CLAP detection messages
-- [ ] T037 Verify BUILD_CLAP flag set correctly in CMake output
-- [ ] T038 Document Test 1.4 results in iteration log
+- [X] T031 Verify CLAP submodule status (git submodule status libs/clap-juce-extensions)
+- [X] T032 If not initialized, initialize CLAP submodule  
+- [X] T033 Create test branch test/ci-validation-004-clap
+- [X] T034 Add trivial comment to Source/Main.cpp
+- [X] T035 Commit and push test branch to remote
+- [X] T036 Monitor build logs for CLAP detection messages
+- [X] T037 Verify BUILD_CLAP flag set correctly in CMake output
+- [X] T038 Document Test 1.4 results in iteration log
 
 ### Test 1.5: System Library Detection (Linux)
 
-- [ ] T039 Review Linux job logs using gh run view --job build-linux --log
-- [ ] T040 Verify system libraries installed (libasound2-dev, libx11-dev, libfreetype6-dev)
-- [ ] T041 Check CMake STATUS messages for library detection
-- [ ] T042 Verify no missing dependency FATAL_ERROR messages
-- [ ] T043 Document Test 1.5 results in iteration log
+- [X] T039 Review Linux job logs using gh run view --job build-linux --log
+- [X] T040 Verify system libraries installed (libasound2-dev, libx11-dev, libfreetype6-dev)
+- [X] T041 Check CMake STATUS messages for library detection
+- [X] T042 Verify no missing dependency FATAL_ERROR messages
+- [X] T043 Document Test 1.5 results in iteration log
+
+Result summary (Test 1.5): ✅ **COMPLETE - All Linux system libraries detected**
+- Package installation verified: libasound2-dev, libx11-dev, libxrandr-dev, libxinerama-dev, libxcursor-dev all unpacked and set up successfully
+- CMake detection messages:
+  - `-- Found ALSA: /usr/lib/x86_64-linux-gnu/libasound.so (found version "1.2.11")`
+  - `-- Found X11: /usr/include`
+  - `-- Found Freetype: /usr/lib/x86_64-linux-gnu/libfreetype.so (found version "2.13.2")`
+  - `-- All required Linux system libraries found (ALSA, X11, Freetype)`
+- Zero FATAL_ERROR or missing dependency errors
+- Build completed successfully with all JUCE modules compiling
 
 ### Test 1.6: Xcode Adaptive Selection (macOS)
 
-- [ ] T044 Review macOS job logs using gh run view --job build-and-test-macos --log
-- [ ] T045 Verify Xcode version detected correctly
-- [ ] T046 Verify Xcode path exists (no "invalid developer directory" error)
-- [ ] T047 Verify xcodebuild --version output shows valid version
-- [ ] T048 Verify zero "invalid developer directory" errors (SC-008)
-- [ ] T049 Document Test 1.6 results in iteration log
+- [X] T044 Review macOS job logs using gh run view --job build-and-test-macos --log
+- [X] T045 Verify Xcode version detected correctly
+- [X] T046 Verify Xcode path exists (no "invalid developer directory" error)
+- [X] T047 Verify xcodebuild --version output shows valid version
+- [X] T048 Verify zero "invalid developer directory" errors (SC-008)
+- [X] T049 Document Test 1.6 results in iteration log
+
+Result summary (Test 1.6): ✅ **COMPLETE - Xcode adaptive selection working perfectly**
+- Xcode version detected: `Xcode 15.4` (Build version 15F31d)
+- Developer directory: `/Applications/Xcode_15.4.app/Contents/Developer` (valid path)
+- xcodebuild invocation successful (used for universal binary build)
+- **Zero "invalid developer directory" errors** ✅ (SC-008 validated)
+- Build completed successfully with arm64+x86_64 universal binaries
 
 ### Test 1.7: Artifact Upload Verification
 
-- [ ] T050 List artifacts using gh run view <run-id> --json artifacts
-- [ ] T051 Download artifacts to local machine using gh run download
-- [ ] T052 Verify macOS artifacts present (Standalone, VST3, AU)
-- [ ] T053 Verify Windows artifacts present (Standalone, VST3)
-- [ ] T054 Verify Linux artifacts present (Standalone, VST3, LV2)
-- [ ] T055 Verify artifact retention set to 90 days
-- [ ] T056 Document Test 1.7 results in iteration log
+- [X] T050 List artifacts using gh run view <run-id> --json artifacts
+- [X] T051 Download artifacts to local machine using gh run download
+- [X] T052 Verify macOS artifacts present (Standalone, VST3, AU)
+- [X] T053 Verify Windows artifacts present (Standalone, VST3)
+- [X] T054 Verify Linux artifacts present (Standalone, VST3, LV2)
+- [X] T055 Verify artifact retention set to 90 days
+- [X] T056 Document Test 1.7 results in iteration log
+
+Result summary (Test 1.7): ✅ **COMPLETE - All artifacts uploaded with correct retention**
+- **ShowMIDI-macOS**: 21,260,690 bytes (~20.3 MB) - Universal binary (arm64+x86_64)
+- **ShowMIDI-Windows**: 5,579,197 bytes (~5.3 MB) - Standalone + VST3
+- **ShowMIDI-Linux**: 13,537,400 bytes (~12.9 MB) - Standalone + VST3 + LV2
+- **Retention period**: 90 days (expires 2026-02-09) ✅
+- All three platform artifacts successfully uploaded and available for download
 
 ### Test 1.8: Timeout Protection Validation
 
-- [ ] T057 Verify timeout-minutes configured in .github/workflows/ci.yml
-- [ ] T058 Confirm macOS job has timeout-minutes: 30
-- [ ] T059 Confirm Windows job has timeout-minutes: 25
-- [ ] T060 Confirm Linux job has timeout-minutes: 20
-- [ ] T061 Monitor actual build times vs timeout limits
-- [ ] T062 Document Test 1.8 results in iteration log
+- [X] T057 Verify timeout-minutes configured in .github/workflows/ci.yml
+- [X] T058 Confirm macOS job has timeout-minutes: 30
+- [X] T059 Confirm Windows job has timeout-minutes: 25
+- [X] T060 Confirm Linux job has timeout-minutes: 20
+- [X] T061 Monitor actual build times vs timeout limits
+- [X] T062 Document Test 1.8 results in iteration log
+
+Result summary (Test 1.8): ✅ **COMPLETE - Timeout protection configured with healthy margins**
+- **macOS (Build and Test)**: timeout 30min, actual 4.4min (85% margin) ✅
+- **Windows (Build)**: timeout 25min, actual 3.8min (85% margin) ✅
+- **Linux (Build)**: timeout 20min, actual 5.2min (74% margin) ✅
+- All jobs complete well within timeout limits
+- Protection against hung builds/infrastructure issues active
+
+---
+
+**Phase 1 Baseline Testing: COMPLETE** ✅
+
+All 8 baseline tests (1.1 through 1.8) passed successfully:
+- ✅ Test 1.1: Trivial change PR validation (all jobs passing)
+- ✅ Test 1.2: Documentation-only PR skip (paths-ignore working)
+- ✅ Test 1.3: Concurrency cancellation (cancel-in-progress working)
+- ✅ Test 1.4: CLAP build validation (graceful degradation)
+- ✅ Test 1.5: Linux system library detection (all libs found)
+- ✅ Test 1.6: Xcode adaptive selection (zero errors, SC-008)
+- ✅ Test 1.7: Artifact uploads (all platforms, 90-day retention)
+- ✅ Test 1.8: Timeout protection (healthy margins)
+
+**Next Phase**: Phase 3 - Performance Benchmarking (optional/deferred)
 
 ---
 
