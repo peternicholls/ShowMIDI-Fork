@@ -446,11 +446,33 @@ Validation: Test 1.3 (run 19250714765) demonstrated cancel-in-progress working:
 
 ### Edge Case 4.3: Mixed Documentation and Code Changes
 
-- [ ] T101 Create PR with both doc and code changes
-- [ ] T102 Add comment to Source/Main.cpp and README.md
-- [ ] T103 Verify full CI workflow runs (not skipped)
-- [ ] T104 Verify all build jobs execute
-- [ ] T105 Document Edge Case 4.3 results
+- [X] T101 Create PR with both doc and code changes
+- [X] T102 Add comment to Source/Main.cpp and README.md
+- [X] T103 Verify full CI workflow runs (not skipped)
+- [X] T104 Verify all build jobs execute
+- [X] T105 Document Edge Case 4.3 results
+
+Result summary (Edge Case 4.3): ✅ **COMPLETE - Mixed changes trigger full CI workflow**
+- **Test PR**: #18 (`test/ci-validation-edge-case-4.3-mixed-changes`)
+- **Changes Made**:
+  - Documentation: HTML comment added to README.md (would normally be ignored)
+  - Code: Comment updated in Source/Main.cpp (triggers CI)
+- **CI Workflow**: https://github.com/peternicholls/ShowMIDI-Fork/actions/runs/19275974050
+- **paths-ignore Behavior**: Did NOT skip workflow (code change present) ✅
+- **Jobs Executed**: All 4 jobs ran successfully ✅
+  - Code Quality Checks: ✅ PASS (6m27s)
+  - macOS Build: ✅ PASS (4m54s)
+  - Windows Build: ✅ PASS (3m38s)
+  - Linux Build: ✅ PASS (3m32s)
+- **Total Workflow Time**: ~6m27s (all jobs in parallel)
+- **paths-ignore Logic**: Correctly prioritizes code changes over doc-only optimization
+
+**Technical Validation**:
+- GitHub Actions paths-ignore works as "ALL paths must match ignore patterns to skip"
+- ANY non-ignored file (like .cpp) prevents workflow skip
+- This prevents false-positives where code changes might be missed in mixed PRs
+
+**Edge Case 4.3 Status**: ✅ COMPLETE - Mixed changes correctly trigger full CI validation
 
 ### Edge Case 4.4: Large Number of Concurrent PRs
 
