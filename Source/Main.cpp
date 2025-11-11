@@ -25,3 +25,6 @@ JUCE_BEGIN_IGNORE_WARNINGS_GCC_LIKE ("-Wmissing-prototypes")
 JUCEApplicationBase* juce_CreateApplication() { return new showmidi::ShowMidiApplication(); }
 void* juce_GetIOSCustomDelegateClass()        { return nullptr; }
 JUCE_END_IGNORE_WARNINGS_GCC_LIKE
+
+// CI concurrency test commit 1
+// CI concurrency test commit 2 (second rapid push to trigger cancellation)
