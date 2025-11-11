@@ -15,9 +15,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include <JuceHeader.h>
 
 #include "ShowMidiApplication.h"
+
+// Test 1.4: CLAP build validation marker (trivial change to trigger CI)
 
 ApplicationCommandManager* commandManager = 0;
 JUCE_BEGIN_IGNORE_WARNINGS_GCC_LIKE ("-Wmissing-prototypes")

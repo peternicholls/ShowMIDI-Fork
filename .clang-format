@@ -1,0 +1,73 @@
+# ShowMIDI clang-format configuration
+# Based on LLVM style with JUCE framework adaptations
+
+BasedOnStyle: LLVM
+Language: Cpp
+
+# Brace wrapping - Allman style (JUCE standard)
+BreakBeforeBraces: Allman
+
+# Indentation
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+NamespaceIndentation: None
+IndentCaseLabels: false
+
+# Line length
+ColumnLimit: 120
+
+# Pointers and references - left-aligned (Type* ptr)
+PointerAlignment: Left
+ReferenceAlignment: Left
+
+# Spacing
+SpaceAfterCStyleCast: false
+SpaceBeforeParens: ControlStatements
+SpacesInParentheses: false
+SpacesInSquareBrackets: false
+SpaceBeforeAssignmentOperators: true
+
+# Alignment
+AlignConsecutiveAssignments: false
+AlignConsecutiveMacros: true
+AlignConsecutiveDeclarations: false
+AlignTrailingComments: true
+
+# Breaking
+AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+AllowShortBlocksOnASingleLine: Never
+BreakBeforeBinaryOperators: None
+BreakBeforeTernaryOperators: true
+
+# Comments
+ReflowComments: true
+CommentPragmas: '^ IWYU pragma:'
+
+# Includes
+SortIncludes: CaseSensitive
+IncludeBlocks: Preserve
+
+# Macros
+MacroBlockBegin: ''
+MacroBlockEnd: ''
+
+# Penalties (fine-tuning line breaking decisions)
+PenaltyBreakBeforeFirstCallParameter: 19
+PenaltyBreakComment: 300
+PenaltyBreakString: 1000
+PenaltyExcessCharacter: 1000000
+PenaltyReturnTypeOnItsOwnLine: 60
+
+# Other
+AccessModifierOffset: -4
+AlwaysBreakAfterReturnType: None
+AlwaysBreakTemplateDeclarations: Yes
+BinPackArguments: true
+BinPackParameters: true
+CompactNamespaces: false
+ConstructorInitializerIndentWidth: 4
+ContinuationIndentWidth: 4
+FixNamespaceComments: true
