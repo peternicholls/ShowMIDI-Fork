@@ -1,0 +1,365 @@
+# CI Test Matrix Configuration
+
+**Version**: 1.0.0  
+**Feature**: 004-tdd-adoption  
+**Platforms**: macOS, Windows, Linux, iOS (simulator)
+
+## Overview
+
+This document defines the cross-platform continuous integration test matrix for ShowMIDI. It specifies which tests run on which platforms, runner configurations, and execution order.
+
+## Platform Matrix
+
+### macOS
+
+**Runner**: `macos-latest` (GitHub Actions)  
+**Toolchain**: Xcode (latest stable)  
+**Architectures**: x86_64, Arm64 (universal binary)  
+**Plugin Formats Tested**: Standalone, VST3, AU, AUv3 (iOS simulator)
+
+**Test Execution**:
+```yaml
+test-macos:
+  runs-on: macos-latest
+  steps:
+    - name: Build tests
+      run: |
+        cmake -B build -DBUILD_TESTS=ON -DCMAKE_BUILD_TYPE=Debug
+        cmake --build build --target ShowMIDI_Tests
+    
+    - name: Run unit tests
+      run: |
+        cd build
+        ctest -L unit --output-on-failure
+    
+    - name: Run integration tests
+      run: |
+        cd build
+        ctest -L integration --output-on-failure
+    
+    - name: Run system tests (Standalone + AU)
+      run: |
+        cd build
+        ctest -L system --output-on-failure
+    
+    - name: Run iOS simulator tests
+      run: |
+        cd build
+        ctest -L ios --output-on-failure
+```
+
+**Dependencies**: None (Xcode includes all required SDKs)
+
+**Estimated Duration**: 8–12 minutes
+
+---
+
+### Windows
+
+**Runner**: `windows-latest` (GitHub Actions)  
+**Toolchain**: Visual Studio 2022  
+**Architectures**: x86_64  
+**Plugin Formats Tested**: Standalone, VST3
+
+**Test Execution**:
+```yaml
+test-windows:
+  runs-on: windows-latest
+  steps:
+    - name: Build tests
+      run: |
+        cmake -B build -DBUILD_TESTS=ON -DCMAKE_BUILD_TYPE=Debug
+        cmake --build build --config Debug --target ShowMIDI_Tests
+    
+    - name: Run unit tests
+      run: |
+        cd build
+        ctest -C Debug -L unit --output-on-failure
+    
+    - name: Run integration tests
+      run: |
+        cd build
+        ctest -C Debug -L integration --output-on-failure
+    
+    - name: Run system tests (Standalone + VST3)
+      run: |
+        cd build
+        ctest -C Debug -L system --output-on-failure
+```
+
+**Dependencies**: None (VS2022 runner pre-configured)
+
+**Estimated Duration**: 10–14 minutes (slower due to Windows FS overhead)
+
+---
+
+### Linux
+
+**Runner**: `ubuntu-latest` (GitHub Actions)  
+**Toolchain**: GCC (latest stable)  
+**Architectures**: x86_64  
+**Plugin Formats Tested**: Standalone, VST3, LV2
+
+**Test Execution**:
+```yaml
+test-linux:
+  runs-on: ubuntu-latest
+  steps:
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libasound2-dev libx11-dev libxrandr-dev \
+          libxinerama-dev libxcursor-dev libfreetype6-dev
+    
+    - name: Build tests
+      run: |
+        cmake -B build -DBUILD_TESTS=ON -DCMAKE_BUILD_TYPE=Debug
+        cmake --build build --target ShowMIDI_Tests
+    
+    - name: Run unit tests
+      run: |
+        cd build
+        ctest -L unit --output-on-failure
+    
+    - name: Run integration tests
+      run: |
+        cd build
+        ctest -L integration --output-on-failure
+    
+    - name: Run system tests (Standalone + VST3 + LV2)
+      run: |
+        cd build
+        ctest -L system --output-on-failure
+```
+
+**Dependencies**: ALSA, X11, Freetype (installed via apt)
+
+**Estimated Duration**: 7–10 minutes (fastest due to native CMake/GCC)
+
+---
+
+### iOS (Simulator)
+
+**Runner**: `macos-latest` (iOS simulator hosted on macOS)  
+**Toolchain**: Xcode (iOS SDK)  
+**Architectures**: x86_64 (simulator), Arm64 (simulator on Apple Silicon)  
+**Plugin Formats Tested**: AUv3 only
+
+**Test Execution**:
+```yaml
+# Runs as part of test-macos job
+- name: Build iOS simulator tests
+  run: |
+    cmake -B build_ios -DBUILD_TESTS=ON -DCMAKE_SYSTEM_NAME=iOS \
+      -DCMAKE_OSX_SYSROOT=iphonesimulator
+    cmake --build build_ios --target ShowMIDI_AUv3_Tests
+
+- name: Run iOS smoke tests
+  run: |
+    cd build_ios
+    ctest -L ios --output-on-failure
+```
+
+**Dependencies**: Xcode with iOS SDK (included in macos-latest)
+
+**Estimated Duration**: 3–5 minutes (smoke tests only, added to macOS job)
+
+**Phase**: Enabled in Phase 1 (Week 3)
+
+---
+
+## Test Label Strategy
+
+Tests are tagged with multiple labels for selective execution:
+
+| Label | Description | Runs On |
+|-------|-------------|---------|
+| `unit` | Fast, isolated component tests | All platforms |
+| `integration` | Multi-component interaction tests | All platforms |
+| `system` | End-to-end, full application tests | All platforms |
+| `midi` | MIDI message handling tests | All platforms |
+| `ui` | User interface and theme tests | All platforms |
+| `settings` | Preferences and persistence tests | All platforms |
+| `fast` | Tests completing in <100ms | All platforms (run first) |
+| `slow` | Tests taking >500ms | All platforms (run last) |
+| `ios` | iOS-specific tests | macOS runner only |
+| `plugin-vst3` | VST3 plugin validation | All platforms |
+| `plugin-au` | Audio Unit validation | macOS only |
+| `plugin-lv2` | LV2 plugin validation | Linux only |
+
+**Example** (test with multiple labels):
+```cpp
+beginTest("MIDI Note On should update channel state");
+// Tagged as: unit, midi, fast
+```
+
+**CMake Registration**:
+```cmake
+add_test(NAME MidiNoteOnTest COMMAND ShowMIDI_Tests --test-name "MIDI Note On")
+set_tests_properties(MidiNoteOnTest PROPERTIES
+    LABELS "unit;midi;fast"
+    COST 5  # Low cost = high priority
+)
+```
+
+**Selective Execution**:
+```bash
+ctest -L unit           # Run all unit tests
+ctest -L "midi;fast"    # Run fast MIDI tests
+ctest -L system -E ios  # Run system tests, exclude iOS
+```
+
+---
+
+## Parallel Execution
+
+**Strategy**: Run tests in parallel across platforms and within platforms.
+
+### Cross-Platform Parallelism
+
+GitHub Actions runs jobs concurrently:
+- `test-macos`, `test-windows`, `test-linux` execute simultaneously
+- Total wall time ≈ slowest job (~12–14 minutes)
+
+### Within-Platform Parallelism
+
+CTest parallel execution:
+```bash
+ctest -j4  # Run 4 tests concurrently
+```
+
+**Cost-Based Scheduling**:
+```cmake
+# Fast tests (unit): COST 5–10 (run first)
+set_tests_properties(ThemeParsingTests PROPERTIES COST 5)
+
+# Medium tests (integration): COST 20–40
+set_tests_properties(MidiFlowTests PROPERTIES COST 30)
+
+# Slow tests (system): COST 50–100 (run last)
+set_tests_properties(StandaloneAppLaunchTests PROPERTIES COST 80)
+```
+
+**Performance Gain**: ~45% reduction in serial execution time (8 min → 4.4 min with `-j4`)
+
+---
+
+## Test Result Artifacts
+
+Each platform job uploads test results for debugging:
+
+```yaml
+- name: Upload test results
+  if: always()
+  uses: actions/upload-artifact@v4
+  with:
+    name: test-results-${{ matrix.platform }}
+    path: |
+      build/test-results.xml
+      build/test-output.log
+```
+
+**Artifact Retention**: 90 days
+
+**Format**: JUnit XML (enables GitHub UI test result display)
+
+---
+
+## Coverage Reporting
+
+### Phase 1 (Week 3): Linux Only
+
+```yaml
+coverage-linux:
+  runs-on: ubuntu-latest
+  steps:
+    - name: Build with coverage
+      run: |
+        cmake -B build -DCMAKE_BUILD_TYPE=Coverage -DBUILD_TESTS=ON
+        cmake --build build
+    
+    - name: Run tests
+      run: |
+        cd build
+        ctest --output-on-failure
+    
+    - name: Generate coverage report
+      run: |
+        lcov --capture --directory build --output-file coverage.info
+        lcov --remove coverage.info '/usr/*' '*/JUCE/*' --output-file coverage_filtered.info
+        genhtml coverage_filtered.info --output-directory coverage_html
+    
+    - name: Upload coverage
+      uses: codecov/codecov-action@v4
+      with:
+        files: coverage_filtered.info
+        flags: linux
+```
+
+### Phase 3 (Week 6): Multi-Platform Coverage
+
+**Aggregation**: Codecov merges reports from macOS, Windows, Linux
+
+**Badge**: `![Coverage](https://codecov.io/gh/owner/ShowMIDI/branch/develop/graph/badge.svg)`
+
+---
+
+## Failure Handling
+
+### Transient Failures
+
+**Retry Policy** (GitHub Actions):
+```yaml
+- name: Run tests with retry
+  uses: nick-fields/retry@v2
+  with:
+    timeout_minutes: 10
+    max_attempts: 2
+    command: ctest --output-on-failure
+```
+
+**Quarantine**: Tests identified as flaky are tagged `flaky` and excluded from CI temporarily while fixed.
+
+### Hard Failures
+
+**Blocking Policy** (aligned with spec FR-011):
+- **Weeks 1–2**: Report-only (no merge blocking)
+- **Week 3+**: New test failures block merges
+- **Week 6**: All legacy failures cleared or ticketed
+- **Week 8+**: Hard gate for all tests
+
+**GitHub Branch Protection**:
+```yaml
+# .github/branch-protection.yml
+required_status_checks:
+  strict: true
+  contexts:
+    - test-macos
+    - test-windows
+    - test-linux
+```
+
+---
+
+## Phased Rollout Timeline
+
+| Phase | Weeks | Platforms | Plugin Formats | Labels Enabled |
+|-------|-------|-----------|----------------|----------------|
+| **0 Seeding** | 1 | macOS, Windows, Linux | Standalone | unit, midi, fast |
+| **1 Stabilize** | 2–3 | + iOS simulator | + AUv3 | + ios, integration |
+| **2 Expansion** | 4–6 | (same) | + VST3 | + plugin-vst3, system |
+| **3 Enforcement** | 7–8 | (same) | + AU, LV2 | + plugin-au, plugin-lv2 |
+| **4 Optimization** | 9+ | (same) | (same) | + performance benchmarks |
+
+---
+
+## Questions?
+
+**Troubleshooting**: See `specs/004-tdd-adoption/quickstart.md` for local setup.
+
+**CI Logs**: Available in GitHub Actions UI under "Test Results" tab.
+
+---
+
+**Version History**:
+- 1.0.0 (2025-11-11): Initial CI matrix for TDD adoption
