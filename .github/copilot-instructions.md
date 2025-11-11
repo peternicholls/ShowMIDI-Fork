@@ -7,11 +7,13 @@ Auto-generated from all feature plans. Last updated: 2025-11-08
 - Text files in repository root and .github/ directory (version controlled via git) (002-dev-housekeeping)
 - YAML (GitHub Actions workflow syntax), CMake 3.15+, Shell scripting (Bash/PowerShell) + GitHub Actions runners (ubuntu-latest, macos-latest, windows-latest), JUCE 7.0.5, CMake, Xcode (macOS), Visual Studio 2022 (Windows), system libraries (ALSA, X11, Freetype on Linux) (003-ci-build-fix)
 - N/A (CI/CD configuration only) (003-ci-build-fix)
+- Git submodules for dependency management, Steinberg VST3 SDK v3.7.11 (external submodule at libs/vst3sdk) (005-vst3-sdk-upstream)
 
 - C++17 (JUCE framework requirements)
 - JUCE framework (audio plugin framework)
 - CMake (build system)
 - Projucer (.jucer project files)
+- JUCE_CUSTOM_VST3_SDK flag for external VST3 SDK integration
 
 ## Project Structure
 
@@ -246,15 +248,21 @@ git push origin release/1.1.0
 ```
 
 ## Recent Changes
-- 003-ci-build-fix: Added YAML (GitHub Actions workflow syntax), CMake 3.15+, Shell scripting (Bash/PowerShell) + GitHub Actions runners (ubuntu-latest, macos-latest, windows-latest), JUCE 7.0.5, CMake, Xcode (macOS), Visual Studio 2022 (Windows), system libraries (ALSA, X11, Freetype on Linux)
-- 002-dev-housekeeping: Completed development housekeeping infrastructure
+- 004-tdd-adoption: Added [if applicable, e.g., PostgreSQL, CoreData, files or N/A]
+- 005-vst3-sdk-upstream: Added Steinberg VST3 SDK as git submodule
+  - VST3 SDK v3.7.11_build_10 at `libs/vst3sdk` (git submodule)
+  - CMake configuration: `JUCE_CUSTOM_VST3_SDK=1` flag enables external VST3 SDK
+  - Projucer configuration: Preprocessor definitions updated for all exporters
+  - Documentation: README.md and CONTRIBUTING.md include submodule initialization instructions
+  - CI/CD: Existing `submodules: recursive` checkout handles VST3 SDK automatically
+  - Technologies: Git submodules, Steinberg VST3 SDK, JUCE custom SDK integration
+- 004-tdd-adoption: Added [if applicable, e.g., PostgreSQL, CoreData, files or N/A]
   - Added configuration files (.editorconfig, .clang-format, updated .gitignore)
   - Added documentation (CHANGELOG.md, CONTRIBUTING.md, DOWNLOAD_STATS.md, PR template)
   - Migrated CI/CD workflows from .github/prompts/workflows/ to .github/workflows/
   - Migrated scripts to scripts/ directory with typo corrections
   - Technologies: Markdown, YAML, EditorConfig, clang-format, Bash scripts
 
-- 001-dpi-scaling: Added C++17 (JUCE framework requirements)
 
 <!-- MANUAL ADDITIONS START -->
 <!-- MANUAL ADDITIONS END -->
