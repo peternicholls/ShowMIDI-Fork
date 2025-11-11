@@ -65,11 +65,11 @@ jobs:
 
     - name: Configure
       run: |
-        BUILD_TYPE="${{ github.event.inputs.build_type }}"
-        cmake -B ${{ env.BUILD_DIR }} -G Ninja -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" -DCMAKE_OSX_DEPLOYMENT_TARGET=10.13
+        BUILD_TYPE="${{ github.event.inputs.build_type || 'Release' }}"
+        cmake -B ${{ env.BUILD_DIR }} -G Ninja -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0
 
     - name: Build
-      run: cmake --build ${{ env.BUILD_DIR }} --config ${{ github.event.inputs.build_type }}
+      run: cmake --build ${{ env.BUILD_DIR }}
 
     - name: Find artifacts
       run: |
@@ -102,8 +102,10 @@ jobs:
 
     - name: Configure & build
       run: |
-        cmake -B ${{ env.BUILD_DIR }} -G Ninja -DCMAKE_BUILD_TYPE=${{ github.event.inputs.build_type }}
-        cmake --build ${{ env.BUILD_DIR }} --config ${{ github.event.inputs.build_type }}
+        $BUILD_TYPE = "${{ github.event.inputs.build_type }}"
+        if ([string]::IsNullOrEmpty($BUILD_TYPE)) { $BUILD_TYPE = "Release" }
+        cmake -B ${{ env.BUILD_DIR }} -G Ninja -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+        cmake --build ${{ env.BUILD_DIR }}
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
@@ -126,12 +128,15 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y build-essential cmake ninja-build libasound2-dev libx11-dev libfreetype6-dev || true
+        sudo apt-get install -y build-essential cmake ninja-build \
+          libasound2-dev libx11-dev libfreetype6-dev \
+          libxrandr-dev libxinerama-dev libxcursor-dev || true
 
     - name: Configure & build
       run: |
-        cmake -B ${{ env.BUILD_DIR }} -G Ninja -DCMAKE_BUILD_TYPE=${{ github.event.inputs.build_type }}
-        cmake --build ${{ env.BUILD_DIR }} --config ${{ github.event.inputs.build_type }}
+        BUILD_TYPE="${{ github.event.inputs.build_type || 'Release' }}"
+        cmake -B ${{ env.BUILD_DIR }} -G Ninja -DCMAKE_BUILD_TYPE=${BUILD_TYPE}
+        cmake --build ${{ env.BUILD_DIR }}
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
