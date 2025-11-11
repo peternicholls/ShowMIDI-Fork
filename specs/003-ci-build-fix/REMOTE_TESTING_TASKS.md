@@ -170,14 +170,31 @@ pull_request:
 
 ### Test 1.4: CLAP Build Validation
 
-- [ ] T031 Verify CLAP submodule status (git submodule status libs/clap-juce-extensions)
-- [ ] T032 If not initialized, initialize CLAP submodule
-- [ ] T033 Create test branch test/ci-validation-004-clap
-- [ ] T034 Add trivial comment to Source/Main.cpp
-- [ ] T035 Commit and push test branch to remote
-- [ ] T036 Monitor build logs for CLAP detection messages
-- [ ] T037 Verify BUILD_CLAP flag set correctly in CMake output
-- [ ] T038 Document Test 1.4 results in iteration log
+- [X] T031 Verify CLAP submodule status (git submodule status libs/clap-juce-extensions)
+- [X] T032 If not initialized, initialize CLAP submodule
+- [X] T033 Create test branch test/ci-validation-004-clap
+- [X] T034 Add trivial comment to Source/Main.cpp
+- [X] T035 Commit and push test branch to remote
+- [X] T036 Monitor build logs for CLAP detection messages
+- [X] T037 Verify BUILD_CLAP flag set correctly in CMake output
+- [X] T038 Document Test 1.4 results in iteration log
+
+Result summary (Test 1.4): ✅ **COMPLETE - CLAP submodule detected, plugin format intentionally disabled**
+- CI Run: https://github.com/peternicholls/ShowMIDI-Fork/actions/runs/19250912223
+- Code Quality job CMake warning: `CLAP plugin format temporarily disabled.  CLAP requires two-stage build (see CMakeLists.txt header).`
+- BUILD_CLAP state: OFF (by design, pending two-stage build implementation)
+- Submodule checkout confirmed (commit `4491bc30223c` + nested clap + clap-helpers)
+- macOS, Windows, Linux builds all successful with CLAP disabled warning only in CMake configure step.
+- iOS AUv3 job skipped (expected)
+- Job durations:
+  - Code Quality: ~7m29s
+  - macOS Build & Test: ~4m23s
+  - Windows Build: ~3m48s
+  - Linux Build: ~5m14s
+- Acceptance: CLAP detection path exercised; graceful degradation verified; no build failures.
+
+**Next Action**: Proceed to Test 1.5 (Linux system library detection).
+
 
 ### Test 1.5: System Library Detection (Linux)
 
