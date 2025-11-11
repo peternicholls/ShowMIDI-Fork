@@ -93,25 +93,40 @@ jobs:
       with:
         submodules: recursive
 
-    - name: Setup MSVC
-      uses: ilammy/msvc-dev-cmd@v1
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v2
 
-    - name: Install tools
+    - name: Build with Visual Studio 2022
       run: |
-        choco install cmake ninja -y || true
+        cd Builds\VisualStudio2022
+        $CONFIG = "${{ github.event.inputs.build_type }}"
+        if ([string]::IsNullOrEmpty($CONFIG)) { $CONFIG = "Release" }
+        # Build shared code and helpers first
+        msbuild ShowMIDI_SharedCode.vcxproj /p:Configuration=$CONFIG /p:Platform=x64
+        msbuild ShowMIDI_VST3ManifestHelper.vcxproj /p:Configuration=$CONFIG /p:Platform=x64
+        # Build plugin targets (skip VST2 - requires proprietary SDK)
+        msbuild ShowMIDI_StandalonePlugin.vcxproj /p:Configuration=$CONFIG /p:Platform=x64
+        msbuild ShowMIDI_VST3.vcxproj /p:Configuration=$CONFIG /p:Platform=x64
 
-    - name: Configure & build
+    - name: Verify build artifacts
       run: |
-        $BUILD_TYPE = "${{ github.event.inputs.build_type }}"
-        if ([string]::IsNullOrEmpty($BUILD_TYPE)) { $BUILD_TYPE = "Release" }
-        cmake -B ${{ env.BUILD_DIR }} -G Ninja -DCMAKE_BUILD_TYPE=$BUILD_TYPE
-        cmake --build ${{ env.BUILD_DIR }}
+        $CONFIG = "${{ github.event.inputs.build_type }}"
+        if ([string]::IsNullOrEmpty($CONFIG)) { $CONFIG = "Release" }
+        $exePath = "Builds\VisualStudio2022\x64\$CONFIG\Standalone Plugin\ShowMIDI.exe"
+        if (Test-Path $exePath) {
+          Write-Host "✅ Build succeeded: $exePath"
+        } else {
+          Write-Host "❌ Build artifact not found: $exePath"
+          exit 1
+        }
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
         name: test-build-windows-${{ github.run_number }}
-        path: ${{ env.BUILD_DIR }}/**/*.exe
+        path: |
+          Builds/VisualStudio2022/x64/**/*.exe
+          Builds/VisualStudio2022/x64/**/*.vst3
         retention-days: 3
 
   test-linux:
