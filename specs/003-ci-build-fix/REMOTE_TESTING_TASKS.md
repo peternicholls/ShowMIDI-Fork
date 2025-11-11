@@ -10,10 +10,12 @@
 **2025-11-11**: Added fail-fast CI pattern
 - All build jobs now depend on `code-quality` job passing first
 - Implements best practice: quality gates before expensive builds
+- **Applied to both workflows**: `ci.yml` AND `test-build.yml`
 - Benefits:
   - Faster feedback: Quality failures detected in ~2min (vs ~6min waiting for builds)
   - Resource efficiency: Don't waste runner minutes on known-bad code
   - Cost savings: Prevent unnecessary macOS/Windows build jobs
+  - **No failure emails**: Build jobs don't run (and fail) when code quality fails first
 - Impact: All Phase 4 edge case tests should be re-validated with this change
 
 ---
