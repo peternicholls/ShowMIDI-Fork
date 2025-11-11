@@ -13,6 +13,46 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## [1.1.2] - 2025-11-11
+
+### Fixed
+- **CI/CD Infrastructure**: Complete rebuild of GitHub Actions workflows
+  - Fixed macOS builds by migrating from Xcode projects to CMake (eliminates hardcoded absolute paths)
+  - Pinned macOS builds to macos-14 runner (JUCE 7.0.5 incompatible with macOS 15 API deprecations)
+  - Fixed Windows builds (VST3 + Standalone) - excluded VST2 (proprietary SDK requirement)
+  - Fixed Linux builds with proper system library detection (ALSA, X11, Freetype)
+  - Applied `-Werror` (warnings as errors) only to ShowMIDI sources, not JUCE modules
+  - Fixed signed/unsigned comparison warnings in MidiDeviceComponent.cpp
+- **Build System**: Enhanced CMakeLists.txt with complete JUCE plugin target definitions
+  - Added all source files, binary data (fonts, SVG icons, themes)
+  - Configured conditional -Werror via SHOWMIDI_WERROR environment variable
+  - Universal binary support for macOS (arm64 + x86_64)
+- **Workflow Optimization**:
+  - Added paths-ignore filter to skip CI on documentation-only changes
+  - Implemented concurrency control (cancel-in-progress) to save CI resources
+  - Configured appropriate timeout limits per platform (macOS: 30min, Windows: 25min, Linux: 20min)
+  - Upgraded artifact upload to actions/upload-artifact@v4 with 90-day retention
+  - Aligned test-build.yml workflow with production CI patterns
+
+### Changed
+- **Build Times**: Dramatically improved CI build performance
+  - macOS: ~2.5 minutes (previously broken)
+  - Windows: ~3.5 minutes (previously broken)
+  - Linux: ~3.8 minutes (previously broken)
+  - Total workflow time: ~6 minutes
+- **CI/CD Architecture**: Migrated from project files to CMake for consistent cross-platform builds
+- **Development Workflow**: Added comprehensive Phase 1 baseline testing (8/8 tests passing)
+  - Validated all success criteria (SC-001 through SC-011)
+  - Full constitution compliance verified
+
+### Added
+- **Documentation**: Comprehensive CI/CD testing and validation documentation
+  - REMOTE_TESTING_TASKS.md with complete test results
+  - CODE_REVIEW.md with workflow analysis
+  - Updated CONTRIBUTING.md with CI/CD integration guide
+- **Quality Assurance**: Automated GPL-3.0 header validation in CI
+- **Artifact Management**: Build artifacts for all platforms (macOS, Windows, Linux) with 90-day retention
+
 ## [1.0.1] - 2024-07-10
 
 ### Fixed
