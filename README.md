@@ -6,12 +6,12 @@ ShowMIDI is a multi-platform GUI application to effortlessly visualize MIDI acti
 
 All the heavy lifting is done by the wonderful JUCE library.
 
-The project website is https://github.com/gbevin/ShowMIDI
+This is a development fork of the original ShowMIDI project. The original project website is https://github.com/gbevin/ShowMIDI
 
 <p style="clear: both;"><img src="https://raw.githubusercontent.com/gbevin/ShowMIDI/main/Design/showmidi-1.0.0-line.png" style="width: 640px" /></p>
 <p><img src="https://raw.githubusercontent.com/gbevin/ShowMIDI/main/Design/showmidi-1.0.0-graph.png" style="width: 640px" /></p>
 
-## Community
+## Original Project Community
 
 Join the Forums: https://forum.uwyn.com
 
@@ -27,7 +27,7 @@ Chat on Discord: https://discord.gg/TgsCnwqWTf
 
 This application fills a void in the available MIDI monitoring solutions.
 
-Instead of wading through logs of MIDI messages to correlate relevant ones and identify what is happening, ShowMIDI visualizes the current activity and hides what you don't care about anymore. It provides you with a real-time glanceable view of all MIDI activity on your computer.
+Instead of wading through logs of MIDI messages to correlate relevant ones and identify what is happening, ShowMIDI visualizes the current activity and hides what you don't care about anymore. It focuses on what is relevant in the now.
 
 This animation shows the difference between a traditional MIDI monitor on the left and ShowMIDI on the right:
 
@@ -56,18 +56,20 @@ ShowMIDI displays:
 
 ## Video introduction
 
-Here's a tutorial video that shows you a quick overview of why I created ShowMIDI:
+Here's a tutorial video that shows you a quick overview of why ShowMIDI was created:
 
 <a href="https://uwyn.com/showmidi-tutorial" target="_blank"><img src="https://uwyn.com/showmidi-tutorial.jpg" alt="Tutorial Video" width="640" border="0" /></a>
 
 ## Download
 
 You can download pre-built binaries from the release section: 
-https://github.com/gbevin/ShowMIDI/releases
+https://github.com/peternicholls/ShowMIDI-Fork/releases
 
 Since ShowMIDI is free and open-source, you can also easily build it yourself. Just take a look into the Builds directory when you download the sources.
 
-If you're using the macOS Homebrew package manager, you can install ShowMIDI with:
+For the official stable releases, visit the original project at https://github.com/gbevin/ShowMIDI/releases
+
+If you're using the macOS Homebrew package manager, you can install the official version with:
 ```
 brew install gbevin/tools/showmidi
 ```
@@ -76,9 +78,9 @@ brew install gbevin/tools/showmidi
 
 To use it, simply double-click the application to launch it.
 
-All connected MIDI devices will automatically be shown in columns. By expanding the left side panel, individual devices can be shown or hidden. Holding the `alt` or `option` key while clicking on a device to change its visibility, will change the visibility of all the devices. 
+All connected MIDI devices will automatically be shown in columns. By expanding the left side panel, individual devices can be shown or hidden. Holding the `alt` or `option` key while clicking on a device's icon or name will toggle all other devices.
 
-When an incoming message first appears on a MIDI channel, that channel will appear at the top of the MIDI device column. For as long as a channel is displayed, it will keep its order in the device column. When a channel is auto-hidden through inactivity, the next time activity happens, the channel will be displayed at the top of the MIDI device column again.
+When an incoming message first appears on a MIDI channel, that channel will appear at the top of the MIDI device column. For as long as a channel is displayed, it will keep its order in the device column.
 
 To pause the MIDI data stream, press the `spacebar`, to un-pause, press it again.
 
@@ -92,9 +94,9 @@ The plugin versions can be used in any DAW that supports MIDI effect plugins. So
 
 ShowMIDI ships with a handful of themes, more will be added in the future.
 
-You can edit, create and save them yourself in the application. Feel free to submit your themes to me.
+You can edit, create and save them yourself in the application. Feel free to submit your themes.
 
-You can find the included themes [in the repository](https://github.com/gbevin/ShowMIDI/tree/main/Themes), please make sure to download the raw SVG files, otherwise the download might not contain the right information. Here are direct links to some of the included themes:
+You can find the included themes [in the original repository](https://github.com/gbevin/ShowMIDI/tree/main/Themes), please make sure to download the raw SVG files, otherwise the download might not contain the proper data.
 
 ![](https://raw.githubusercontent.com/gbevin/ShowMIDI/main/Themes/bstation.svg)
 ![](https://raw.githubusercontent.com/gbevin/ShowMIDI/main/Themes/classic%20light.svg)
@@ -109,6 +111,8 @@ You can find the included themes [in the repository](https://github.com/gbevin/S
 ShowMIDI was created by Geert Bevin: https://uwyn.com
 
 The UI design was done by Stephen Petoniak: https://spetoniak.com
+
+This fork is maintained by Peter Nicholls: https://github.com/peternicholls
 
 ## Building from Source on Linux
 
@@ -150,4 +154,3 @@ The resulting binary will be in the `Build/LinuxMakefile/build` directory and ca
 ```
 sudo mv build/ShowMIDI /usr/local/bin
 ```
-# Testing CMake build
