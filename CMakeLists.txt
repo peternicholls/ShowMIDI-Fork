@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 
-project(ShowMIDI VERSION 1.1.2)
+project(ShowMIDI VERSION 1.1.3)
 
 # To build a CLAP you need to do the following in addition to editing this file
 #
