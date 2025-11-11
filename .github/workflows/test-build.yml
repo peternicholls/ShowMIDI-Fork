@@ -76,7 +76,7 @@ jobs:
         find ${{ env.BUILD_DIR }} -maxdepth 4 -type d -name "*.app" || true
 
     - name: Upload artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: test-build-macos-${{ github.run_number }}
         path: ${{ env.BUILD_DIR }}/**/*.app
@@ -106,7 +106,7 @@ jobs:
         cmake --build ${{ env.BUILD_DIR }} --config ${{ github.event.inputs.build_type }}
 
     - name: Upload artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: test-build-windows-${{ github.run_number }}
         path: ${{ env.BUILD_DIR }}/**/*.exe
@@ -134,7 +134,7 @@ jobs:
         cmake --build ${{ env.BUILD_DIR }} --config ${{ github.event.inputs.build_type }}
 
     - name: Upload artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: test-build-linux-${{ github.run_number }}
         path: ${{ env.BUILD_DIR }}/**/ShowMIDI*
