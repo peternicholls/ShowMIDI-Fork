@@ -45,7 +45,7 @@ jobs:
   test-macos:
     name: Test macOS Build
     if: ${{ github.event.inputs.platform == 'all' || github.event.inputs.platform == 'macos' || github.event_name == 'pull_request' }}
-    runs-on: macos-latest
+    runs-on: macos-14  # Pin to macOS 14 - JUCE 7.0.5 incompatible with macOS 15 APIs
 
     steps:
     - name: Checkout code
