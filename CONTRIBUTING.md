@@ -393,9 +393,20 @@ See [Test Protocol](specs/004-tdd-adoption/contracts/test-protocol.md) for detai
 - **Platform Parity**: Same suite on all platforms
 - **No UI Blocking**: Tests must not block MIDI processing thread
 
+### Testing Documentation
+
+For comprehensive testing guidance, see:
+
+- **[Quick Start Guide](specs/005-test-cadence/quickstart.md)**: Developer workflow (local setup, TDD loop, PR expectations)
+- **[Agent Guide](docs/testing/AGENT_GUIDE.md)**: Machine-readable reference for AI agents
+- **[Workflow Diagrams](docs/testing/WORKFLOW_DIAGRAMS.md)**: Visual flow diagrams for CI/CD pipelines
+- **[Testing Governance](specs/005-test-cadence/spec.md)**: Complete testing strategy and policies
+- **[TDD Adoption Guide](specs/004-tdd-adoption/quickstart.md)**: Write your first test in 30 minutes
+
 ### Flake Management
 
-**Automatic Quarantine**: Tests failing ≥3 times in 10 runs or >20% in 7 days are automatically:
+**Automatic Quarantine** (Configured in `.github/testing-governance.yaml`):  
+Tests failing ≥3 times in 10 runs or >20% in 7 days are automatically:
 1. Removed from required PR gates
 2. Assigned to owner (from CODEOWNERS or testing-governance.yaml)
 3. Tracked with GitHub issue (48-hour SLA)
@@ -405,6 +416,7 @@ See [Test Protocol](specs/004-tdd-adoption/contracts/test-protocol.md) for detai
 1. Report in GitHub issue with label `flaky-test`
 2. Include: platform, failure rate, suspected cause
 3. Test will be quarantined while investigation proceeds
+4. See [Flake Detection Diagram](docs/testing/WORKFLOW_DIAGRAMS.md#flake-detection-planned---phase-6)
 
 ### Skip/Bypass Process
 
@@ -417,6 +429,8 @@ See [Test Protocol](specs/004-tdd-adoption/contracts/test-protocol.md) for detai
 2. Link remediation tracking issue
 3. Release manager approval required
 4. Audit trail logged (retained 365 days)
+
+**Policy Reference**: `.github/testing-governance.yaml` → `policies` → `skip-approval-required` (when implemented)
 
 ### Manual Testing Requirements
 
@@ -445,67 +459,119 @@ ShowMIDI uses GitHub Actions with a comprehensive testing governance framework. 
 ### Configuration-Driven CI/CD
 
 The CI/CD pipeline is driven by `.github/testing-governance.yaml` which defines:
-- Check categories with timeouts
-- Trigger contexts (PR, nightly, release)
-- Policies (retry, caching, flake detection)
-- Owner assignments
+- **Check categories** with timeouts (12 categories: unit, integration, system, performance, UI/visual, static analysis, formatting, linting, security SAST/SCA, license, build, packaging)
+- **Trigger contexts** (pre-commit, pre-push, PR, nightly, release, hotfix)
+- **Policies** (retry, caching, flake detection, skip approval)
+- **Owner assignments** (core-team, platform-*, security-team)
 
 **Key Features**:
-- Dynamic timeouts from config (no hardcoded values)
-- Fail-fast strategy (abort on first failure)
-- Build caching (CMake, JUCE modules, ccache) - reduces build time ~50%
-- Unified test matrix (macOS/Windows/Linux in parallel)
+- ⚡ Dynamic timeouts from config (no hardcoded values)
+- 🚀 Fail-fast strategy (abort on first failure in PRs, saves CI time)
+- 💾 Build caching (CMake, JUCE modules, ccache) - reduces build time ~50%
+- 🔄 Unified test matrix (macOS/Windows/Linux in parallel)
+- 📊 Automated test summary reports with PR comments
+
+**Documentation**:
+- [Workflow Diagrams](docs/testing/WORKFLOW_DIAGRAMS.md) - Visual CI/CD flow charts
+- [Agent Guide](docs/testing/AGENT_GUIDE.md) - Machine-readable reference
+- [Testing Governance Spec](specs/005-test-cadence/spec.md) - Complete strategy
 
 ### Workflow Triggers
 
 GitHub Actions workflows run automatically based on branch activity and file changes:
 
-| Workflow | Triggers | Purpose | Typical Duration |
-|----------|----------|---------|------------------|
-| **CI Build** (`ci.yml`) | PR → `develop`/`main`<br>Push → `main`/`release/*`/`hotfix/*`<br>Manual dispatch | Full platform validation + tests | ~13 min (p95 target: 10 min) |
-| **Test Build** (`test-build.yml`) | Push → `develop` | Quick build matrix test | Varies |
-| **Changelog** (`changelog.yml`) | Tags `v*.*.*` only | Generate release notes | <1 min |
+| Workflow | Triggers | Purpose | Time Budget |
+|----------|----------|---------|-------------|
+| **CI Build** (`ci.yml`) | PR → `develop`/`main`<br>Push → `main`/`release/*`/`hotfix/*`<br>Manual dispatch | Full platform validation + tests | Median: 5 min<br>P95: 10 min |
+| **Nightly Tests** (`nightly.yml`) | Cron: 2 AM UTC daily<br>Manual dispatch | Extended suites (system, performance) on all platforms | Median: 60 min<br>P95: 90 min |
 
-**Path Filtering Optimization**: The CI Build workflow skips heavy builds when only documentation files change (`**.md`, `docs/**`, `*.txt`), completing in under 30 seconds instead of 15+ minutes.
+**Path Filtering Optimization**: The CI Build workflow skips heavy builds when only documentation files change (`**.md`, `docs/**`, `*.txt`), completing in under 30 seconds instead of 10+ minutes.
 
 **Concurrency Control**: When you push multiple commits rapidly to the same branch, GitHub Actions automatically cancels in-progress workflow runs to avoid wasting resources on outdated code.
+
+**Change Detection**: Nightly workflow uses git diff to skip execution if no code changes since last successful run, saving CI resources.
 
 ### What Runs on PR
 
 When you open a PR to `develop` or `main`, the following checks run automatically:
 
-**Config Loader** (~5s):
-- Parses testing-governance.yaml
-- Extracts timeouts and time budgets
+**1. Config Loader** (~5s):
+- Parses `.github/testing-governance.yaml`
+- Extracts timeouts and time budgets via `yq`
 - Provides configuration to downstream jobs
 
-**Code Quality** (~8-9 min):
-- GPL-3.0 header validation
+**2. Code Quality** (~2-3 min, Linux):
+- GPL-3.0 header validation (warning only)
 - CMake configuration
-- Build with warnings as errors (Linux)
+- Build with warnings as errors
 
-**Test Suite** (parallel, ~4-5 min):
-- ✅ Unit tests (macOS/Windows/Linux) - 180s timeout
-- ✅ Integration tests (all platforms) - 270s timeout
-- ✅ System tests (all platforms) - 300s timeout
-- Fail-fast: Aborts remaining platforms on first failure
+**3. Test Suite** (parallel matrix, ~4-5 min):
+- ✅ macOS 14 (primary platform) - always runs
+- ✅ Windows latest - runs in parallel
+- ✅ Linux latest - runs in parallel
+- Unit tests (180s timeout per config)
+- Integration tests (270s timeout per config)
+- System tests (300s timeout)
+- **Fail-fast**: Aborts remaining platforms on first failure
 
-**Build Jobs** (parallel, ~4-7 min):
-- macOS: Xcode build with CMake + Ninja
+**4. Build Jobs** (parallel, ~3-4 min):
+- macOS: Xcode build with CMake + Ninja (arm64 + x86_64)
 - Windows: Visual Studio 2022 build
 - Linux: GCC build with system libraries
 
-**Total PR time**: ~13 minutes (code quality 8-9 min + tests 4-5 min)
+**5. Test Summary** (~30s):
+- Aggregates results from all platforms
+- Generates markdown table
+- Posts PR comment with platform coverage
+
+**Total PR Time**: ~5-10 min (median ~5 min, p95 ~10 min per governance config)
 
 **Caching Benefits**:
-- CMake build files (keyed by CMakeLists.txt + JUCE)
-- JUCE modules (keyed by .jucer + JUCE version)
+- CMake build files (keyed by `CMakeLists.txt` + JUCE hash)
+- JUCE modules (keyed by `.jucer` + JUCE version)
 - ccache compiler cache (keyed by commit SHA)
-- Reduces build time from ~5 min to ~2 min on cache hits
+- **Impact**: Reduces build time from ~5 min to ~2 min on cache hits (~60% faster)
+
+### What Runs Nightly
+
+The nightly workflow (`nightly.yml`) runs at 2 AM UTC daily with comprehensive validation:
+
+**Change Detection** (~10s):
+- Git diff against last successful run
+- Skips entire workflow if no code changes
+- Checks `.cpp`, `.h`, `.cmake`, `.jucer` files only
+
+**Extended Test Suites** (if changes detected, ~60 min):
+- **System tests**: Headless UI testing (all platforms)
+- **Performance tests**: Latency benchmarks (<10ms validation)
+- **Full platform matrix**: macOS, Windows, Linux (no conditional skipping)
+- **Security scans**: CodeQL SAST, Dependabot SCA (when implemented)
+- **License compliance**: GPL-3.0 dependency verification (when implemented)
+
+**Fail-fast disabled**: All platforms complete even if one fails (comprehensive results)
 
 ### Local Testing Before Pushing
 
-**Always build locally before opening a PR** to catch errors early and reduce CI failures:
+**Always build and test locally before opening a PR** to catch errors early and reduce CI failures:
+
+#### Quick Local Validation
+
+```bash
+# 1. Install git hooks (one-time setup)
+./scripts/install-hooks.sh
+
+# 2. Make changes, commit triggers pre-commit hook
+git add Source/MyComponent.cpp
+git commit -m "feat(component): add MyFeature"
+# → clang-format auto-fixes code
+# → GPL header check runs
+# → Commit succeeds if valid
+
+# 3. Push triggers pre-push hook
+git push origin feature/123-my-feature
+# → Unit tests run via CTest (1-2 min)
+# → Push succeeds if tests pass
+```
 
 #### macOS (Xcode)
 

@@ -92,26 +92,71 @@ The plugin versions can be used in any DAW that supports MIDI effect plugins. So
 
 ## Development & Testing
 
-This development fork includes comprehensive testing infrastructure:
+This development fork includes comprehensive testing infrastructure with a configuration-driven CI/CD framework:
 
+### Testing Framework
+
+- **Test Categories**: 12 categories (Unit, Integration, System, Performance, UI/Visual, Static Analysis, Formatting, Linting, Security SAST/SCA, License Compliance, Build Verification, Packaging)
 - **Test Framework**: JUCE UnitTest with CTest runner
-- **Test Categories**: Unit, Integration, System, Performance, Static Analysis, Security
-- **CI/CD**: GitHub Actions with automated PR validation (~13 min)
-- **Test Governance**: Configuration-driven timeouts and policies (`.github/testing-governance.yaml`)
-- **Local Hooks**: Pre-commit (format/lint) and pre-push (unit tests)
+- **CI/CD**: GitHub Actions with automated PR validation (5-10 min) and nightly comprehensive testing
+- **Test Governance**: Configuration-driven via `.github/testing-governance.yaml`
+- **Local Hooks**: Pre-commit (format/lint <10s) and pre-push (unit tests 1-2min)
 
-For detailed testing documentation, see [CONTRIBUTING.md](CONTRIBUTING.md#testing).
+### Quick Start for Contributors
 
-**Quick Start for Contributors**:
 ```bash
-# Install Git hooks (one-time)
+# Clone with submodules
+git clone https://github.com/peternicholls/ShowMIDI-Fork.git
+cd ShowMIDI-Fork
+git submodule update --init --recursive
+
+# Install Git hooks (one-time setup)
 ./scripts/install-hooks.sh
 
-# Build and run tests
+# Build with tests enabled
 cmake -B build -DBUILD_TESTS=ON -DCMAKE_BUILD_TYPE=Debug
 cmake --build build --target ShowMIDI_Tests
+
+# Run tests locally
 cd build && ctest --output-on-failure
+
+# Run specific test categories
+ctest -L unit --verbose          # Unit tests only (timeout: 180s)
+ctest -L integration --verbose   # Integration tests (timeout: 270s)
+ctest -L system --verbose        # System tests (timeout: 300s)
 ```
+
+### Documentation
+
+**For Developers**:
+- 📖 [Contributing Guide](CONTRIBUTING.md) - Complete development workflow
+- 🚀 [Testing Quick Start](specs/005-test-cadence/quickstart.md) - Local setup, TDD loop, PR expectations
+- 🧪 [TDD Adoption Guide](specs/004-tdd-adoption/quickstart.md) - Write your first test in 30 minutes
+- 📊 [Workflow Diagrams](docs/testing/WORKFLOW_DIAGRAMS.md) - Visual CI/CD flow charts
+
+**For AI Agents**:
+- 🤖 [Agent Guide](docs/testing/AGENT_GUIDE.md) - Machine-readable reference for automated testing
+
+**Governance & Policies**:
+- ⚙️ [Testing Governance](specs/005-test-cadence/spec.md) - Complete testing strategy
+- 📋 [Coverage Policy](specs/004-tdd-adoption/contracts/coverage-policy.md) - 80% minimum for new code
+- 🎯 [Test Protocol](specs/004-tdd-adoption/contracts/test-protocol.md) - Red-Green-Refactor cycle
+
+### CI/CD Pipeline
+
+**PR Validation** (5-10 min):
+- Config-driven timeouts via YAML
+- Parallel test matrix (macOS/Windows/Linux)
+- Fail-fast strategy (abort on first failure)
+- Build caching (~50% faster with cache hits)
+- Automated test summary with PR comments
+
+**Nightly Tests** (60-90 min, 2 AM UTC):
+- Extended suites (system, performance, security scans)
+- Change detection (skips if no code changes)
+- Full platform coverage (no conditional skipping)
+
+See [Workflow Diagrams](docs/testing/WORKFLOW_DIAGRAMS.md) for visual CI/CD flow charts.
 
 ## Themes
 

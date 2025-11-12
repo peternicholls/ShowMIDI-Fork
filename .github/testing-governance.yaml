@@ -234,6 +234,12 @@ check_categories:
       - "Visual Studio 2022"
     owner: core-team
     blocking_policy: always
+    platform_coverage:
+      required_platforms:
+        - macos-latest
+      conditional_platforms:
+        - windows-latest
+        - ubuntu-latest
     expected_duration_sec: 180
     timeout_sec: 270
     flake_threshold:
@@ -306,8 +312,39 @@ trigger_contexts:
       - build-verification
     time_budget_sec: 300
     time_budget_p95_sec: 600
-    parallelization: parallel
+    parallelization: matrix
+    platform_matrix:
+      primary: macos-latest
+      conditional:
+        - platform: windows-latest
+          condition: "contains(changed_files, 'JUCE_WINDOWS') OR contains(changed_files, 'Builds/VisualStudio')"
+        - platform: ubuntu-latest
+          condition: "contains(changed_files, 'JUCE_LINUX') OR contains(changed_files, 'Builds/LinuxMakefile')"
     change_detection_enabled: false
+
+  - id: nightly-develop
+    event_type: nightly
+    scope: develop
+    enabled_checks:
+      - unit-tests
+      - integration-tests
+      - system-tests
+      - performance-tests
+      - ui-visual-regression
+      - static-analysis
+      - formatting
+      - linting
+      - build-verification
+      - security-sast
+      - security-sca
+      - license-compliance
+    time_budget_sec: 3600
+    time_budget_p95_sec: 5400
+    parallelization: matrix
+    platform_matrix:
+      primary: macos-latest
+      conditional: []  # All platforms run unconditionally in nightly
+    change_detection_enabled: true
 
 # Policies: Governance rules for flake handling, skip approval, retry, caching
 policies:
@@ -334,3 +371,20 @@ policies:
         - dependencies
       cache_ttl_days: 7
     enforcement: soft
+
+  - id: flake-quarantine
+    policy_type: flake
+    applies_to:
+      - pr-to-develop
+      - nightly-develop
+    rules:
+      failure_count_window: 10
+      failure_threshold: 3
+      failure_rate_7d_threshold: 0.20
+      quarantine_action: remove_from_required_gates
+      owner_assignment: auto_from_codeowners
+      re_enable_criteria:
+        pass_rate_14d: 0.95
+        owner_signoff_required: true
+    sla_hours: 48
+    enforcement: hard

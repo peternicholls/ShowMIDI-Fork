@@ -475,6 +475,13 @@ jobs:
           cd build
           ctest ${{ matrix.ctest-config }} -L system --output-on-failure --timeout 300
       
+      # T034: Generate test run summary JSON
+      - name: Generate test run summary
+        if: always()
+        run: |
+          chmod +x scripts/reporting/generate-run-summary.sh
+          TRIGGER_CONTEXT="pr-to-develop" PLATFORM="${{ matrix.os-name }}" OUTPUT_FILE="test-run-summary.json" ./scripts/reporting/generate-run-summary.sh
+      
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v4
@@ -484,6 +491,7 @@ jobs:
           path: |
             build/Testing/Temporary/LastTest.log
             build/Testing/Temporary/*.xml
+            test-run-summary.json
 
   build-ios:
     name: Build (iOS AUv3)
@@ -522,3 +530,86 @@ jobs:
         with:
           name: ShowMIDI-iOS
           path: Builds/iOS/build/Release-iphonesimulator/*.appex
+
+  # T032: Aggregated status check reporter
+  # This job collects results from all platform tests and creates a unified summary
+  # Provides clear visibility into which platforms ran and their results
+  test-summary:
+    name: Test Summary Report
+    needs: [test-suite]
+    if: always()  # Run even if some tests failed
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Download all test results
+        uses: actions/download-artifact@v4
+        with:
+          pattern: test-results-*
+          path: test-results/
+      
+      - name: Generate aggregated summary
+        run: |
+          echo "# 📊 Test Summary - Run ${{ github.run_number }}" > summary.md
+          echo "" >> summary.md
+          echo "## Platform Coverage" >> summary.md
+          echo "" >> summary.md
+          echo "| Platform | Status | Tests Run | Passed | Failed |" >> summary.md
+          echo "|----------|--------|-----------|--------|--------|" >> summary.md
+          
+          # Parse results from each platform
+          for platform in macOS Windows Linux; do
+            result_dir="test-results/test-results-${platform}-${{ github.run_number }}"
+            if [ -d "$result_dir" ]; then
+              # Extract test counts from LastTest.log
+              if [ -f "$result_dir/LastTest.log" ]; then
+                total=$(grep -c "^[0-9]" "$result_dir/LastTest.log" || echo "0")
+                passed=$(grep -c "Passed" "$result_dir/LastTest.log" || echo "0")
+                failed=$(grep -c "Failed" "$result_dir/LastTest.log" || echo "0")
+                
+                if [ "$failed" -eq 0 ]; then
+                  status="✅ Pass"
+                else
+                  status="❌ Fail"
+                fi
+                
+                echo "| $platform | $status | $total | $passed | $failed |" >> summary.md
+              else
+                echo "| $platform | ⚠️ No results | - | - | - |" >> summary.md
+              fi
+            else
+              echo "| $platform | ⏭️ Skipped | - | - | - |" >> summary.md
+            fi
+          done
+          
+          echo "" >> summary.md
+          echo "**Trigger**: ${{ github.event_name }}" >> summary.md
+          echo "**Branch**: ${{ github.ref_name }}" >> summary.md
+          echo "**Commit**: ${{ github.sha }}" >> summary.md
+          
+          # Display summary
+          cat summary.md
+      
+      - name: Upload summary as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-summary-${{ github.run_number }}
+          retention-days: 90
+          path: summary.md
+      
+      - name: Add PR comment (if PR event)
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const summary = fs.readFileSync('summary.md', 'utf8');
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: summary
+            });

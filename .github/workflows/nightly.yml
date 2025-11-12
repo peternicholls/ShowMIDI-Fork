@@ -1,0 +1,300 @@
+name: Nightly Tests
+
+# Nightly comprehensive validation workflow (T039)
+# Runs extended test suites (system, performance, UI/visual regression) on all platforms
+# with change detection to skip if no code changes since last successful run
+
+on:
+  # Scheduled nightly run at 2 AM UTC
+  schedule:
+    - cron: '0 2 * * *'
+  
+  # Manual trigger for testing
+  workflow_dispatch:
+
+# Prevent concurrent nightly runs
+concurrency:
+  group: nightly-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # T040: Change detection job to skip if no changes since last successful nightly run
+  change-detection:
+    name: Detect Code Changes
+    runs-on: ubuntu-latest
+    outputs:
+      has_changes: ${{ steps.check-changes.outputs.has_changes }}
+      last_commit: ${{ steps.check-changes.outputs.last_commit }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch full history for git diff
+      
+      - name: Check for changes since last successful nightly run
+        id: check-changes
+        run: |
+          # Get the last successful nightly run commit (from GitHub API)
+          LAST_SUCCESS_SHA=$(gh api repos/${{ github.repository }}/actions/workflows/nightly.yml/runs \
+            --jq '.workflow_runs[] | select(.conclusion == "success") | .head_sha' \
+            --field per_page=1 || echo "")
+          
+          if [ -z "$LAST_SUCCESS_SHA" ]; then
+            echo "No previous successful run found. Running full nightly."
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "last_commit=none" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          
+          echo "Last successful run commit: $LAST_SUCCESS_SHA"
+          echo "last_commit=$LAST_SUCCESS_SHA" >> $GITHUB_OUTPUT
+          
+          # Check for code changes (exclude docs, markdown, config files)
+          CHANGED_FILES=$(git diff --name-only $LAST_SUCCESS_SHA..HEAD | \
+            grep -E '\.(cpp|h|cmake|jucer)$' || true)
+          
+          if [ -z "$CHANGED_FILES" ]; then
+            echo "✅ No code changes since last successful run. Skipping nightly tests."
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "📝 Code changes detected:"
+            echo "$CHANGED_FILES"
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          fi
+        env:
+          GH_TOKEN: ${{ github.token }}
+  
+  # Load configuration from testing-governance.yaml
+  config-loader:
+    name: Load Testing Configuration
+    runs-on: ubuntu-latest
+    needs: change-detection
+    if: needs.change-detection.outputs.has_changes == 'true'
+    outputs:
+      system_tests_timeout_sec: ${{ steps.parse-config.outputs.system_tests_timeout_sec }}
+      performance_tests_timeout_sec: ${{ steps.parse-config.outputs.performance_tests_timeout_sec }}
+      nightly_time_budget_min: ${{ steps.parse-config.outputs.nightly_time_budget_min }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Install yq (YAML parser)
+        run: |
+          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+          sudo chmod +x /usr/local/bin/yq
+      
+      - name: Parse testing-governance.yaml
+        id: parse-config
+        run: |
+          CONFIG_FILE=".github/testing-governance.yaml"
+          
+          # Extract timeout values for system and performance tests
+          SYSTEM_TIMEOUT=$(yq eval '.check_categories[] | select(.id == "system-tests") | .timeout_sec' "$CONFIG_FILE")
+          PERFORMANCE_TIMEOUT=$(yq eval '.check_categories[] | select(.id == "performance-tests") | .timeout_sec' "$CONFIG_FILE")
+          
+          # Extract time budget from nightly-develop trigger context
+          NIGHTLY_BUDGET=$(yq eval '.trigger_contexts[] | select(.id == "nightly-develop") | .time_budget_p95_sec' "$CONFIG_FILE")
+          
+          echo "system_tests_timeout_sec=$SYSTEM_TIMEOUT" >> $GITHUB_OUTPUT
+          echo "performance_tests_timeout_sec=$PERFORMANCE_TIMEOUT" >> $GITHUB_OUTPUT
+          echo "nightly_time_budget_min=$((NIGHTLY_BUDGET / 60))" >> $GITHUB_OUTPUT
+          
+          echo "✅ Configuration loaded:"
+          echo "  System tests timeout: ${SYSTEM_TIMEOUT}s"
+          echo "  Performance tests timeout: ${PERFORMANCE_TIMEOUT}s"
+          echo "  Nightly time budget: ${NIGHTLY_BUDGET}s ($(($NIGHTLY_BUDGET / 60)) min)"
+
+  # T041: System tests with headless UI testing
+  system-tests:
+    name: System Tests (${{ matrix.os-name }})
+    needs: [change-detection, config-loader]
+    if: needs.change-detection.outputs.has_changes == 'true'
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: ${{ fromJSON(needs.config-loader.outputs.nightly_time_budget_min) }}
+    strategy:
+      fail-fast: false  # Continue testing all platforms even if one fails
+      matrix:
+        include:
+          - os: macos-14
+            os-name: macOS
+          - os: windows-latest
+            os-name: Windows
+          - os: ubuntu-latest
+            os-name: Linux
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      
+      - name: Install dependencies (Linux)
+        if: matrix.os-name == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential pkg-config cmake \
+            libasound2-dev libfreetype6-dev libfontconfig1-dev libx11-dev \
+            libxrandr-dev libxinerama-dev libxcursor-dev xvfb
+      
+      - name: Install dependencies (macOS)
+        if: matrix.os-name == 'macOS'
+        run: brew install cmake ninja
+      
+      - name: Build tests
+        run: |
+          cmake -B build -DBUILD_TESTS=ON -DCMAKE_BUILD_TYPE=Debug
+          cmake --build build --target ShowMIDI_Tests
+      
+      - name: Run system tests (headless)
+        run: |
+          cd build
+          # Run with virtual display on Linux
+          if [ "${{ matrix.os-name }}" = "Linux" ]; then
+            xvfb-run -a ctest -L system --output-on-failure --timeout ${{ needs.config-loader.outputs.system_tests_timeout_sec }}
+          else
+            ctest -L system --output-on-failure --timeout ${{ needs.config-loader.outputs.system_tests_timeout_sec }}
+          fi
+      
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: system-test-results-${{ matrix.os-name }}
+          retention-days: 90
+          path: build/Testing/Temporary/
+
+  # T042: Performance tests with latency benchmarks (<10ms validation)
+  performance-tests:
+    name: Performance Tests (${{ matrix.os-name }})
+    needs: [change-detection, config-loader]
+    if: needs.change-detection.outputs.has_changes == 'true'
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: ${{ fromJSON(needs.config-loader.outputs.nightly_time_budget_min) }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-14
+            os-name: macOS
+          - os: windows-latest
+            os-name: Windows
+          - os: ubuntu-latest
+            os-name: Linux
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      
+      - name: Install dependencies (Linux)
+        if: matrix.os-name == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential pkg-config cmake \
+            libasound2-dev libfreetype6-dev libfontconfig1-dev libx11-dev \
+            libxrandr-dev libxinerama-dev libxcursor-dev
+      
+      - name: Install dependencies (macOS)
+        if: matrix.os-name == 'macOS'
+        run: brew install cmake ninja
+      
+      - name: Build tests
+        run: |
+          cmake -B build -DBUILD_TESTS=ON -DCMAKE_BUILD_TYPE=Release
+          cmake --build build --target ShowMIDI_Tests --config Release
+      
+      - name: Run performance tests
+        run: |
+          cd build
+          ctest -L performance --output-on-failure --timeout ${{ needs.config-loader.outputs.performance_tests_timeout_sec }}
+      
+      - name: Upload performance results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance-test-results-${{ matrix.os-name }}
+          retention-days: 90
+          path: build/Testing/Temporary/
+
+  # Comprehensive platform validation (T043)
+  full-platform-matrix:
+    name: Full Suite (${{ matrix.os-name }})
+    needs: [change-detection, config-loader]
+    if: needs.change-detection.outputs.has_changes == 'true'
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: ${{ fromJSON(needs.config-loader.outputs.nightly_time_budget_min) }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-14
+            os-name: macOS
+          - os: windows-latest
+            os-name: Windows
+          - os: ubuntu-latest
+            os-name: Linux
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      
+      - name: Install dependencies (Linux)
+        if: matrix.os-name == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential pkg-config cmake \
+            libasound2-dev libfreetype6-dev libfontconfig1-dev libx11-dev \
+            libxrandr-dev libxinerama-dev libxcursor-dev
+      
+      - name: Install dependencies (macOS)
+        if: matrix.os-name == 'macOS'
+        run: brew install cmake ninja
+      
+      - name: Build
+        run: |
+          cmake -B build -DBUILD_TESTS=ON -DCMAKE_BUILD_TYPE=Release
+          cmake --build build --config Release
+      
+      - name: Run all tests
+        run: |
+          cd build
+          ctest --output-on-failure
+      
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nightly-results-${{ matrix.os-name }}
+          retention-days: 90
+          path: build/Testing/Temporary/
+
+  # Summary job
+  nightly-summary:
+    name: Nightly Summary
+    needs: [change-detection, system-tests, performance-tests, full-platform-matrix]
+    if: always()
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Generate summary
+        run: |
+          echo "# 🌙 Nightly Test Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ needs.change-detection.outputs.has_changes }}" = "false" ]; then
+            echo "✅ **No code changes detected**. Nightly tests skipped." >> $GITHUB_STEP_SUMMARY
+            echo "Last successful run: ${{ needs.change-detection.outputs.last_commit }}" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "📝 **Code changes detected**. Running comprehensive validation." >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "| Suite | Status |" >> $GITHUB_STEP_SUMMARY
+            echo "|-------|--------|" >> $GITHUB_STEP_SUMMARY
+            echo "| System Tests | ${{ needs.system-tests.result }} |" >> $GITHUB_STEP_SUMMARY
+            echo "| Performance Tests | ${{ needs.performance-tests.result }} |" >> $GITHUB_STEP_SUMMARY
+            echo "| Full Platform Matrix | ${{ needs.full-platform-matrix.result }} |" >> $GITHUB_STEP_SUMMARY
+          fi
