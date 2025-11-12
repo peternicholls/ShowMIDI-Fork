@@ -1,9 +1,8 @@
-# Quick Start: Testing Cadence & Governance (Final)
+# Quick Start: Testing Cadence & Governance (Run 1)
 
 **Feature**: 005-test-cadence  
 **Audience**: Developers, maintainers, release managers  
 **Prerequisites**: Familiarity with Git, GitHub Actions, and ShowMIDI codebase
-**Consolidated From**: Run 1 (comprehensive guide) + Run 3 (concise commands)
 
 ---
 

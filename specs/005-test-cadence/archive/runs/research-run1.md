@@ -1,9 +1,8 @@
-# Research: Phase 11 Testing Cadence & Governance (Final)
+# Research: Phase 11 Testing Cadence & Governance (Run 1)
 
 **Date**: 2025-11-12  
 **Feature**: 005-test-cadence  
 **Purpose**: Resolve unknowns and document technology/pattern decisions for testing governance framework
-**Consolidated From**: Run 1 (comprehensive base) + Run 2 (clarifications) + Run 3 (clean decisions)
 
 ---
 
@@ -309,12 +308,11 @@ chmod +x .git/hooks/pre-commit .git/hooks/pre-push
 
 ---
 
-## Consolidation Notes
+## Open Questions (for Runs 2-3)
 
-All decisions from Runs 1-3 have been evaluated and integrated:
+1. **UI/Visual Regression Tooling**: Percy vs Chromatic vs manual review? Cost/benefit for open-source project?
+2. **Performance Baseline Storage**: Where to persist benchmark results for regression detection? Git LFS? CI artifacts?
+3. **Multi-feature Integration Staging**: Dedicated `staging/*` branch or use `develop` with feature flags?
+4. **Hotfix Safety-Critical Subset**: Exact scope of "safety-critical" tests? All MIDI + build, or broader?
 
-- **Run 1**: Provided comprehensive technology decisions with detailed rationale and alternatives
-- **Run 2**: Contributed explicit "NEEDS CLARIFICATION" tracking in technical context (integrated into final plan)
-- **Run 3**: Offered concise decision summaries (used to refine presentation)
-
-**Status**: All unknowns resolved. All clarifications documented. Ready for Phase 1 implementation.
+These will be explored in Runs 2 and 3 with alternative approaches.

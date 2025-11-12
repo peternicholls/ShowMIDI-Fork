@@ -252,8 +252,8 @@ git push origin release/1.1.0
 
 ## Recent Changes
 - 005-test-cadence: Added Markdown, YAML (GitHub Actions), Shell (Bash/Zsh for local hooks)
+- 005-test-cadence: Added [if applicable, e.g., PostgreSQL, CoreData, files or N/A]
 - 005-test-cadence: Added Markdown, YAML (GitHub Actions), Shell (Bash/Zsh for local hooks)
-- 005-vst3-sdk-upstream: Added Steinberg VST3 SDK as git submodule
   - VST3 SDK v3.7.11_build_10 at `libs/vst3sdk` (git submodule)
   - CMake configuration: `JUCE_CUSTOM_VST3_SDK=1` flag enables external VST3 SDK
   - Projucer configuration: Preprocessor definitions updated for all exporters

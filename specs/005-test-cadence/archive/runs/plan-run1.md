@@ -1,8 +1,9 @@
-# Implementation Plan: Phase 11 — Testing Cadence & Governance (Final)
+# Implementation Plan: Phase 11 — Testing Cadence & Governance (Run 1 of 3)
 
 **Branch**: `005-test-cadence` | **Date**: 2025-11-12 | **Spec**: [spec.md](./spec.md)
 **Input**: Feature specification from `/specs/005-test-cadence/spec.md`
-**Consolidated From**: Run 1 (base) + Run 2 (clarification tracking) + Run 3 (conciseness)
+
+**Note**: This is Run 1 of 3 consecutive planning iterations. Final plan will cherry-pick from all runs.
 
 ## Summary
 
@@ -11,29 +12,21 @@ Establish comprehensive testing cadence and governance framework aligned with TD
 ## Technical Context
 
 **Language/Version**: Markdown, YAML (GitHub Actions), Shell (Bash/Zsh for local hooks)
-
 **Primary Dependencies**: 
-- GitHub Actions (CI/CD platform - ubuntu-latest, macos-latest, windows-latest runners)
+- GitHub Actions (CI/CD platform)
 - JUCE UnitTest framework (existing from 004-tdd-adoption)
 - CTest (CMake test runner)
 - clang-format, clang-tidy (static analysis/formatting)
 - Git hooks (pre-commit, pre-push automation)
-- GitHub CodeQL, Dependabot (security scanning - free for public repos)
-- FOSSA or license-checker scripts (license compliance)
 
 **Storage**: N/A (policy/governance documentation; test results in CI artifacts)
-
 **Testing**: Meta-level (this feature defines testing strategy itself); validation via policy compliance checks
-
 **Target Platform**: Cross-platform CI/CD (GitHub Actions runners: ubuntu-latest, macos-latest, windows-latest)
-
 **Project Type**: Governance/process framework (produces documentation artifacts and CI/CD workflow updates)
-
 **Performance Goals**: 
 - PR check median ≤ 5 minutes
 - PR check p95 ≤ 10 minutes
 - Nightly full suite ≤ 60 minutes (change detection optimized)
-- Re-run rate due to non-determinism ≤ 2%
 
 **Constraints**: 
 - Public repository: unlimited GitHub Actions minutes (no cost ceiling)
@@ -70,14 +63,12 @@ Establish comprehensive testing cadence and governance framework aligned with TD
 
 ```text
 specs/005-test-cadence/
-├── plan-final.md                            # This file (consolidated from runs 1-3)
-├── research-final.md                        # Phase 0: Technology/pattern decisions (consolidated)
-├── data-model-final.md                      # Phase 1: Entities, relationships, validation (consolidated)
-├── quickstart-final.md                      # Phase 1: Developer onboarding guide (consolidated)
+├── plan.md                                  # This file (Run 1 of 3)
+├── research.md                              # Phase 0: Technology/pattern decisions
+├── data-model.md                            # Phase 1: Entities, relationships, validation
+├── quickstart.md                            # Phase 1: Developer onboarding guide
 ├── contracts/
-│   ├── testing-governance-schema.md         # YAML/JSON schemas for config/tracking
-│   ├── checks.schema.json                   # Check category validation schema
-│   └── policy.schema.json                   # Policy validation schema
+│   └── testing-governance-schema.md         # YAML/JSON schemas for config/tracking
 └── checklists/
     └── requirements.md                      # Spec quality validation (pre-planning)
 ```
@@ -137,159 +128,5 @@ GitHub Actions Artifacts:
 
 | Violation | Why Needed | Simpler Alternative Rejected Because |
 |-----------|------------|-------------------------------------|
-| N/A | No constitutional violations | N/A |
-
----
-
-## Phase 0: Outline & Research
-
-**Objective**: Document all technology and pattern decisions with rationale and alternatives.
-
-**Status**: ✅ **COMPLETE** — All decisions documented in `research-final.md`
-
-### Key Decisions (Summary)
-
-1. **Check Taxonomy & Tooling**: 12 categories with specific tools per category
-2. **Trigger Strategy**: Local hooks + GitHub Actions with tiered coverage
-3. **Flake Detection**: Automated 3/10 threshold with quarantine workflow
-4. **Platform Coverage**: Tiered (PR macOS primary, nightly all platforms, release full)
-5. **Time Budget Enforcement**: Fail-fast + parallel execution + caching
-6. **Skip/Bypass Governance**: Documented exception process with audit trail
-7. **Constitution Amendment**: New Section VI in constitution.md
-
-**Deliverable**: ✅ `research-final.md` (consolidated from runs 1-3)
-
----
-
-## Phase 1: Design & Contracts
-
-**Objective**: Define data model, contracts, and developer quickstart guide.
-
-**Status**: ✅ **COMPLETE** — All artifacts generated
-
-### 1. Data Model
-
-**Deliverable**: ✅ `data-model-final.md`
-
-**Entities Defined**:
-- `CheckCategory`: Test/check types with ownership, duration, blocking policy
-- `TriggerContext`: Events/environments where checks execute
-- `Policy`: Governance rules (flake, skip, retry, caching)
-- `Owner`: Team/area accountability with SLAs
-- `TestRun`: Single execution record with results
-- `QuarantineRecord`: Flaky check tracking and remediation
-
-**Relationships**: Documented with validation rules and state transitions
-
-### 2. API Contracts
-
-**Deliverable**: ✅ `contracts/` directory
-
-**Files**:
-- `testing-governance-schema.md`: Human-readable schema documentation
-- `checks.schema.json`: JSON schema for check category validation
-- `policy.schema.json`: JSON schema for policy validation
-
-### 3. Quickstart Guide
-
-**Deliverable**: ✅ `quickstart-final.md`
-
-**Contents**:
-- Local developer workflow (setup, TDD loop, what runs when)
-- PR validation expectations for reviewers
-- Release/hotfix workflow for release managers
-- Flake management for maintainers
-- Configuration file editing
-- Common scenarios and troubleshooting
-
-### 4. Agent Context Update
-
-**Action Required**: Run agent context update script
-
-```bash
-cd /Users/peternicholls/Dev/ShowMIDI.git
-.specify/scripts/bash/update-agent-context.sh copilot
-```
-
-**Technologies to Add**:
-- GitHub Actions (workflow definitions)
-- YAML (configuration)
-- Shell scripting (Bash/Zsh hooks)
-- clang-tidy, clang-format (existing but ensure documented)
-- CodeQL, Dependabot (security scanning)
-- FOSSA (license compliance)
-
----
-
-## Constitution Check (Post-Design)
-
-*Re-evaluation after Phase 1 artifacts generated*
-
-| Principle | Post-Design Assessment | Status |
-|-----------|------------------------|--------|
-| **Multi-Platform Architecture** | Data model includes platform coverage policies; quickstart documents nightly/release full platform validation | ✅ Pass |
-| **JUCE Framework Standards** | No changes to JUCE usage patterns; testing infrastructure already JUCE-compliant | ✅ Pass |
-| **Real-Time Performance** | Performance tests categorized separately; run in nightly to avoid PR blocking; preserves TDD velocity | ✅ Pass |
-| **User-Centric Design** | Fast feedback (5 min median) and flake governance protect developer UX; quickstart enhances onboarding | ✅ Pass |
-| **Maintainability** | Ownership, SLAs, schemas, and quickstart all improve long-term maintainability; constitution amendment codifies practices | ✅ Pass |
-| **Development Workflow (GitFlow)** | Trigger contexts and gates align with GitFlow branches; progressive depth matches risk profile | ✅ Pass |
-| **CI/CD Integration** | Workflow updates extend existing ci.yml; new nightly/release workflows follow established patterns | ✅ Pass |
-| **Quality Gates** | Blocking/advisory classification balances risk and velocity; staging gates prevent regressions | ✅ Pass |
-
-**Overall**: ✅ **PASS** — Post-design evaluation confirms no constitutional violations. All artifacts strengthen constitutional compliance.
-
----
-
-## Phase 2: Task Breakdown
-
-**Status**: ⏸️ **PENDING** — Use `/speckit.tasks` command to generate actionable implementation tasks
-
-**Scope**:
-- Git hook scripts (pre-commit, pre-push)
-- GitHub Actions workflow updates (ci.yml, nightly.yml, release.yml, flake-detector.yml)
-- Configuration file (`testing-governance.yaml`)
-- Validation scripts (`validate-testing-config.sh`, `install-hooks.sh`)
-- Constitution amendment (Section VI)
-- Documentation updates (CONTRIBUTING.md, README.md)
-
-**Command**: `@workspace /speckit.tasks` (to be run after plan approval)
-
----
-
-## Deliverables Summary
-
-### Phase 0 (Research)
-✅ `research-final.md` — Technology decisions, rationale, alternatives
-
-### Phase 1 (Design)
-✅ `data-model-final.md` — Entities, relationships, validation rules
-✅ `contracts/testing-governance-schema.md` — Schema documentation
-✅ `contracts/checks.schema.json` — Check category JSON schema
-✅ `contracts/policy.schema.json` — Policy JSON schema
-✅ `quickstart-final.md` — Developer/maintainer guide
-
-### Phase 2 (Implementation Tasks)
-⏸️ `tasks.md` — Generated via `/speckit.tasks` command
-
-### Constitution Amendment
-⏸️ `constitution.md` Section VI — To be added after implementation
-
----
-
-## Next Steps
-
-1. **Review Consolidated Plan**: Approve final plan before proceeding to task breakdown
-2. **Generate Tasks**: Run `/speckit.tasks` to create implementation task list
-3. **Pilot Phase**: Implement one check category (unit tests) to validate workflow
-4. **Incremental Rollout**: Add categories progressively (nightly → PR)
-5. **Constitution Ratification**: Amend constitution.md after successful pilot
-
----
-
-## Notes
-
-- **Run 1 Contributions**: Comprehensive research, detailed data model, thorough quickstart, flake workflow
-- **Run 2 Contributions**: Explicit clarification tracking, phased prerequisites, schema validation emphasis
-- **Run 3 Contributions**: Concise summaries, clean data model structure, focused quickstart
-
-**Consolidation Approach**: Run 1 provided the most complete foundation. Run 2's clarification tracking was integrated into Technical Context. Run 3's conciseness informed summary and decision documentation.
+| [e.g., 4th project] | [current need] | [why 3 projects insufficient] |
+| [e.g., Repository pattern] | [specific problem] | [why direct DB access insufficient] |
