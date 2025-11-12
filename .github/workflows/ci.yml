@@ -55,7 +55,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y build-essential pkg-config \
-            libasound2-dev libfreetype6-dev libx11-dev \
+            libasound2-dev libfreetype-dev libfreetype6-dev libx11-dev \
             libxrandr-dev libxinerama-dev libxcursor-dev
       
       - name: Check GPL-3.0 headers
@@ -79,8 +79,7 @@ jobs:
         run: |
           mkdir -p build
           cd build
-          PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig:$PKG_CONFIG_PATH \
-          cmake .. -DCMAKE_BUILD_TYPE=Release
+          cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/usr
         env:
           SHOWMIDI_WERROR: "1"  # Enable warnings-as-errors for ShowMIDI code
       
