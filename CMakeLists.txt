@@ -111,9 +111,14 @@ if(UNIX AND NOT APPLE)
 
     if(FREETYPE_INCLUDES)
         # Use CPPFLAGS/CXXFLAGS to propagate to sub-CMake configure/compile of juceaide
-        set(ENV{CPPFLAGS} "$ENV{CPPFLAGS} -I${FREETYPE_INCLUDES}")
-        set(ENV{CXXFLAGS} "$ENV{CXXFLAGS} -I${FREETYPE_INCLUDES}")
-        message(STATUS "Propagated Freetype includes to environment for juceaide: ${FREETYPE_INCLUDES}")
+        # Expand each include directory into its own -I flag
+        set(_FT_INC_FLAGS "")
+        foreach(_dir IN LISTS FREETYPE_INCLUDES)
+            set(_FT_INC_FLAGS "${_FT_INC_FLAGS} -I${_dir}")
+        endforeach()
+        set(ENV{CPPFLAGS} "$ENV{CPPFLAGS}${_FT_INC_FLAGS}")
+        set(ENV{CXXFLAGS} "$ENV{CXXFLAGS}${_FT_INC_FLAGS}")
+        message(STATUS "Propagated Freetype include flags to environment for juceaide: ${_FT_INC_FLAGS}")
     endif()
     
     message(STATUS "All required Linux system libraries found (ALSA, X11, Freetype)")
