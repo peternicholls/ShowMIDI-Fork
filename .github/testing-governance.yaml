@@ -1,0 +1,336 @@
+# ShowMIDI Testing Governance Configuration
+# Version: 1.0.0
+# Last Updated: 2025-11-12
+# Documentation: specs/005-test-cadence/
+
+version: "1.0.0"
+
+# Owners: Team/area accountability mapping
+owners:
+  - id: core-team
+    name: "Core Team"
+    contact: "#showmidi-dev"
+    escalation_path:
+      - "@maintainer"
+    sla_default_hours: 48
+    owned_check_categories:
+      - unit-tests
+      - integration-tests
+      - build-verification
+
+  - id: platform-macos
+    name: "macOS Platform Maintainers"
+    contact: "#platform-macos"
+    escalation_path:
+      - "@macos-lead"
+    sla_default_hours: 48
+    owned_check_categories:
+      - build-verification
+
+  - id: platform-windows
+    name: "Windows Platform Maintainers"
+    contact: "#platform-windows"
+    escalation_path:
+      - "@windows-lead"
+    sla_default_hours: 48
+    owned_check_categories:
+      - build-verification
+
+  - id: platform-linux
+    name: "Linux Platform Maintainers"
+    contact: "#platform-linux"
+    escalation_path:
+      - "@linux-lead"
+    sla_default_hours: 48
+    owned_check_categories:
+      - build-verification
+
+  - id: security-team
+    name: "Security Team"
+    contact: "security@showmidi.dev"
+    escalation_path:
+      - "@security-lead"
+    sla_default_hours: 24
+    owned_check_categories:
+      - security-sast
+      - security-sca
+      - license-compliance
+
+# Check Categories: Define all test/validation types
+check_categories:
+  - id: unit-tests
+    name: "Unit Tests"
+    purpose: "Test individual components in isolation using JUCE UnitTest framework"
+    tools:
+      - "JUCE UnitTest"
+      - "CTest"
+    owner: core-team
+    blocking_policy: always
+    expected_duration_sec: 120
+    timeout_sec: 180
+    flake_threshold:
+      failure_count_window: 10
+      failure_threshold: 3
+      failure_rate_7d_threshold: 0.20
+
+  - id: integration-tests
+    name: "Integration Tests"
+    purpose: "Test component interactions and module boundaries with fixtures"
+    tools:
+      - "JUCE UnitTest"
+      - "Mock adapters"
+    owner: core-team
+    blocking_policy: always
+    expected_duration_sec: 180
+    timeout_sec: 270
+    flake_threshold:
+      failure_count_window: 10
+      failure_threshold: 3
+      failure_rate_7d_threshold: 0.20
+
+  - id: system-tests
+    name: "System Tests"
+    purpose: "End-to-end flows including standalone launch and plugin load"
+    tools:
+      - "Automated UI testing"
+      - "Smoke tests"
+    owner: core-team
+    blocking_policy: conditional
+    condition_expression: "trigger_context == 'nightly-develop' OR trigger_context == 'release-gate'"
+    expected_duration_sec: 600
+    timeout_sec: 900
+    flake_threshold:
+      failure_count_window: 10
+      failure_threshold: 3
+      failure_rate_7d_threshold: 0.20
+
+  - id: performance-tests
+    name: "Performance Tests"
+    purpose: "Latency, throughput, and memory benchmarks (<10ms latency validation)"
+    tools:
+      - "JUCE high-resolution timer"
+      - "Custom benchmarks"
+    owner: core-team
+    blocking_policy: conditional
+    condition_expression: "trigger_context == 'nightly-develop' OR trigger_context == 'release-gate'"
+    expected_duration_sec: 300
+    timeout_sec: 450
+    flake_threshold:
+      failure_count_window: 10
+      failure_threshold: 3
+      failure_rate_7d_threshold: 0.20
+
+  - id: ui-visual-regression
+    name: "UI/Visual Regression"
+    purpose: "Detect unintended visual changes for DPI-aware design and theme support"
+    tools:
+      - "Screenshot comparison"
+      - "Manual review"
+    owner: core-team
+    blocking_policy: never
+    expected_duration_sec: 180
+    timeout_sec: 270
+    flake_threshold:
+      failure_count_window: 10
+      failure_threshold: 3
+      failure_rate_7d_threshold: 0.20
+
+  - id: static-analysis
+    name: "Static Analysis"
+    purpose: "Code quality and bug detection for C++17 JUCE codebase"
+    tools:
+      - "clang-tidy"
+      - "cppcheck"
+    owner: core-team
+    blocking_policy: always
+    expected_duration_sec: 90
+    timeout_sec: 135
+    flake_threshold:
+      failure_count_window: 10
+      failure_threshold: 3
+      failure_rate_7d_threshold: 0.20
+
+  - id: formatting
+    name: "Code Formatting"
+    purpose: "Code style consistency using clang-format"
+    tools:
+      - "clang-format"
+    owner: core-team
+    blocking_policy: always
+    expected_duration_sec: 30
+    timeout_sec: 45
+    flake_threshold:
+      failure_count_window: 10
+      failure_threshold: 3
+      failure_rate_7d_threshold: 0.20
+
+  - id: linting
+    name: "Code Linting"
+    purpose: "Style/idiom enforcement and GPL header validation"
+    tools:
+      - "clang-tidy"
+      - "GPL header check"
+    owner: core-team
+    blocking_policy: always
+    expected_duration_sec: 30
+    timeout_sec: 45
+    flake_threshold:
+      failure_count_window: 10
+      failure_threshold: 3
+      failure_rate_7d_threshold: 0.20
+
+  - id: security-sast
+    name: "Security SAST"
+    purpose: "Static application security testing to detect vulnerabilities"
+    tools:
+      - "GitHub CodeQL"
+    owner: security-team
+    blocking_policy: conditional
+    condition_expression: "severity IN ['High', 'Critical']"
+    expected_duration_sec: 180
+    timeout_sec: 270
+    flake_threshold:
+      failure_count_window: 10
+      failure_threshold: 3
+      failure_rate_7d_threshold: 0.20
+
+  - id: security-sca
+    name: "Security SCA"
+    purpose: "Software composition analysis for dependency vulnerabilities"
+    tools:
+      - "GitHub Dependabot"
+      - "OWASP Dependency-Check"
+    owner: security-team
+    blocking_policy: conditional
+    condition_expression: "severity IN ['High', 'Critical']"
+    expected_duration_sec: 120
+    timeout_sec: 180
+    flake_threshold:
+      failure_count_window: 10
+      failure_threshold: 3
+      failure_rate_7d_threshold: 0.20
+
+  - id: license-compliance
+    name: "License Compliance"
+    purpose: "Verify GPL-3.0 compatibility of dependencies"
+    tools:
+      - "FOSSA"
+      - "license-checker scripts"
+    owner: security-team
+    blocking_policy: always
+    expected_duration_sec: 90
+    timeout_sec: 135
+    flake_threshold:
+      failure_count_window: 10
+      failure_threshold: 3
+      failure_rate_7d_threshold: 0.20
+
+  - id: build-verification
+    name: "Build Verification"
+    purpose: "Compile across platforms and configurations"
+    tools:
+      - "CMake"
+      - "Xcode"
+      - "Visual Studio 2022"
+    owner: core-team
+    blocking_policy: always
+    expected_duration_sec: 180
+    timeout_sec: 270
+    flake_threshold:
+      failure_count_window: 10
+      failure_threshold: 3
+      failure_rate_7d_threshold: 0.20
+
+  - id: packaging-validation
+    name: "Packaging Validation"
+    purpose: "Validate distribution artifacts (DMG, EXE, RPM/DEB)"
+    tools:
+      - "Platform-specific packaging tools"
+    owner: core-team
+    blocking_policy: conditional
+    condition_expression: "trigger_context == 'release-gate'"
+    expected_duration_sec: 300
+    timeout_sec: 450
+    flake_threshold:
+      failure_count_window: 10
+      failure_threshold: 3
+      failure_rate_7d_threshold: 0.20
+
+  - id: installer-smoke
+    name: "Installer Smoke Tests"
+    purpose: "Validate install, launch, and uninstall on target OS"
+    tools:
+      - "Installer test scripts"
+    owner: core-team
+    blocking_policy: conditional
+    condition_expression: "trigger_context == 'release-gate'"
+    expected_duration_sec: 300
+    timeout_sec: 450
+    flake_threshold:
+      failure_count_window: 10
+      failure_threshold: 3
+      failure_rate_7d_threshold: 0.20
+
+# Trigger Contexts: Define when and where checks execute
+trigger_contexts:
+  - id: pre-commit
+    event_type: pre-commit
+    scope: local
+    enabled_checks:
+      - formatting
+      - linting
+    time_budget_sec: 10
+    time_budget_p95_sec: 15
+    parallelization: sequential
+    change_detection_enabled: false
+
+  - id: pre-push
+    event_type: pre-push
+    scope: local
+    enabled_checks:
+      - unit-tests
+    time_budget_sec: 120
+    time_budget_p95_sec: 180
+    parallelization: sequential
+    change_detection_enabled: false
+
+  - id: pr-to-develop
+    event_type: pull_request
+    scope: develop
+    enabled_checks:
+      - unit-tests
+      - integration-tests
+      - static-analysis
+      - formatting
+      - linting
+      - build-verification
+    time_budget_sec: 300
+    time_budget_p95_sec: 600
+    parallelization: parallel
+    change_detection_enabled: false
+
+# Policies: Governance rules for flake handling, skip approval, retry, caching
+policies:
+  - id: retry-on-infrastructure-failure
+    policy_type: retry
+    applies_to:
+      - pr-to-develop
+    rules:
+      max_retries: 2
+      retry_on:
+        - infrastructure_failure
+        - runner_timeout
+      retry_delay_sec: 30
+    enforcement: hard
+
+  - id: caching-strategy
+    policy_type: caching
+    applies_to:
+      - pr-to-develop
+    rules:
+      cache_keys:
+        - cmake-build
+        - juce-modules
+        - dependencies
+      cache_ttl_days: 7
+    enforcement: soft

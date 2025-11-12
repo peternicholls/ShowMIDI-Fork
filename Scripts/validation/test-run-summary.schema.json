@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://showmidi.git/scripts/validation/test-run-summary.schema.json",
+  "title": "Test Run Summary Schema",
+  "description": "Schema for aggregated test run results and metrics",
+  "type": "object",
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "Schema version",
+      "const": "1.0.0"
+    },
+    "run_id": {
+      "type": "string",
+      "description": "Unique run identifier (GitHub Actions run ID or local timestamp)"
+    },
+    "trigger_context": {
+      "type": "string",
+      "description": "Which trigger initiated this run",
+      "enum": ["local", "pre-commit", "pre-push", "pr-to-develop", "pr-to-main", "on-merge", "nightly-develop", "release-gate", "hotfix-gate"]
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when run started"
+    },
+    "duration_sec": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Total elapsed time in seconds"
+    },
+    "platform": {
+      "type": "string",
+      "enum": ["macos", "windows", "linux", "ios", "local"],
+      "description": "Execution environment"
+    },
+    "overall_status": {
+      "type": "string",
+      "enum": ["pass", "fail", "flaky", "skipped", "cancelled"],
+      "description": "Aggregate result"
+    },
+    "check_results": {
+      "type": "array",
+      "description": "Results per check category",
+      "items": {
+        "type": "object",
+        "required": ["check_category_id", "status", "duration_sec"],
+        "properties": {
+          "check_category_id": {
+            "type": "string",
+            "description": "Check category identifier"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["pass", "fail", "skipped", "timeout"],
+            "description": "Check result"
+          },
+          "duration_sec": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Check execution time"
+          },
+          "details": {
+            "type": "object",
+            "description": "Check-specific metrics",
+            "properties": {
+              "tests_run": {"type": "integer", "minimum": 0},
+              "tests_passed": {"type": "integer", "minimum": 0},
+              "tests_failed": {"type": "integer", "minimum": 0},
+              "tests_skipped": {"type": "integer", "minimum": 0}
+            }
+          },
+          "failure_message": {
+            "type": "string",
+            "description": "Error message if status == fail"
+          }
+        }
+      }
+    },
+    "artifacts_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Link to logs/artifacts (CI-specific)"
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Additional run context",
+      "properties": {
+        "branch": {"type": "string"},
+        "commit_sha": {"type": "string"},
+        "pr_number": {"type": "integer"},
+        "triggered_by": {"type": "string"}
+      }
+    }
+  },
+  "required": ["version", "run_id", "trigger_context", "timestamp", "duration_sec", "platform", "overall_status", "check_results"]
+}

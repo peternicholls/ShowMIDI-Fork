@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://showmidi.git/specs/005-test-cadence/policy.schema.json",
+  "title": "Policy Contract",
+  "type": "object",
+  "properties": {
+    "policies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "rules", "ownerId"],
+        "properties": {
+          "id": {"type": "string"},
+          "type": {"enum": ["flake", "skip-bypass", "determinism", "retry"]},
+          "rules": {"type": "object"},
+          "ownerId": {"type": "string"}
+        }
+      }
+    }
+  },
+  "required": ["policies"]
+}
