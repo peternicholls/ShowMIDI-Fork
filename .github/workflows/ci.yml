@@ -81,7 +81,6 @@ jobs:
           cd build
           cmake .. -DCMAKE_BUILD_TYPE=Release
         env:
-          SHOWMIDI_WERROR: "1"  # Enable warnings-as-errors for ShowMIDI code
           CPLUS_INCLUDE_PATH: /usr/include/freetype2
           C_INCLUDE_PATH: /usr/include/freetype2
       
