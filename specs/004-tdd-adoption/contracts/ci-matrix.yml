@@ -8,12 +8,16 @@
 
 This document defines the cross-platform continuous integration test matrix for ShowMIDI. It specifies which tests run on which platforms, runner configurations, and execution order.
 
+**Concurrent Run Policy**: Allow parallel runs on different branches; serialize runs on same branch to prevent resource conflicts
+**Job Timeout**: 30 minutes maximum per job, 15 minutes target for median feedback time
+**Artifact Retention**: 90 days for test results and coverage reports
+
 ## Platform Matrix
 
 ### macOS
 
 **Runner**: `macos-latest` (GitHub Actions)  
-**Toolchain**: Xcode (latest stable)  
+**Toolchain**: Xcode 15.0+ (latest stable recommended)  
 **Architectures**: x86_64, Arm64 (universal binary)  
 **Plugin Formats Tested**: Standalone, VST3, AU, AUv3 (iOS simulator)
 
@@ -21,6 +25,7 @@ This document defines the cross-platform continuous integration test matrix for 
 ```yaml
 test-macos:
   runs-on: macos-latest
+  timeout-minutes: 30
   steps:
     - name: Build tests
       run: |
@@ -46,11 +51,24 @@ test-macos:
       run: |
         cd build
         ctest -L ios --output-on-failure
+    
+    - name: Upload test results and build artifacts
+      if: always()  # Upload even on test failure
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results-macos-${{ github.run_number }}
+        path: |
+          build/test-results.xml
+          build/test-output.log
+          build/*.dmg
+        retention-days: 90
 ```
 
 **Dependencies**: None (Xcode includes all required SDKs)
 
 **Estimated Duration**: 8–12 minutes
+
+**Test Duration Reporting**: Each job reports individual test durations via CTest XML output; GitHub Actions UI displays per-job timing; target median <15 min across all jobs
 
 ---
 

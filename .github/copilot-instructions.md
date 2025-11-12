@@ -128,6 +128,7 @@ All source files MUST include GPL-3.0 header:
 
    ShowMIDI
    Copyright (C) 2023 Uwyn LLC.  https://www.uwyn.com
+   Copyright (C) 2025 Peter Nicholls.  https://www.peternicholls.me.uk
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by

@@ -194,6 +194,7 @@ All new source files (`.cpp`, `.h`, `.mm`) MUST include the GPL-3.0 header:
 
    ShowMIDI
    Copyright (C) 2023 Uwyn LLC.  https://www.uwyn.com
+   Copyright (C) 2025 Peter Nicholls.  https://www.peternicholls.me.uk
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -298,9 +299,55 @@ The `.clang-format` file in the repository root defines the JUCE style (Allman b
 
 ## Testing
 
+ShowMIDI uses test-driven development (TDD) to ensure quality and maintainability. All new code and refactors MUST include tests.
+
+### TDD Workflow
+
+**New to TDD?** Follow the [TDD Quickstart Guide](specs/004-tdd-adoption/quickstart.md) to write your first test in ~30 minutes.
+
+**Core Protocol**: Follow the Red-Green-Refactor cycle documented in [Test Protocol](specs/004-tdd-adoption/contracts/test-protocol.md):
+
+1. **Red**: Write a failing test that describes expected behavior
+2. **Green**: Write minimal code to make the test pass
+3. **Refactor**: Improve code quality while keeping tests green
+
+### Running Tests Locally
+
+```bash
+# Build test suite
+cmake -B build -DBUILD_TESTS=ON -DCMAKE_BUILD_TYPE=Debug
+cmake --build build --target ShowMIDI_Tests
+
+# Run all tests
+./build/Tests/ShowMIDI_Tests_artefacts/Debug/ShowMIDI_Tests
+
+# Run specific test category
+./build/Tests/ShowMIDI_Tests_artefacts/Debug/ShowMIDI_Tests --category MIDI
+./build/Tests/ShowMIDI_Tests_artefacts/Debug/ShowMIDI_Tests --category UI
+
+# Run with verbose output
+./build/Tests/ShowMIDI_Tests_artefacts/Debug/ShowMIDI_Tests --verbose
+```
+
+### Test Coverage Requirements
+
+- **New code**: 80% coverage minimum (enforced from Week 8 of TDD adoption)
+- **Critical flows**: 90% qualitative coverage (happy path + error case)
+- **Legacy code**: Add tests for your changes only (full retrofit not required)
+
+See [Coverage Policy](specs/004-tdd-adoption/contracts/coverage-policy.md) for complete requirements and exception process.
+
+### Test Scopes
+
+- **Unit Tests** (`Tests/Unit/`): Fast (<100ms), isolated, no external dependencies
+- **Integration Tests** (`Tests/Integration/`): Multi-component interactions (<500ms)
+- **System Tests** (`Tests/System/`): End-to-end workflows (<5s)
+
+See [Test Protocol](specs/004-tdd-adoption/contracts/test-protocol.md) for detailed guidance on each scope.
+
 ### Manual Testing Requirements
 
-All changes MUST be manually tested before submitting a PR:
+In addition to automated tests, manually verify:
 
 1. **Build on Primary Platform**: At minimum, build and test on macOS
 2. **Cross-Platform Verification**: For UI changes, test on macOS, Windows, and Linux if possible
@@ -315,25 +362,6 @@ ShowMIDI enforces a **zero-tolerance policy** for JUCE leak detector warnings:
 - Use `JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR` on all component classes
 - Use smart pointers (`std::unique_ptr`, `juce::OwnedArray`) for ownership
 - Review leak warnings carefully - they often indicate real memory issues
-
-### Running Local Tests
-
-Before pushing, verify your changes:
-
-```bash
-# Build in Debug mode to enable leak detection
-cmake -DCMAKE_BUILD_TYPE=Debug -B build
-cmake --build build
-
-# Run the standalone application
-./build/ShowMIDI_artefacts/Debug/ShowMIDI
-
-# Test MIDI functionality
-# 1. Connect a MIDI device or use a virtual MIDI driver
-# 2. Play notes, send CC messages, etc.
-# 3. Verify visualization appears correctly
-# 4. Check for any console warnings or errors
-```
 
 ---
 

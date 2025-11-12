@@ -31,6 +31,8 @@ ShowMIDI is transitioning to Test-Driven Development to establish sustainable qu
 - **Desktop**: macOS 11.7+, Windows 10+, Linux (Ubuntu/Fedora/Arch)
 - **Mobile**: iOS 12+ (AUv3 plugin only, simulator for testing)
 - **Plugin Formats**: VST, VST3, AU, AUv3, LV2, CLAP, Standalone
+  - **AAX Status**: Deferred to Phase 4 (experimental) pending Avid SDK license acquisition
+  - **CLAP Status**: Planned for Phase 4 (emerging standard)
 
 **Project Type**: Multi-platform audio plugin (desktop + mobile)
 
@@ -45,6 +47,7 @@ ShowMIDI is transitioning to Test-Driven Development to establish sustainable qu
 - Headless CI execution (GUI-less via `MessageManager::setCurrentThreadAsMessageThread()`)
 - Deterministic tests (no flaky timing, hardware dependencies mocked)
 - GPL-3.0 license compliance (all test files require license headers)
+- Platform-conditional tests: Use `#if JUCE_MAC`, `#if JUCE_LINUX`, `#if JUCE_WINDOWS` for platform-specific code; skip tests via CTest labels (e.g., `-E ios` to exclude iOS tests on non-macOS runners)
 
 **Scale/Scope**: 
 - ~50 source files in `Source/` directory (baseline)
@@ -633,17 +636,35 @@ This feature does not introduce architectural complexity that violates ShowMIDI'
 
 ---
 
+## Coverage Gate Rollback & Escalation Strategy
+
+**Rollback Triggers** (CHK070):
+- If hard gate (Week 8) causes >50% PR rejection rate for 2 consecutive weeks, automatically rollback to soft gate
+- Rollback decision authority: Product owner + tech lead consensus
+- Communication: Announce rollback via Discord #development + GitHub Discussion within 24 hours
+
+**Escalation Timeline** (CHK071):
+- **Week 6 Checkpoint**: If overall coverage <70%, extend soft gate period by 2 weeks (shift hard gate to Week 10)
+- **Week 4 Checkpoint**: If overall coverage <50%, pause new feature development to focus on test remediation
+- **Week 2 Checkpoint**: If critical flow coverage <90%, delay Phase 1 start by 1 week
+- Decision authority: Weekly coverage review meeting (all maintainers)
+- Escalation triggers automatic timeline adjustment; no manual intervention required
+
+---
+
 ## Open Questions
 
 *(To be resolved before Phase 2)*
 
-1. **AAX Plugin Testing**: Do we pursue Avid AAX SDK license for Phase 3, or defer AAX tests to Phase 4?
+1. **AAX Plugin Testing**: ~~Do we pursue Avid AAX SDK license for Phase 3, or defer AAX tests to Phase 4?~~
+   - **RESOLVED (2025-11-11)**: Defer AAX to Phase 4 (experimental). No SDK license acquisition during TDD rollout. Focus on VST3/AU/LV2 in Phases 1-3.
    - **Decision needed by**: Week 5
    - **Impact**: Phase 3 scope and timeline
 
 2. **Self-Hosted Runners**: Should we set up self-hosted runners for faster macOS builds, or rely on GitHub-hosted?
-   - **Decision needed by**: Week 4 (if CI times exceed 15 min)
+   - **Decision needed by**: Week 4 (if CI median feedback time exceeds 15 min for 3 consecutive runs)
    - **Impact**: CI performance and cost
+   - **Fallback criteria**: If GitHub Actions runners unavailable >2 times/week, provision self-hosted macOS runner within 1 week
 
 3. **Test Data Repository**: Large binary test assets (MIDI files, SVG themes) — store in Git LFS or inline?
    - **Decision needed by**: Week 2

@@ -255,6 +255,91 @@ MidiDeviceComponentTests() : juce::UnitTest("MIDI Device Component", "MIDI") {}
 
 ---
 
+## Platform-Conditional Testing
+
+**Purpose**: Handle platform-specific code and tests that only apply to certain OS/plugin formats.
+
+### Compilation Patterns
+
+Use JUCE preprocessor macros for platform-conditional code:
+
+```cpp
+class DeviceDiscoveryTests : public juce::UnitTest
+{
+public:
+    void runTest() override
+    {
+        #if JUCE_MAC
+        beginTest("Audio Unit should appear in plugin list");
+        // AU-specific test code
+        #endif
+        
+        #if JUCE_LINUX
+        beginTest("LV2 plugin should register with host");
+        // LV2-specific test code
+        #endif
+        
+        #if JUCE_WINDOWS
+        beginTest("ASIO driver should initialize");
+        // Windows ASIO test code
+        #endif
+    }
+};
+```
+
+### Test Labels for Platform Filtering
+
+**CTest Labels** (set in `Tests/CMakeLists.txt`):
+- `ios`: iOS simulator tests (skip on non-macOS runners)
+- `plugin-au`: Audio Unit tests (macOS only)
+- `plugin-lv2`: LV2 tests (Linux only)
+- `plugin-vst3`: VST3 tests (all desktop platforms)
+- `plugin-clap`: CLAP tests (all platforms, Phase 4)
+
+**Example CMake Configuration**:
+```cmake
+# Tests/CMakeLists.txt
+add_test(NAME AudioUnitTests COMMAND ShowMIDI_Tests --test-name "Audio Unit")
+set_tests_properties(AudioUnitTests PROPERTIES
+    LABELS "system;plugin-au;macos"
+    COST 50
+)
+```
+
+**CI Platform Skipping**:
+```bash
+# Linux runner: exclude macOS/iOS-only tests
+ctest -E "ios|plugin-au"
+
+# macOS runner: run iOS tests
+ctest -L ios
+
+# All platforms: run VST3 tests
+ctest -L plugin-vst3
+```
+
+### Platform-Specific Assertions
+
+When testing cross-platform behavior with platform differences:
+
+```cpp
+beginTest("MIDI device names should be available");
+
+#if JUCE_MAC
+expectGreaterThan(deviceList.size(), 0, "macOS always has at least IAC driver");
+#elif JUCE_WINDOWS
+// Windows may have zero MIDI devices on CI runners
+expect(deviceList.size() >= 0, "Device list should be valid");
+#elif JUCE_LINUX
+// Linux ALSA may need configuration
+expect(deviceList.size() >= 0, "ALSA should enumerate");
+#endif
+```
+
+**Best Practice**: Prefer adapter pattern (mock devices) over platform-conditional assertions when possible.
+
+---
+
 ## Review Expectations
 
 ### Pull Request Requirements

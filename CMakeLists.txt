@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 3.15)
 
 project(ShowMIDI VERSION 1.1.3)
 
+# Build configuration options
+option(BUILD_TESTS "Build test suite (requires JUCE_UNIT_TESTS=1)" OFF)
+
 # To build a CLAP you need to do the following in addition to editing this file
 #
 # - First do the native build of at least the ShowMIDI_shared target on your platform as Debug or Release
@@ -219,3 +222,8 @@ if(BUILD_CLAP)
     )
 endif()
 
+# Test infrastructure (TDD adoption - feature 004-tdd-adoption)
+if(BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(Tests)
+endif()

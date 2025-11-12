@@ -261,6 +261,144 @@ jobs:
             build/ShowMIDI_artefacts/Release/**/*
             build_clap/ShowMIDI_artefacts/Release/*.clap
 
+  # Test jobs: Run automated test suite on all platforms
+  # Phase 4 (User Story 2): Cross-platform test execution
+  test-macos:
+    name: Test (macOS)
+    needs: code-quality
+    runs-on: macos-latest
+    timeout-minutes: 30
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      
+      - name: Install dependencies
+        run: brew install cmake ninja
+      
+      - name: Build tests
+        run: |
+          cmake -B build -DBUILD_TESTS=ON -DCMAKE_BUILD_TYPE=Debug -G Ninja
+          cmake --build build --target ShowMIDI_Tests -j$(sysctl -n hw.ncpu)
+      
+      - name: Run unit tests
+        run: |
+          cd build
+          ctest -L unit --output-on-failure --timeout 300
+      
+      - name: Run integration tests
+        run: |
+          cd build
+          ctest -L integration --output-on-failure --timeout 300
+      
+      - name: Run system tests
+        run: |
+          cd build
+          ctest -L system --output-on-failure --timeout 300
+      
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-macos-${{ github.run_number }}
+          retention-days: 90
+          path: |
+            build/Testing/Temporary/LastTest.log
+            build/Testing/Temporary/*.xml
+  
+  test-windows:
+    name: Test (Windows)
+    needs: code-quality
+    runs-on: windows-latest
+    timeout-minutes: 30
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      
+      - name: Build tests
+        run: |
+          cmake -B build -DBUILD_TESTS=ON -DCMAKE_BUILD_TYPE=Debug
+          cmake --build build --config Debug --target ShowMIDI_Tests
+      
+      - name: Run unit tests
+        run: |
+          cd build
+          ctest -C Debug -L unit --output-on-failure --timeout 300
+      
+      - name: Run integration tests
+        run: |
+          cd build
+          ctest -C Debug -L integration --output-on-failure --timeout 300
+      
+      - name: Run system tests
+        run: |
+          cd build
+          ctest -C Debug -L system --output-on-failure --timeout 300
+      
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-windows-${{ github.run_number }}
+          retention-days: 90
+          path: |
+            build/Testing/Temporary/LastTest.log
+            build/Testing/Temporary/*.xml
+  
+  test-linux:
+    name: Test (Linux)
+    needs: code-quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential pkg-config cmake \
+            libasound2-dev libfreetype6-dev libx11-dev \
+            libxrandr-dev libxinerama-dev libxcursor-dev
+      
+      - name: Build tests
+        run: |
+          cmake -B build -DBUILD_TESTS=ON -DCMAKE_BUILD_TYPE=Debug
+          cmake --build build --target ShowMIDI_Tests -j$(nproc)
+      
+      - name: Run unit tests
+        run: |
+          cd build
+          ctest -L unit --output-on-failure --timeout 300
+      
+      - name: Run integration tests
+        run: |
+          cd build
+          ctest -L integration --output-on-failure --timeout 300
+      
+      - name: Run system tests
+        run: |
+          cd build
+          ctest -L system --output-on-failure --timeout 300
+      
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-linux-${{ github.run_number }}
+          retention-days: 90
+          path: |
+            build/Testing/Temporary/LastTest.log
+            build/Testing/Temporary/*.xml
+
   build-ios:
     name: Build (iOS AUv3)
     needs: code-quality  # Only run builds if code quality checks pass (fail-fast)

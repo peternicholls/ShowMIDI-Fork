@@ -82,7 +82,7 @@ Features MUST prioritize immediate value and ease of use:
 ### V. Maintainability
 
 Code MUST be maintainable for the long term:
-- **File Headers**: All source files MUST include GPL-3.0 license header with copyright notice (© 2023 Uwyn LLC)
+- **File Headers**: All source files MUST include GPL-3.0 license header with copyright notices (© 2023 Uwyn LLC, © 2025 Peter Nicholls)
 - **Component Documentation**: Complex components (e.g., MidiDeviceComponent) MUST include docstring explaining purpose and responsibilities
 - **State Management**: Use SettingsManager pattern for persistent preferences; PropertiesSettings and PluginSettings for context-specific state
 - **Consistent Naming**: Follow JUCE conventions (camelCase for methods, PascalCase for types)

@@ -24,13 +24,13 @@
 
 **Purpose**: Project initialization and test framework setup
 
-- [ ] T001 Add BUILD_TESTS option to CMakeLists.txt (set to OFF by default)
-- [ ] T002 Create Tests/ directory structure (Unit/, Integration/, System/, Fixtures/)
-- [ ] T003 Create Tests/CMakeLists.txt with juce_add_console_app(ShowMIDI_Tests)
-- [ ] T004 Link JUCE modules in Tests/CMakeLists.txt (juce_core, juce_audio_basics, juce_audio_processors, juce_audio_utils, juce_graphics, juce_gui_basics, juce_gui_extra)
-- [ ] T005 Add JUCE_UNIT_TESTS=1 compile definition to ShowMIDI_Tests target
-- [ ] T006 Create Tests/README.md linking to quickstart.md
-- [ ] T007 Verify JUCE submodule initialized (git submodule update --init --recursive)
+- [X] T001 Add BUILD_TESTS option to CMakeLists.txt (set to OFF by default)
+- [X] T002 Create Tests/ directory structure (Unit/, Integration/, System/, Fixtures/)
+- [X] T003 Create Tests/CMakeLists.txt with juce_add_console_app(ShowMIDI_Tests)
+- [X] T004 Link JUCE modules in Tests/CMakeLists.txt (juce_core, juce_audio_basics, juce_audio_processors, juce_audio_utils, juce_graphics, juce_gui_basics, juce_gui_extra)
+- [X] T005 Add JUCE_UNIT_TESTS=1 compile definition to ShowMIDI_Tests target
+- [X] T006 Create Tests/README.md linking to quickstart.md
+- [X] T007 Verify JUCE submodule initialized (git submodule update --init --recursive)
 
 ---
 
@@ -40,15 +40,15 @@
 
 **⚠️ CRITICAL**: No user story work can begin until adapter interfaces and CI pipeline are ready
 
-- [ ] T008 [P] Create Tests/Fixtures/IMidiDeviceAdapter.h interface
-- [ ] T009 [P] Create Tests/Fixtures/MockMidiAdapter.h header
-- [ ] T010 [P] Create Tests/Fixtures/MockMidiAdapter.cpp implementation
-- [ ] T011 [P] Create Tests/Fixtures/ITimeProvider.h interface
-- [ ] T012 [P] Create Tests/Fixtures/SimulatedTimeProvider.h header
-- [ ] T013 [P] Create Tests/Fixtures/SimulatedTimeProvider.cpp implementation
-- [ ] T014 [P] Create Tests/Fixtures/IFileProvider.h interface (for file dialog mocking)
-- [ ] T015 Build ShowMIDI_Tests target locally on macOS to verify CMake integration (success: binary builds without errors)
-- [ ] T016 Run empty test suite to verify JUCE UnitTest framework activation (expected output: "0 tests run, 0 failures" or JUCE test runner initialization message)
+- [X] T008 [P] Create Tests/Fixtures/IMidiDeviceAdapter.h interface
+- [X] T009 [P] Create Tests/Fixtures/MockMidiAdapter.h header
+- [X] T010 [P] Create Tests/Fixtures/MockMidiAdapter.cpp implementation
+- [X] T011 [P] Create Tests/Fixtures/ITimeProvider.h interface
+- [X] T012 [P] Create Tests/Fixtures/SimulatedTimeProvider.h header
+- [X] T013 [P] Create Tests/Fixtures/SimulatedTimeProvider.cpp implementation
+- [X] T014 [P] Create Tests/Fixtures/IFileProvider.h interface (for file dialog mocking)
+- [X] T015 Build ShowMIDI_Tests target locally on macOS to verify CMake integration (success: binary builds without errors)
+- [X] T016 Run empty test suite to verify JUCE UnitTest framework activation (expected output: "0 tests run, 0 failures" or JUCE test runner initialization message)
 
 **Checkpoint**: Foundation ready - test implementation can now begin in parallel
 
@@ -62,14 +62,14 @@
 
 ### Implementation for User Story 1
 
-- [ ] T017 [US1] Verify contracts/test-protocol.md exists and documents Red-Green-Refactor workflow
-- [ ] T018 [US1] Verify contracts/test-protocol.md defines test scopes (Unit/Integration/System)
-- [ ] T019 [US1] Verify contracts/test-protocol.md includes naming conventions (ComponentNameTests, "should X when Y")
-- [ ] T020 [US1] Verify contracts/test-protocol.md includes review expectations and Definition of Done (DoD MUST require tests for all new code and refactors)
-- [ ] T020a [US1] Verify contracts/test-protocol.md or quickstart.md documents platform-conditional compilation patterns (#if JUCE_MAC, test labels: ios, plugin-au, plugin-lv2)
-- [ ] T021 [US1] Create example test in Tests/Unit/ExampleTest.cpp demonstrating protocol
-- [ ] T022 [US1] Update CONTRIBUTING.md with link to test-protocol.md
-- [ ] T023 [US1] Validate quickstart.md enables new contributor to write first test in <30 minutes
+- [X] T017 [US1] Verify contracts/test-protocol.md exists and documents Red-Green-Refactor workflow
+- [X] T018 [US1] Verify contracts/test-protocol.md defines test scopes (Unit/Integration/System)
+- [X] T019 [US1] Verify contracts/test-protocol.md includes naming conventions (ComponentNameTests, "should X when Y")
+- [X] T020 [US1] Verify contracts/test-protocol.md includes review expectations and Definition of Done (DoD MUST require tests for all new code and refactors)
+- [X] T020a [US1] Verify contracts/test-protocol.md or quickstart.md documents platform-conditional compilation patterns (#if JUCE_MAC, test labels: ios, plugin-au, plugin-lv2)
+- [X] T021 [US1] Create example test in Tests/Unit/ExampleTest.cpp demonstrating protocol
+- [X] T022 [US1] Update CONTRIBUTING.md with link to test-protocol.md
+- [X] T023 [US1] Validate quickstart.md enables new contributor to write first test in <30 minutes
 
 **Checkpoint**: TDD protocol is documented and validated via example test
 
@@ -83,15 +83,15 @@
 
 ### Implementation for User Story 2
 
-- [ ] T024 [P] [US2] Update .github/workflows/ci.yml to add test-macos job with CMake build and ctest execution
-- [ ] T025 [P] [US2] Update .github/workflows/ci.yml to add test-windows job with CMake build and ctest execution
-- [ ] T026 [P] [US2] Update .github/workflows/ci.yml to add test-linux job with CMake build, dependencies install, and ctest execution
-- [ ] T027 [US2] Configure test result artifact upload (JUnit XML format) in all platform jobs
-- [ ] T028 [US2] Add test job triggers for PRs to develop and main branches
-- [ ] T029 [US2] Set artifact retention to 90 days in workflow configuration
-- [ ] T030 [US2] Verify contracts/ci-matrix.yml documents platform-specific test labels (unit, integration, system, midi, ui, ios, plugin-vst3, plugin-au, plugin-lv2)
-- [ ] T031 [US2] Update CMakeLists.txt to register CTest with enable_testing()
-- [ ] T032 [US2] Add CTest test labels configuration in Tests/CMakeLists.txt
+- [X] T024 [P] [US2] Update .github/workflows/ci.yml to add test-macos job with CMake build and ctest execution
+- [X] T025 [P] [US2] Update .github/workflows/ci.yml to add test-windows job with CMake build and ctest execution
+- [X] T026 [P] [US2] Update .github/workflows/ci.yml to add test-linux job with CMake build, dependencies install, and ctest execution
+- [X] T027 [US2] Configure test result artifact upload (JUnit XML format) in all platform jobs
+- [X] T028 [US2] Add test job triggers for PRs to develop and main branches
+- [X] T029 [US2] Set artifact retention to 90 days in workflow configuration
+- [X] T030 [US2] Verify contracts/ci-matrix.yml documents platform-specific test labels (unit, integration, system, midi, ui, ios, plugin-vst3, plugin-au, plugin-lv2)
+- [X] T031 [US2] Update CMakeLists.txt to register CTest with enable_testing()
+- [X] T032 [US2] Add CTest test labels configuration in Tests/CMakeLists.txt
 - [ ] T033 [US2] Trigger test run on CI for all three desktop platforms (macOS, Windows, Linux)
 - [ ] T034 [US2] Validate median CI feedback time is <15 minutes
 

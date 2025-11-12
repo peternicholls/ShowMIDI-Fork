@@ -26,17 +26,30 @@ This document defines code coverage targets, measurement methodology, enforcemen
 
 **Identified Critical Flows**:
 1. **MIDI Message Reception**: MidiInput → DeviceListener → MidiDeviceComponent display
+   - **Acceptance**: Happy path (Note On displays) + 1 error case (invalid MIDI ignored)
 2. **Channel Auto-Discovery**: New MIDI device appears in sidebar automatically
+   - **Acceptance**: Happy path (device appears) + 1 error case (device disconnects gracefully)
 3. **Channel Auto-Hide**: Inactive channels disappear after timeout
+   - **Acceptance**: Happy path (timeout triggers hide) + 1 boundary case (activity resets timer)
 4. **Theme Loading**: User drops SVG file → theme applies
+   - **Acceptance**: Happy path (valid SVG loads) + 1 error case (malformed SVG shows error)
 5. **Keyboard Shortcuts**: Spacebar (pause/resume), Delete (reset), V (toggle viz)
+   - **Acceptance**: Happy path (each shortcut works) + 1 edge case (shortcuts disabled during specific states)
 6. **Plugin Initialization**: Host loads plugin → UI renders without crash
+   - **Acceptance**: Happy path (VST3/AU loads) + 1 error case (invalid host state handled)
 7. **Standalone Device Selection**: User selects MIDI input from dropdown
+   - **Acceptance**: Happy path (selection works) + 1 boundary case (no devices available)
 8. **Settings Persistence**: Preferences saved on quit, restored on launch
+   - **Acceptance**: Happy path (settings persist) + 1 error case (corrupted file falls back to defaults)
 9. **Multi-Channel Display**: 16 channels visualized simultaneously
+   - **Acceptance**: Happy path (all 16 active) + 1 boundary case (channel 17 ignored gracefully)
 10. **High-Throughput MIDI**: Dense CC automation processed without drops
+   - **Acceptance**: Happy path (1000 msgs/sec processed) + 1 stress case (10000 msgs/sec degrades gracefully)
 
 **Coverage Measurement**: Each flow MUST have at least one integration or system test by end of Week 1.
+
+**Acceptance Formula**: Critical Flow Coverage = (Flows with ≥1 happy path test + ≥1 error/edge/boundary test) / Total Critical Flows
+**Target**: ≥9 of 10 flows (90%) meet acceptance by Week 1
 
 ### Line Coverage (Weeks 2–8)
 
@@ -115,6 +128,11 @@ Line Coverage % = (Covered Lines / Total Executable Lines) × 100
 ### Hard Gate (Weeks 7–8)
 
 **Policy**: New/modified code MUST have ≥80% coverage; legacy code allowed <80% if unchanged.
+
+**"New Code" Definition**:
+- **New files**: Any `.cpp`/`.h` file created in PR (100% of new file must be covered)
+- **Modified files**: Lines changed in git diff (only changed lines counted, not entire file)
+- **Exclusions**: Auto-generated code, platform-specific blocks (#if JUCE_MAC), JUCE library code
 
 **Incremental Coverage Check**:
 ```bash
@@ -219,7 +237,8 @@ Coverage exceptions may be granted for:
 **File**: Source/MyComponent.cpp  
 **Lines**: 145–180  
 **Current Coverage**: 45%  
-**Target Coverage**: N/A (exception requested)
+**Target Coverage**: N/A (exception requested)  
+**Type**: [Performance-Critical | Platform-Specific | GUI-Heavy | Third-Party]
 
 **Justification**:
 This code interacts with Windows ASIO driver APIs that require physical audio hardware.
@@ -229,23 +248,46 @@ Mocking ASIO is impractical due to complex driver state machine.
 - Manual testing on physical devices (documented in TESTING.md)
 - Integration test with simulated buffer (covers logic, not driver calls)
 
+**Duration**: [Temporary | Permanent]
+**Review SLA**: 3 business days
 **Approver**: @maintainer-username
 ```
 
+**Required Fields**:
+1. **File + Lines**: Exact location of uncovered code
+2. **Type**: One of: Performance-Critical, Platform-Specific, GUI-Heavy, Third-Party
+3. **Justification**: Specific technical reason why coverage is impractical
+4. **Alternative Validation**: How behavior is verified without automated tests
+5. **Duration**: Temporary (time-bound) or Permanent (requires quarterly review)
+
 **Approval Criteria**:
-- Justification is specific and detailed
-- Alternative validation method provided
+- Justification is specific and detailed (not "too hard to test")
+- Alternative validation method provided and documented
 - Code review shows no obvious testability improvements
+- **Approval authority**: 2 maintainers (one must be tech lead)
+- **SLA**: Decision within 3 business days of request
+
+**Exception Duration**:
+- **Temporary**: Valid for one release cycle, must be re-requested
+- **Permanent**: Valid indefinitely, but subject to quarterly review
+- All exceptions expire if code is modified (must re-request)
 
 **Tracking**: Exceptions tracked in `.codecov.yml`:
 ```yaml
 ignore:
-  - "Source/AsioDriverInterface.cpp:145-180"  # Exception #12: Hardware-dependent
+  - "Source/AsioDriverInterface.cpp:145-180"  # Exception #12: Hardware-dependent (approved 2025-11-15, permanent)
 ```
 
 ---
 
 ## Coverage Anti-Patterns
+
+**Flaky Test Handling** (CHK-COV057):
+- **Quarantined tests** (marked with CTest `WILL_FAIL`) are EXCLUDED from coverage % calculations
+- **Rationale**: Flaky tests provide unreliable coverage data; excluding prevents gaming
+- **Process**: Quarantined tests tracked in GitHub Issues with `flaky-test` label
+- **Re-inclusion**: Once fixed and passing consistently (7 days, 0 failures), test coverage counts again
+- **Coverage impact**: If quarantined test covered 5% of Component X, that 5% is removed from numerator AND denominator
 
 ### Avoid
 
