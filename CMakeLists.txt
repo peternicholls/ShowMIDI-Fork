@@ -116,9 +116,10 @@ if(UNIX AND NOT APPLE)
         foreach(_dir IN LISTS FREETYPE_INCLUDES)
             set(_FT_INC_FLAGS "${_FT_INC_FLAGS} -I${_dir}")
         endforeach()
-        set(ENV{CPPFLAGS} "$ENV{CPPFLAGS}${_FT_INC_FLAGS}")
-        set(ENV{CXXFLAGS} "$ENV{CXXFLAGS}${_FT_INC_FLAGS}")
-        message(STATUS "Propagated Freetype include flags to environment for juceaide: ${_FT_INC_FLAGS}")
+        # Also disable fontconfig usage in juceaide to avoid requiring fontconfig headers in CI
+        set(ENV{CPPFLAGS} "$ENV{CPPFLAGS}${_FT_INC_FLAGS} -DJUCE_USE_FONTCONFIG=0")
+        set(ENV{CXXFLAGS} "$ENV{CXXFLAGS}${_FT_INC_FLAGS} -DJUCE_USE_FONTCONFIG=0")
+        message(STATUS "Propagated Freetype flags and disabled fontconfig for juceaide: ${_FT_INC_FLAGS} -DJUCE_USE_FONTCONFIG=0")
     endif()
     
     message(STATUS "All required Linux system libraries found (ALSA, X11, Freetype)")

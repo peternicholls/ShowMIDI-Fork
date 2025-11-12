@@ -32,7 +32,8 @@ int main (int, char**)
 #endif
 
   juce::UnitTestRunner runner;
-  runner.runAllTests();
+  // Run only ShowMIDI tests (category: "Tutorial"); avoid JUCE internal tests
+  runner.runTestsInCategory("Tutorial");
 
   int numFailures = 0;
   for (int i = 0; i < runner.getNumResults(); ++i)
