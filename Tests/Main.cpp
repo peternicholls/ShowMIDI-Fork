@@ -27,9 +27,9 @@
 int main (int, char**)
 {
     // Initialize JUCE for headless/console execution
-    // ScopedJuceInitialiser_GUI sets up MessageManager and other JUCE subsystems
-    // Required for unit tests that use JUCE GUI components (even without display server)
-    juce::ScopedJuceInitialiser_GUI juceInitialiser;
+    // Manual initialization avoids Windows message loop blocking
+    juce::initialiseJuce_GUI();
+    juce::MessageManager::getInstance()->setCurrentThreadAsMessageThread();
     
     juce::UnitTestRunner runner;
     runner.runAllTests();
@@ -40,6 +40,10 @@ int main (int, char**)
         if (runner.getResult(i)->failures > 0)
             ++numFailures;
     }
+    
+    // Clean shutdown
+    juce::MessageManager::deleteInstance();
+    juce::shutdownJuce_GUI();
     
     return numFailures > 0 ? 1 : 0;
 }

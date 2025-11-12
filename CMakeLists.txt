@@ -94,10 +94,13 @@ if(UNIX AND NOT APPLE)
     # Use Freetype::Freetype target includes if available, otherwise fall back to FREETYPE_INCLUDE_DIRS
     if(TARGET Freetype::Freetype)
         get_target_property(FREETYPE_INCLUDES Freetype::Freetype INTERFACE_INCLUDE_DIRECTORIES)
-        include_directories(${FREETYPE_INCLUDES})
+        include_directories(SYSTEM ${FREETYPE_INCLUDES})
+        # Also add to CMAKE_CXX_FLAGS to ensure it propagates to JUCE's juceaide build
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I${FREETYPE_INCLUDES}")
         message(STATUS "Using Freetype includes from target: ${FREETYPE_INCLUDES}")
     else()
-        include_directories(${FREETYPE_INCLUDE_DIRS})
+        include_directories(SYSTEM ${FREETYPE_INCLUDE_DIRS})
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I${FREETYPE_INCLUDE_DIRS}")
         message(STATUS "Using Freetype includes from variable: ${FREETYPE_INCLUDE_DIRS}")
     endif()
     
