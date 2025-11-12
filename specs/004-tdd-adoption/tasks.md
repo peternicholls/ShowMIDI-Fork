@@ -100,6 +100,13 @@
   - [X] T033e Fix Linux build failure (CMake configuration or dependency issues) - Main build works, no issues found
   - [ ] T033f Fix Windows test build failure (ensure BUILD_TESTS works on Windows)
   - [X] T033g Fix Linux test build failure (ensure BUILD_TESTS works on Linux) - Fixed by disabling -Wmaybe-uninitialized for GCC
+  - [X] T033h [P1] Add juce::MessageManager::setCurrentThreadAsMessageThread() to Tests/Main.cpp for headless CI execution (Copilot review)
+  - [X] T033i [P1] Pin test jobs to macos-14 in .github/workflows/ci.yml to match build job and avoid macOS 15 API deprecations (Codex review)
+  - [X] T033j [P2] Standardize test executable path documentation in Tests/README.md and CONTRIBUTING.md (Gemini/Copilot review)
+  - [X] T033k [P2] Fix duplicate 004-tdd-adoption entry in .github/copilot-instructions.md Recent Changes section (Gemini review)
+  - [X] T033l [P3] Add TODO with tracking issue for timestamp implementation in Tests/Fixtures/MockMidiAdapter.cpp (Copilot review)
+  - [X] T033m [P3] Add comment explaining code-quality dependency (fail-fast) in .github/workflows/ci.yml test jobs (Copilot review)
+  - [X] T033n [P3] Add reference to tasks.md Phase 5 (T035-T048) in Tests/CMakeLists.txt comments (Copilot review)
 - [ ] T034 [US2] Validate median CI feedback time is <15 minutes (awaiting all platforms passing)
 
 **Checkpoint**: CI runs tests on all desktop platforms with clear per-platform status

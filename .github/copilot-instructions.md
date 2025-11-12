@@ -249,7 +249,6 @@ git push origin release/1.1.0
 ```
 
 ## Recent Changes
-- 004-tdd-adoption: Added [if applicable, e.g., PostgreSQL, CoreData, files or N/A]
 - 005-vst3-sdk-upstream: Added Steinberg VST3 SDK as git submodule
   - VST3 SDK v3.7.11_build_10 at `libs/vst3sdk` (git submodule)
   - CMake configuration: `JUCE_CUSTOM_VST3_SDK=1` flag enables external VST3 SDK
@@ -257,12 +256,15 @@ git push origin release/1.1.0
   - Documentation: README.md and CONTRIBUTING.md include submodule initialization instructions
   - CI/CD: Existing `submodules: recursive` checkout handles VST3 SDK automatically
   - Technologies: Git submodules, Steinberg VST3 SDK, JUCE custom SDK integration
-- 004-tdd-adoption: Added [if applicable, e.g., PostgreSQL, CoreData, files or N/A]
+- 004-tdd-adoption: Added test infrastructure and development tools
+  - Added test framework (JUCE UnitTest) with BUILD_TESTS CMake option
+  - Created Tests/ directory structure (Unit/, Integration/, System/, Fixtures/)
+  - Added test fixtures (MockMidiAdapter, SimulatedTimeProvider)
   - Added configuration files (.editorconfig, .clang-format, updated .gitignore)
-  - Added documentation (CHANGELOG.md, CONTRIBUTING.md, DOWNLOAD_STATS.md, PR template)
-  - Migrated CI/CD workflows from .github/prompts/workflows/ to .github/workflows/
+  - Added documentation (CHANGELOG.md, CONTRIBUTING.md, DOWNLOAD_STATS.md, PR template, TDD guides)
+  - Extended CI/CD with test jobs (test-macos, test-windows, test-linux)
   - Migrated scripts to scripts/ directory with typo corrections
-  - Technologies: Markdown, YAML, EditorConfig, clang-format, Bash scripts
+  - Technologies: JUCE UnitTest, CTest, CMake, Markdown, YAML, EditorConfig, clang-format
 
 
 <!-- MANUAL ADDITIONS START -->

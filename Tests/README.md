@@ -18,14 +18,14 @@ cmake --build build --target ShowMIDI_Tests
 
 ```bash
 # Run all tests
-./build/ShowMIDI_Tests
+./build/Tests/ShowMIDI_Tests_artefacts/Debug/ShowMIDI_Tests
 
 # Run specific category
-./build/ShowMIDI_Tests --category MIDI
-./build/ShowMIDI_Tests --category UI
+./build/Tests/ShowMIDI_Tests_artefacts/Debug/ShowMIDI_Tests --category MIDI
+./build/Tests/ShowMIDI_Tests_artefacts/Debug/ShowMIDI_Tests --category UI
 
 # Run with verbose output
-./build/ShowMIDI_Tests --verbose
+./build/Tests/ShowMIDI_Tests_artefacts/Debug/ShowMIDI_Tests --verbose
 ```
 
 ### Run via CTest

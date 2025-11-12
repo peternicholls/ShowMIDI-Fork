@@ -59,7 +59,10 @@ void MockMidiAdapter::injectMessage(const juce::MidiMessage& message, double tim
         callback->handleIncomingMidiMessage(nullptr, message);
     }
     
-    // timestamp parameter available for future use with simulated time
+    // TODO: Implement timestamp tracking for time-based test scenarios
+    // See tasks.md Phase 5 (T040: ChannelAutoHideTests) for use case
+    // Future: Store timestamps for tests that validate timing-dependent behavior
+    // (e.g., channel auto-hide after inactivity, latency measurements)
     juce::ignoreUnused(timestamp);
 }
 
