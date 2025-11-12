@@ -299,7 +299,41 @@ The `.clang-format` file in the repository root defines the JUCE style (Allman b
 
 ## Testing
 
-ShowMIDI uses test-driven development (TDD) to ensure quality and maintainability. All new code and refactors MUST include tests.
+ShowMIDI uses test-driven development (TDD) with a comprehensive testing governance framework to ensure quality and maintainability. All new code and refactors MUST include tests.
+
+### Test Categories
+
+ShowMIDI defines 12 test/check categories in `.github/testing-governance.yaml`:
+
+- **Unit Tests**: Component isolation (timeout: 180s per test suite)
+- **Integration Tests**: Module boundaries and interactions (timeout: 270s)
+- **System Tests**: End-to-end workflows (timeout: 300s)
+- **Performance Tests**: Latency benchmarks (<10ms validation)
+- **Static Analysis**: Code quality (clang-tidy, cppcheck)
+- **Formatting**: Style consistency (clang-format)
+- **Linting**: GPL header validation
+- **Security SAST**: Static security testing (CodeQL)
+- **Security SCA**: Dependency scanning (Dependabot)
+- **License Compliance**: GPL-3.0 verification
+- **Build Verification**: Multi-platform compilation
+- **Packaging/Installer**: Distribution artifact validation
+
+### Local Development Workflow
+
+**One-time setup** - Install Git hooks:
+```bash
+./scripts/install-hooks.sh
+```
+
+**Pre-commit hook** (runs on `git commit`):
+- Code formatting (clang-format auto-fix)
+- GPL-3.0 header validation
+- Duration: <10s
+
+**Pre-push hook** (runs on `git push`):
+- Unit tests via CTest
+- Duration: 1-2 min
+- Blocks push if tests fail
 
 ### TDD Workflow
 
@@ -318,15 +352,20 @@ ShowMIDI uses test-driven development (TDD) to ensure quality and maintainabilit
 cmake -B build -DBUILD_TESTS=ON -DCMAKE_BUILD_TYPE=Debug
 cmake --build build --target ShowMIDI_Tests
 
-# Run all tests
+# Run all tests with CTest
+cd build && ctest --output-on-failure
+
+# Run specific test categories
+ctest -L unit --output-on-failure          # Unit tests (timeout: 180s from config)
+ctest -L integration --output-on-failure    # Integration tests (timeout: 270s from config)
+ctest -L system --output-on-failure         # System tests (timeout: 300s)
+
+# Run directly (for verbose output)
 ./build/Tests/ShowMIDI_Tests_artefacts/Debug/ShowMIDI_Tests
 
-# Run specific test category
+# Run specific test category (direct execution)
 ./build/Tests/ShowMIDI_Tests_artefacts/Debug/ShowMIDI_Tests --category MIDI
 ./build/Tests/ShowMIDI_Tests_artefacts/Debug/ShowMIDI_Tests --category UI
-
-# Run with verbose output
-./build/Tests/ShowMIDI_Tests_artefacts/Debug/ShowMIDI_Tests --verbose
 ```
 
 ### Test Coverage Requirements
@@ -344,6 +383,40 @@ See [Coverage Policy](specs/004-tdd-adoption/contracts/coverage-policy.md) for c
 - **System Tests** (`Tests/System/`): End-to-end workflows (<5s)
 
 See [Test Protocol](specs/004-tdd-adoption/contracts/test-protocol.md) for detailed guidance on each scope.
+
+### Test Guidelines
+
+- **Isolation**: No shared mutable state between tests
+- **Determinism**: Seeded randomness only (`juce::Random(42)` not `setSeedRandomly()`)
+- **Fast Feedback**: Unit <100ms, Integration <1s, System <10s
+- **Clear Failures**: Descriptive assertions with context
+- **Platform Parity**: Same suite on all platforms
+- **No UI Blocking**: Tests must not block MIDI processing thread
+
+### Flake Management
+
+**Automatic Quarantine**: Tests failing ≥3 times in 10 runs or >20% in 7 days are automatically:
+1. Removed from required PR gates
+2. Assigned to owner (from CODEOWNERS or testing-governance.yaml)
+3. Tracked with GitHub issue (48-hour SLA)
+4. Re-enabled after ≥95% pass rate over 14 days + owner sign-off
+
+**If you encounter a flaky test**:
+1. Report in GitHub issue with label `flaky-test`
+2. Include: platform, failure rate, suspected cause
+3. Test will be quarantined while investigation proceeds
+
+### Skip/Bypass Process
+
+**When allowed**:
+- Multi-feature integration (temporary breakage during coordinated merge)
+- Critical hotfix (document risk acceptance)
+
+**How to skip**:
+1. Add PR comment: `Skip: [category] — Reason: [justification] — Approved by: @release-manager`
+2. Link remediation tracking issue
+3. Release manager approval required
+4. Audit trail logged (retained 365 days)
 
 ### Manual Testing Requirements
 
@@ -367,21 +440,68 @@ ShowMIDI enforces a **zero-tolerance policy** for JUCE leak detector warnings:
 
 ## CI/CD Pipeline
 
-ShowMIDI uses GitHub Actions for continuous integration and delivery. Understanding how workflows behave helps you troubleshoot build failures and optimize your development workflow.
+ShowMIDI uses GitHub Actions with a comprehensive testing governance framework. Understanding how workflows behave helps you troubleshoot build failures and optimize your development workflow.
+
+### Configuration-Driven CI/CD
+
+The CI/CD pipeline is driven by `.github/testing-governance.yaml` which defines:
+- Check categories with timeouts
+- Trigger contexts (PR, nightly, release)
+- Policies (retry, caching, flake detection)
+- Owner assignments
+
+**Key Features**:
+- Dynamic timeouts from config (no hardcoded values)
+- Fail-fast strategy (abort on first failure)
+- Build caching (CMake, JUCE modules, ccache) - reduces build time ~50%
+- Unified test matrix (macOS/Windows/Linux in parallel)
 
 ### Workflow Triggers
 
 GitHub Actions workflows run automatically based on branch activity and file changes:
 
-| Workflow | Triggers | Purpose | Skips on |
-|----------|----------|---------|----------|
-| **CI Build** (`ci.yml`) | PR → `develop`/`main`<br>Push → `main`/`release/*`/`hotfix/*` | Full platform validation (Linux, macOS, Windows) | Documentation-only changes (`**.md`, `docs/**`, `*.txt`) |
-| **Test Build** (`test-build.yml`) | Push → `develop` | Quick build matrix test | N/A |
-| **Changelog** (`changelog.yml`) | Tags `v*.*.*` only | Generate release notes | All non-tag pushes |
+| Workflow | Triggers | Purpose | Typical Duration |
+|----------|----------|---------|------------------|
+| **CI Build** (`ci.yml`) | PR → `develop`/`main`<br>Push → `main`/`release/*`/`hotfix/*`<br>Manual dispatch | Full platform validation + tests | ~13 min (p95 target: 10 min) |
+| **Test Build** (`test-build.yml`) | Push → `develop` | Quick build matrix test | Varies |
+| **Changelog** (`changelog.yml`) | Tags `v*.*.*` only | Generate release notes | <1 min |
 
-**Path Filtering Optimization**: The CI Build workflow skips heavy builds when only documentation files change, completing in under 30 seconds instead of 15+ minutes. This saves CI minutes and reduces wait time for doc-only PRs.
+**Path Filtering Optimization**: The CI Build workflow skips heavy builds when only documentation files change (`**.md`, `docs/**`, `*.txt`), completing in under 30 seconds instead of 15+ minutes.
 
 **Concurrency Control**: When you push multiple commits rapidly to the same branch, GitHub Actions automatically cancels in-progress workflow runs to avoid wasting resources on outdated code.
+
+### What Runs on PR
+
+When you open a PR to `develop` or `main`, the following checks run automatically:
+
+**Config Loader** (~5s):
+- Parses testing-governance.yaml
+- Extracts timeouts and time budgets
+- Provides configuration to downstream jobs
+
+**Code Quality** (~8-9 min):
+- GPL-3.0 header validation
+- CMake configuration
+- Build with warnings as errors (Linux)
+
+**Test Suite** (parallel, ~4-5 min):
+- ✅ Unit tests (macOS/Windows/Linux) - 180s timeout
+- ✅ Integration tests (all platforms) - 270s timeout
+- ✅ System tests (all platforms) - 300s timeout
+- Fail-fast: Aborts remaining platforms on first failure
+
+**Build Jobs** (parallel, ~4-7 min):
+- macOS: Xcode build with CMake + Ninja
+- Windows: Visual Studio 2022 build
+- Linux: GCC build with system libraries
+
+**Total PR time**: ~13 minutes (code quality 8-9 min + tests 4-5 min)
+
+**Caching Benefits**:
+- CMake build files (keyed by CMakeLists.txt + JUCE)
+- JUCE modules (keyed by .jucer + JUCE version)
+- ccache compiler cache (keyed by commit SHA)
+- Reduces build time from ~5 min to ~2 min on cache hits
 
 ### Local Testing Before Pushing
 

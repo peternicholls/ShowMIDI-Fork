@@ -1,6 +1,6 @@
 # ShowMIDI.git Development Guidelines
 
-Auto-generated from all feature plans. Last updated: 2025-11-08
+Auto-generated from all feature plans. Last updated: 2025-11-12
 
 ## Active Technologies
 - Markdown, YAML, EditorConfig, clang-format configuration (no programming language - documentation only) (002-dev-housekeeping)
@@ -251,9 +251,12 @@ git push origin release/1.1.0
 ```
 
 ## Recent Changes
-- 005-test-cadence: Added Markdown, YAML (GitHub Actions), Shell (Bash/Zsh for local hooks)
-- 005-test-cadence: Added [if applicable, e.g., PostgreSQL, CoreData, files or N/A]
-- 005-test-cadence: Added Markdown, YAML (GitHub Actions), Shell (Bash/Zsh for local hooks)
+- 005-test-cadence: Phase 3 (User Story 1) - Fast PR Feedback implemented
+  - Config-driven CI/CD with testing-governance.yaml (yq for YAML parsing)
+  - Unified test matrix with fail-fast strategy (macOS/Windows/Linux parallel execution)
+  - Dynamic timeouts from config (180s unit tests, 270s integration tests, 10 min job p95)
+  - Build caching (CMake, JUCE modules, ccache) reduces build time ~50%
+  - All tests passing on all platforms (validated in CI run 19312282108)
   - VST3 SDK v3.7.11_build_10 at `libs/vst3sdk` (git submodule)
   - CMake configuration: `JUCE_CUSTOM_VST3_SDK=1` flag enables external VST3 SDK
   - Projucer configuration: Preprocessor definitions updated for all exporters

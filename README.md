@@ -90,6 +90,29 @@ To quickly clear the displayed data, press the reset button or the `delete`/`bac
 
 The plugin versions can be used in any DAW that supports MIDI effect plugins. Some plugin formats, like VST3, might filter out certain MIDI messages and not present a fully accurate view.
 
+## Development & Testing
+
+This development fork includes comprehensive testing infrastructure:
+
+- **Test Framework**: JUCE UnitTest with CTest runner
+- **Test Categories**: Unit, Integration, System, Performance, Static Analysis, Security
+- **CI/CD**: GitHub Actions with automated PR validation (~13 min)
+- **Test Governance**: Configuration-driven timeouts and policies (`.github/testing-governance.yaml`)
+- **Local Hooks**: Pre-commit (format/lint) and pre-push (unit tests)
+
+For detailed testing documentation, see [CONTRIBUTING.md](CONTRIBUTING.md#testing).
+
+**Quick Start for Contributors**:
+```bash
+# Install Git hooks (one-time)
+./scripts/install-hooks.sh
+
+# Build and run tests
+cmake -B build -DBUILD_TESTS=ON -DCMAKE_BUILD_TYPE=Debug
+cmake --build build --target ShowMIDI_Tests
+cd build && ctest --output-on-failure
+```
+
 ## Themes
 
 ShowMIDI ships with a handful of themes, more will be added in the future.
