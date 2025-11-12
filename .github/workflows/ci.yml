@@ -390,22 +390,25 @@ jobs:
             os-name: macOS
             install-deps: brew install cmake ninja
             cmake-generator: -G Ninja
-            test-config: ""
+            cmake-build-config: ""
+            ctest-config: ""
             parallel-flag: -j$(sysctl -n hw.ncpu)
           # Windows and Linux run in parallel with macOS
           - os: windows-latest
             os-name: Windows
             install-deps: ""
             cmake-generator: ""
-            test-config: -C Debug
-            parallel-flag: -j $env:NUMBER_OF_PROCESSORS
+            cmake-build-config: --config Debug
+            ctest-config: -C Debug
+            parallel-flag: ""
           - os: ubuntu-latest
             os-name: Linux
             install-deps: |
               sudo apt-get update
               sudo apt-get install -y build-essential pkg-config cmake libasound2-dev libfreetype6-dev libfontconfig1-dev libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev
             cmake-generator: ""
-            test-config: ""
+            cmake-build-config: ""
+            ctest-config: ""
             parallel-flag: -j$(nproc)
     
     steps:
@@ -451,26 +454,26 @@ jobs:
       - name: Build tests
         run: |
           cmake -B build -DBUILD_TESTS=ON -DCMAKE_BUILD_TYPE=Debug ${{ matrix.cmake-generator }}
-          cmake --build build --target ShowMIDI_Tests ${{ matrix.test-config }} ${{ matrix.parallel-flag }}
+          cmake --build build --target ShowMIDI_Tests ${{ matrix.cmake-build-config }} ${{ matrix.parallel-flag }}
       
       - name: Run unit tests
         run: |
           cd build
           # T019-T020: Use timeout from config (in seconds)
           # T023: Timeout enforcement using config values
-          ctest ${{ matrix.test-config }} -L unit --output-on-failure --timeout ${{ needs.config-loader.outputs.unit_tests_timeout_sec }}
+          ctest ${{ matrix.ctest-config }} -L unit --output-on-failure --timeout ${{ needs.config-loader.outputs.unit_tests_timeout_sec }}
       
       - name: Run integration tests
         run: |
           cd build
           # T019-T020: Use timeout from config (in seconds)
           # T023: Timeout enforcement using config values
-          ctest ${{ matrix.test-config }} -L integration --output-on-failure --timeout ${{ needs.config-loader.outputs.integration_tests_timeout_sec }}
+          ctest ${{ matrix.ctest-config }} -L integration --output-on-failure --timeout ${{ needs.config-loader.outputs.integration_tests_timeout_sec }}
       
       - name: Run system tests
         run: |
           cd build
-          ctest ${{ matrix.test-config }} -L system --output-on-failure --timeout 300
+          ctest ${{ matrix.ctest-config }} -L system --output-on-failure --timeout 300
       
       - name: Upload test results
         if: always()
