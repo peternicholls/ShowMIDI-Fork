@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://showmidi.git/specs/005-test-cadence/checks.schema.json",
+  "title": "CI Checks Contract",
+  "type": "object",
+  "properties": {
+    "owners": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "displayName", "contact", "sla"],
+        "properties": {
+          "id": {"type": "string"},
+          "displayName": {"type": "string"},
+          "contact": {"type": "string"},
+          "sla": {"type": "string"}
+        }
+      }
+    },
+    "categories": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "purpose", "blockingDefault", "ownerId"],
+        "properties": {
+          "id": {"type": "string"},
+          "name": {"type": "string"},
+          "purpose": {"type": "string"},
+          "expectedDuration": {"type": "string"},
+          "blockingDefault": {"type": "boolean"},
+          "severityPolicy": {"enum": ["none", "advisory", "block-high", "block-all"]},
+          "ownerId": {"type": "string"}
+        }
+      }
+    },
+    "triggers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "event"],
+        "properties": {
+          "id": {"type": "string"},
+          "event": {"enum": ["pre-commit", "pre-push", "pr", "merge-develop", "nightly", "release", "hotfix"]},
+          "scope": {"type": "string"},
+          "timeBudget": {
+            "type": "object",
+            "properties": {
+              "median": {"type": "string"},
+              "p95": {"type": "string"}
+            }
+          },
+          "platforms": {"type": "array", "items": {"enum": ["macos", "windows", "linux"]}}
+        }
+      }
+    },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "categoryId", "ownerId"],
+        "properties": {
+          "id": {"type": "string"},
+          "categoryId": {"type": "string"},
+          "triggerIds": {"type": "array", "items": {"type": "string"}},
+          "blocking": {"type": "boolean"},
+          "platforms": {"type": "array", "items": {"enum": ["macos", "windows", "linux"]}},
+          "ownerId": {"type": "string"}
+        }
+      }
+    },
+    "gates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "requiredChecks"],
+        "properties": {
+          "id": {"type": "string"},
+          "description": {"type": "string"},
+          "requiredChecks": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    }
+  },
+  "required": ["owners", "categories", "triggers", "checks", "gates"]
+}
