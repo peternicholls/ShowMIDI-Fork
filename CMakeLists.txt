@@ -101,13 +101,19 @@ if(UNIX AND NOT APPLE)
             "  Install with: sudo apt-get install libfreetype6-dev")
     endif()
     
-    # Freetype includes were already added to CMAKE_CXX_FLAGS above (before JUCE subdirectory)
-    # This ensures juceaide (built by JUCE in separate CMake invocation) can find ft2build.h
+    # Ensure juceaide (built by JUCE in a separate CMake invocation) can find ft2build.h
+    # Export include path via environment so JUCE's execute_process()-spawned CMake sees it
     if(TARGET Freetype::Freetype)
         get_target_property(FREETYPE_INCLUDES Freetype::Freetype INTERFACE_INCLUDE_DIRECTORIES)
-        message(STATUS "Using Freetype includes: ${FREETYPE_INCLUDES}")
     else()
-        message(STATUS "Using Freetype includes: ${FREETYPE_INCLUDE_DIRS}")
+        set(FREETYPE_INCLUDES "${FREETYPE_INCLUDE_DIRS}")
+    endif()
+
+    if(FREETYPE_INCLUDES)
+        # Use CPPFLAGS/CXXFLAGS to propagate to sub-CMake configure/compile of juceaide
+        set(ENV{CPPFLAGS} "$ENV{CPPFLAGS} -I${FREETYPE_INCLUDES}")
+        set(ENV{CXXFLAGS} "$ENV{CXXFLAGS} -I${FREETYPE_INCLUDES}")
+        message(STATUS "Propagated Freetype includes to environment for juceaide: ${FREETYPE_INCLUDES}")
     endif()
     
     message(STATUS "All required Linux system libraries found (ALSA, X11, Freetype)")

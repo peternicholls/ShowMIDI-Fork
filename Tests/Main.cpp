@@ -26,24 +26,20 @@
 //==============================================================================
 int main (int, char**)
 {
-    // Initialize JUCE for headless/console execution
-    // Manual initialization avoids Windows message loop blocking
-    juce::initialiseJuce_GUI();
-    juce::MessageManager::getInstance()->setCurrentThreadAsMessageThread();
-    
-    juce::UnitTestRunner runner;
-    runner.runAllTests();
-    
-    int numFailures = 0;
-    for (int i = 0; i < runner.getNumResults(); ++i)
-    {
-        if (runner.getResult(i)->failures > 0)
-            ++numFailures;
-    }
-    
-    // Clean shutdown
-    juce::MessageManager::deleteInstance();
-    juce::shutdownJuce_GUI();
-    
-    return numFailures > 0 ? 1 : 0;
+#if ! JUCE_WINDOWS
+  // Non-Windows: initialise JUCE subsystems for tests that may touch GUI types
+  juce::ScopedJuceInitialiser_GUI juceInitialiser;
+#endif
+
+  juce::UnitTestRunner runner;
+  runner.runAllTests();
+
+  int numFailures = 0;
+  for (int i = 0; i < runner.getNumResults(); ++i)
+  {
+    if (runner.getResult(i)->failures > 0)
+      ++numFailures;
+  }
+
+  return numFailures > 0 ? 1 : 0;
 }
