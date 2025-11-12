@@ -93,7 +93,14 @@
 - [X] T031 [US2] Update CMakeLists.txt to register CTest with enable_testing()
 - [X] T032 [US2] Add CTest test labels configuration in Tests/CMakeLists.txt
 - [X] T033 [US2] Trigger test run on CI for all three desktop platforms (macOS, Windows, Linux) - PR #24 created
-- [ ] T034 [US2] Validate median CI feedback time is <15 minutes (awaiting first CI run completion)
+  - [X] T033a Fix CI dependencies (freetype-dev, fontconfig-dev) and include paths for JUCE juceaide build
+  - [X] T033b Fix deprecated JUCE Font APIs (getStringWidth, Font constructor) to resolve warnings-as-errors
+  - [X] T033c Resolve macOS platform build and test execution (PASSED: build, unit tests, integration tests, system tests)
+  - [ ] T033d Fix Windows build failure in Visual Studio 2022 (Theme.cpp Font API compatibility)
+  - [ ] T033e Fix Linux build failure (CMake configuration or dependency issues)
+  - [ ] T033f Fix Windows test build failure (ensure BUILD_TESTS works on Windows)
+  - [ ] T033g Fix Linux test build failure (ensure BUILD_TESTS works on Linux)
+- [ ] T034 [US2] Validate median CI feedback time is <15 minutes (awaiting all platforms passing)
 
 **Checkpoint**: CI runs tests on all desktop platforms with clear per-platform status
 
