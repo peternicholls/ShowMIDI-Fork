@@ -79,6 +79,7 @@ jobs:
         run: |
           mkdir -p build
           cd build
+          PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig:$PKG_CONFIG_PATH \
           cmake .. -DCMAKE_BUILD_TYPE=Release
         env:
           SHOWMIDI_WERROR: "1"  # Enable warnings-as-errors for ShowMIDI code
