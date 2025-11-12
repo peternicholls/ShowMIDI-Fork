@@ -28,11 +28,12 @@ set(FIXTURE_FILES
 )
 
 # Test files (Phase 3+: Example and production tests)
+# See specs/004-tdd-adoption/tasks.md Phase 5 (T035-T048) for baseline test implementation
 set(TEST_FILES
     Unit/ExampleTest.cpp
-    # Additional unit tests will go here (e.g., Unit/ThemeTests.cpp)
-    # Integration tests will go here (e.g., Integration/MidiFlowTests.cpp)
-    # System tests will go here (e.g., System/StandaloneAppTests.cpp)
+    # Additional unit tests will go here (e.g., Unit/ThemeTests.cpp - T035, T036, T037)
+    # Integration tests will go here (e.g., Integration/MidiFlowTests.cpp - T038-T042, T046-T047)
+    # System tests will go here (e.g., System/StandaloneAppTests.cpp - T043-T045)
 )
 
 target_sources(ShowMIDI_Tests PRIVATE ${FIXTURE_FILES} ${TEST_FILES})
@@ -44,6 +45,14 @@ target_compile_definitions(ShowMIDI_Tests PRIVATE
     JUCE_USE_CURL=0
     JUCE_STANDALONE_APPLICATION=1
 )
+
+# Windows: Use static runtime library to match main ShowMIDI build
+# This fixes "unresolved external symbol _CrtDbgReport" linker errors
+if(MSVC)
+    set_target_properties(ShowMIDI_Tests PROPERTIES
+        MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>"
+    )
+endif()
 
 # Link JUCE modules (same as main ShowMIDI plugin)
 target_link_libraries(ShowMIDI_Tests PRIVATE

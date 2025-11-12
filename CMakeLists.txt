@@ -73,6 +73,9 @@ if(UNIX AND NOT APPLE)
             "  Install with: sudo apt-get install libfreetype6-dev")
     endif()
     
+    # Add FreeType2 include directories for JUCE modules (fixes ft2build.h not found)
+    include_directories(${FREETYPE_INCLUDE_DIRS})
+    
     message(STATUS "All required Linux system libraries found (ALSA, X11, Freetype)")
 endif()
 
