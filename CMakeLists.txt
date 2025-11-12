@@ -61,6 +61,18 @@ set(CMAKE_OSX_DEPLOYMENT_TARGET "11.7" CACHE STRING "Minimum OS X deployment tar
 #set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>" CACHE STRING "Runtime")
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded" CACHE STRING "Runtime")
 
+# Linux: Pre-emptively add Freetype includes to CMAKE_CXX_FLAGS for juceaide build
+# JUCE builds juceaide in a separate CMake invocation, so we need to set this BEFORE
+# the JUCE subdirectory is added. It will be properly validated in the Linux block below.
+if(UNIX AND NOT APPLE)
+    # Find Freetype early to get include paths for juceaide
+    find_package(Freetype QUIET)
+    if(TARGET Freetype::Freetype)
+        get_target_property(FREETYPE_INCLUDES Freetype::Freetype INTERFACE_INCLUDE_DIRECTORIES)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -isystem ${FREETYPE_INCLUDES}" CACHE STRING "C++ compile flags" FORCE)
+    endif()
+endif()
+
 # This bypasses XCode signing and is appropriate if you sign after a build. Comment it out if you want to use 
 # xcode signing.
 set(CMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED "NO")
@@ -89,19 +101,13 @@ if(UNIX AND NOT APPLE)
             "  Install with: sudo apt-get install libfreetype6-dev")
     endif()
     
-    # Add FreeType2 include directories BEFORE adding JUCE subdirectory
-    # This ensures juceaide (built by JUCE) can find ft2build.h
-    # Use Freetype::Freetype target includes if available, otherwise fall back to FREETYPE_INCLUDE_DIRS
+    # Freetype includes were already added to CMAKE_CXX_FLAGS above (before JUCE subdirectory)
+    # This ensures juceaide (built by JUCE in separate CMake invocation) can find ft2build.h
     if(TARGET Freetype::Freetype)
         get_target_property(FREETYPE_INCLUDES Freetype::Freetype INTERFACE_INCLUDE_DIRECTORIES)
-        include_directories(SYSTEM ${FREETYPE_INCLUDES})
-        # Also add to CMAKE_CXX_FLAGS to ensure it propagates to JUCE's juceaide build
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I${FREETYPE_INCLUDES}")
-        message(STATUS "Using Freetype includes from target: ${FREETYPE_INCLUDES}")
+        message(STATUS "Using Freetype includes: ${FREETYPE_INCLUDES}")
     else()
-        include_directories(SYSTEM ${FREETYPE_INCLUDE_DIRS})
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I${FREETYPE_INCLUDE_DIRS}")
-        message(STATUS "Using Freetype includes from variable: ${FREETYPE_INCLUDE_DIRS}")
+        message(STATUS "Using Freetype includes: ${FREETYPE_INCLUDE_DIRS}")
     endif()
     
     message(STATUS "All required Linux system libraries found (ALSA, X11, Freetype)")
