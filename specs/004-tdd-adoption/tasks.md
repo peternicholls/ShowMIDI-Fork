@@ -92,8 +92,8 @@
 - [X] T030 [US2] Verify contracts/ci-matrix.yml documents platform-specific test labels (unit, integration, system, midi, ui, ios, plugin-vst3, plugin-au, plugin-lv2)
 - [X] T031 [US2] Update CMakeLists.txt to register CTest with enable_testing()
 - [X] T032 [US2] Add CTest test labels configuration in Tests/CMakeLists.txt
-- [ ] T033 [US2] Trigger test run on CI for all three desktop platforms (macOS, Windows, Linux)
-- [ ] T034 [US2] Validate median CI feedback time is <15 minutes
+- [X] T033 [US2] Trigger test run on CI for all three desktop platforms (macOS, Windows, Linux) - PR #24 created
+- [ ] T034 [US2] Validate median CI feedback time is <15 minutes (awaiting first CI run completion)
 
 **Checkpoint**: CI runs tests on all desktop platforms with clear per-platform status
 
