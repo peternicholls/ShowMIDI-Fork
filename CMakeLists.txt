@@ -51,9 +51,25 @@ message(WARNING "CLAP plugin format temporarily disabled. CLAP requires two-stag
 #     set(BUILD_CLAP OFF)
 # endif()
 
+# Make sure to set the same C++ version as you have set in the Projucer
+set(CMAKE_CXX_STANDARD 17)
+
+# Make sure to set the same MacOS deployment target as you have set in the Projucer
+set(CMAKE_OSX_DEPLOYMENT_TARGET "11.7" CACHE STRING "Minimum OS X deployment target")
+
+# If the Projucer is using "static runtime" for Visual Studio:
+#set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>" CACHE STRING "Runtime")
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded" CACHE STRING "Runtime")
+
+# This bypasses XCode signing and is appropriate if you sign after a build. Comment it out if you want to use 
+# xcode signing.
+set(CMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED "NO")
+set(CMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED "NO")
+
 # Linux: Detect required system libraries with clear error messages
 # JUCE requires ALSA, X11, and Freetype on Linux. These checks provide actionable error messages
 # if dependencies are missing, rather than cryptic JUCE compilation errors.
+# MUST be done BEFORE add_subdirectory(JUCE) so juceaide can find FreeType headers
 if(UNIX AND NOT APPLE)
     find_package(ALSA REQUIRED)
     if(NOT ALSA_FOUND)
@@ -73,26 +89,12 @@ if(UNIX AND NOT APPLE)
             "  Install with: sudo apt-get install libfreetype6-dev")
     endif()
     
-    # Add FreeType2 include directories for JUCE modules (fixes ft2build.h not found)
+    # Add FreeType2 include directories BEFORE adding JUCE subdirectory
+    # This ensures juceaide (built by JUCE) can find ft2build.h
     include_directories(${FREETYPE_INCLUDE_DIRS})
     
     message(STATUS "All required Linux system libraries found (ALSA, X11, Freetype)")
 endif()
-
-# Make sure to set the same C++ version as you have set in the Projucer
-set(CMAKE_CXX_STANDARD 17)
-
-# Make sure to set the same MacOS deployment target as you have set in the Projucer
-set(CMAKE_OSX_DEPLOYMENT_TARGET "11.7" CACHE STRING "Minimum OS X deployment target")
-
-# If the Projucer is using "static runtime" for Visual Studio:
-#set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>" CACHE STRING "Runtime")
-set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded" CACHE STRING "Runtime")
-
-# This bypasses XCode signing and is appropriate if you sign after a build. Comment it out if you want to use 
-# xcode signing.
-set(CMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED "NO")
-set(CMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED "NO")
 
 # define the exporter types used in your Projucer configuration
 if (APPLE)
