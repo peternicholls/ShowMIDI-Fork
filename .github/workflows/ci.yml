@@ -79,7 +79,9 @@ jobs:
         run: |
           mkdir -p build
           cd build
-          cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/usr
+          cmake .. -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_CXX_FLAGS="-I/usr/include/freetype2" \
+            -DCMAKE_C_FLAGS="-I/usr/include/freetype2"
         env:
           SHOWMIDI_WERROR: "1"  # Enable warnings-as-errors for ShowMIDI code
       
