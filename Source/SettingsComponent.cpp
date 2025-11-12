@@ -168,7 +168,11 @@ struct SettingsComponent::Pimpl : public Button::Listener, public Value::Listene
     {
         auto& theme = manager_->getSettings().getTheme();
         auto font = theme.fontLabel();
-        auto textWidth = font.getStringWidth(text);
+        
+        // Use GlyphArrangement instead of deprecated getStringWidth
+        juce::GlyphArrangement glyphs;
+        glyphs.addLineOfText(font, text, 0.0f, 0.0f);
+        auto textWidth = static_cast<int>(glyphs.getBoundingBox(0, -1, true).getWidth());
         
         // Button width = text width (touch outset is added by setBoundsForTouch)
         return textWidth;
