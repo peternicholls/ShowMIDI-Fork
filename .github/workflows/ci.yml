@@ -41,8 +41,55 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # Config Loader: Parse testing-governance.yaml to read time budgets and check configurations
+  # This job runs first and provides configuration values as outputs for downstream jobs
+  config-loader:
+    name: Load Testing Configuration
+    runs-on: ubuntu-latest
+    outputs:
+      unit_tests_timeout_sec: ${{ steps.parse-config.outputs.unit_tests_timeout_sec }}
+      integration_tests_timeout_sec: ${{ steps.parse-config.outputs.integration_tests_timeout_sec }}
+      pr_time_budget_min: ${{ steps.parse-config.outputs.pr_time_budget_min }}
+      pr_time_budget_p95_min: ${{ steps.parse-config.outputs.pr_time_budget_p95_min }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Install yq (YAML parser)
+        run: |
+          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+          sudo chmod +x /usr/local/bin/yq
+      
+      - name: Parse testing-governance.yaml
+        id: parse-config
+        run: |
+          CONFIG_FILE=".github/testing-governance.yaml"
+          
+          # Extract timeout values from check categories (in seconds)
+          UNIT_TIMEOUT=$(yq eval '.check_categories[] | select(.id == "unit-tests") | .timeout_sec' "$CONFIG_FILE")
+          INTEGRATION_TIMEOUT=$(yq eval '.check_categories[] | select(.id == "integration-tests") | .timeout_sec' "$CONFIG_FILE")
+          
+          # Extract time budgets from pr-to-develop trigger context (in seconds)
+          PR_BUDGET=$(yq eval '.trigger_contexts[] | select(.id == "pr-to-develop") | .time_budget_sec' "$CONFIG_FILE")
+          PR_BUDGET_P95=$(yq eval '.trigger_contexts[] | select(.id == "pr-to-develop") | .time_budget_p95_sec' "$CONFIG_FILE")
+          
+          # Set outputs (keep seconds for ctest, convert to minutes for timeout-minutes)
+          echo "unit_tests_timeout_sec=$UNIT_TIMEOUT" >> $GITHUB_OUTPUT
+          echo "integration_tests_timeout_sec=$INTEGRATION_TIMEOUT" >> $GITHUB_OUTPUT
+          echo "pr_time_budget_min=$((PR_BUDGET_P95 / 60))" >> $GITHUB_OUTPUT
+          echo "pr_time_budget_p95_min=$((PR_BUDGET_P95 / 60))" >> $GITHUB_OUTPUT
+          
+          # Display parsed values for debugging
+          echo "✅ Configuration loaded:"
+          echo "  Unit tests timeout: ${UNIT_TIMEOUT}s"
+          echo "  Integration tests timeout: ${INTEGRATION_TIMEOUT}s"
+          echo "  PR time budget (median): ${PR_BUDGET}s"
+          echo "  PR time budget (p95): ${PR_BUDGET_P95}s ($(($PR_BUDGET_P95 / 60)) min)"
+
   code-quality:
     name: Code Quality Checks
+    needs: config-loader  # Load configuration before running checks
     runs-on: ubuntu-latest
     
     steps:
@@ -110,6 +157,28 @@ jobs:
       - name: Install dependencies
         run: |
           brew install cmake ninja
+      
+      # T026: Cache configuration for JUCE builds (reduces build time from ~5 min to ~2 min on cache hit)
+      - name: Cache CMake build files
+        uses: actions/cache@v4
+        with:
+          path: |
+            build/CMakeCache.txt
+            build/CMakeFiles
+            build/_deps
+          key: ${{ runner.os }}-cmake-release-${{ hashFiles('**/CMakeLists.txt', 'JUCE/**') }}
+          restore-keys: |
+            ${{ runner.os }}-cmake-release-
+      
+      - name: Cache JUCE modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            JUCE/modules
+            JuceLibraryCode
+          key: ${{ runner.os }}-juce-${{ hashFiles('showmidi.jucer', 'JUCE/VERSION') }}
+          restore-keys: |
+            ${{ runner.os }}-juce-
       
       - name: Display build environment
         run: |
@@ -180,6 +249,28 @@ jobs:
         with:
           submodules: recursive
       
+      # T026: Cache configuration for JUCE builds
+      - name: Cache CMake build files
+        uses: actions/cache@v4
+        with:
+          path: |
+            build/CMakeCache.txt
+            build/CMakeFiles
+            build/_deps
+          key: ${{ runner.os }}-cmake-release-${{ hashFiles('**/CMakeLists.txt', 'JUCE/**') }}
+          restore-keys: |
+            ${{ runner.os }}-cmake-release-
+      
+      - name: Cache JUCE modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            JUCE/modules
+            JuceLibraryCode
+          key: ${{ runner.os }}-juce-${{ hashFiles('showmidi.jucer', 'JUCE/VERSION') }}
+          restore-keys: |
+            ${{ runner.os }}-juce-
+      
       - name: Configure CMake
         run: |
           cmake -B build -DCMAKE_BUILD_TYPE=Release
@@ -229,6 +320,28 @@ jobs:
             libasound2-dev libfreetype6-dev libfontconfig1-dev libx11-dev \
             libxrandr-dev libxinerama-dev libxcursor-dev
       
+      # T026: Cache configuration for JUCE builds
+      - name: Cache CMake build files
+        uses: actions/cache@v4
+        with:
+          path: |
+            build/CMakeCache.txt
+            build/CMakeFiles
+            build/_deps
+          key: ${{ runner.os }}-cmake-release-${{ hashFiles('**/CMakeLists.txt', 'JUCE/**') }}
+          restore-keys: |
+            ${{ runner.os }}-cmake-release-
+      
+      - name: Cache JUCE modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            JUCE/modules
+            JuceLibraryCode
+          key: ${{ runner.os }}-juce-${{ hashFiles('showmidi.jucer', 'JUCE/VERSION') }}
+          restore-keys: |
+            ${{ runner.os }}-juce-
+      
       - name: Configure CMake
         run: |
           mkdir -p build
@@ -262,138 +375,108 @@ jobs:
             build_clap/ShowMIDI_artefacts/Release/*.clap
 
   # Test jobs: Run automated test suite on all platforms
-  # Phase 4 (User Story 2): Cross-platform test execution
-  test-macos:
-    name: Test (macOS)
-    needs: code-quality  # Fail-fast: Skip tests if code quality checks fail (saves CI time)
-    runs-on: macos-14  # Pin to macOS 14 to match build job and avoid macOS 15 API deprecations
-    timeout-minutes: 30
+  # Phase 4 (User Story 2): Cross-platform test execution with fail-fast and parallelization
+  test-suite:
+    name: Test (${{ matrix.os-name }})
+    needs: [code-quality, config-loader]  # Fail-fast + load config for timeouts
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: ${{ fromJSON(needs.config-loader.outputs.pr_time_budget_p95_min) }}  # Dynamic timeout from config (p95 budget)
+    strategy:
+      fail-fast: true  # Abort remaining jobs if any platform fails (saves CI time, faster feedback per T021)
+      matrix:
+        include:
+          # macOS is primary platform per research.md Decision 4 (T022: parallelization matrix)
+          - os: macos-14
+            os-name: macOS
+            install-deps: brew install cmake ninja
+            cmake-generator: -G Ninja
+            test-config: ""
+            parallel-flag: -j$(sysctl -n hw.ncpu)
+          # Windows and Linux run in parallel with macOS
+          - os: windows-latest
+            os-name: Windows
+            install-deps: ""
+            cmake-generator: ""
+            test-config: -C Debug
+            parallel-flag: -j $env:NUMBER_OF_PROCESSORS
+          - os: ubuntu-latest
+            os-name: Linux
+            install-deps: |
+              sudo apt-get update
+              sudo apt-get install -y build-essential pkg-config cmake libasound2-dev libfreetype6-dev libfontconfig1-dev libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev
+            cmake-generator: ""
+            test-config: ""
+            parallel-flag: -j$(nproc)
     
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           submodules: recursive
+      
+      # T026: Cache configuration per research.md Decision 5 and testing-governance.yaml caching-strategy policy
+      - name: Cache CMake build files
+        uses: actions/cache@v4
+        with:
+          path: |
+            build/CMakeCache.txt
+            build/CMakeFiles
+            build/_deps
+          key: ${{ runner.os }}-cmake-${{ hashFiles('**/CMakeLists.txt', 'JUCE/**') }}
+          restore-keys: |
+            ${{ runner.os }}-cmake-
+      
+      - name: Cache JUCE modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            JUCE/modules
+            JuceLibraryCode
+          key: ${{ runner.os }}-juce-${{ hashFiles('showmidi.jucer', 'JUCE/VERSION') }}
+          restore-keys: |
+            ${{ runner.os }}-juce-
+      
+      - name: Cache ccache (compiler cache)
+        uses: actions/cache@v4
+        with:
+          path: ~/.ccache
+          key: ${{ runner.os }}-ccache-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-ccache-
       
       - name: Install dependencies
-        run: brew install cmake ninja
+        if: matrix.install-deps != ''
+        run: ${{ matrix.install-deps }}
       
       - name: Build tests
         run: |
-          cmake -B build -DBUILD_TESTS=ON -DCMAKE_BUILD_TYPE=Debug -G Ninja
-          cmake --build build --target ShowMIDI_Tests -j$(sysctl -n hw.ncpu)
+          cmake -B build -DBUILD_TESTS=ON -DCMAKE_BUILD_TYPE=Debug ${{ matrix.cmake-generator }}
+          cmake --build build --target ShowMIDI_Tests ${{ matrix.test-config }} ${{ matrix.parallel-flag }}
       
       - name: Run unit tests
         run: |
           cd build
-          ctest -L unit --output-on-failure --timeout 300
+          # T019-T020: Use timeout from config (in seconds)
+          # T023: Timeout enforcement using config values
+          ctest ${{ matrix.test-config }} -L unit --output-on-failure --timeout ${{ needs.config-loader.outputs.unit_tests_timeout_sec }}
       
       - name: Run integration tests
         run: |
           cd build
-          ctest -L integration --output-on-failure --timeout 300
+          # T019-T020: Use timeout from config (in seconds)
+          # T023: Timeout enforcement using config values
+          ctest ${{ matrix.test-config }} -L integration --output-on-failure --timeout ${{ needs.config-loader.outputs.integration_tests_timeout_sec }}
       
       - name: Run system tests
         run: |
           cd build
-          ctest -L system --output-on-failure --timeout 300
+          ctest ${{ matrix.test-config }} -L system --output-on-failure --timeout 300
       
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: test-results-macos-${{ github.run_number }}
-          retention-days: 90
-          path: |
-            build/Testing/Temporary/LastTest.log
-            build/Testing/Temporary/*.xml
-  
-  test-windows:
-    name: Test (Windows)
-    needs: code-quality  # Fail-fast: Skip tests if code quality checks fail (saves CI time)
-    runs-on: windows-latest
-    timeout-minutes: 30
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-      
-      - name: Build tests
-        run: |
-          cmake -B build -DBUILD_TESTS=ON -DCMAKE_BUILD_TYPE=Debug
-          cmake --build build --config Debug --target ShowMIDI_Tests
-      
-      - name: Run unit tests
-        run: |
-          cd build
-          ctest -C Debug -L unit --output-on-failure --timeout 300
-      
-      - name: Run integration tests
-        run: |
-          cd build
-          ctest -C Debug -L integration --output-on-failure --timeout 300
-      
-      - name: Run system tests
-        run: |
-          cd build
-          ctest -C Debug -L system --output-on-failure --timeout 300
-      
-      - name: Upload test results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results-windows-${{ github.run_number }}
-          retention-days: 90
-          path: |
-            build/Testing/Temporary/LastTest.log
-            build/Testing/Temporary/*.xml
-  
-  test-linux:
-    name: Test (Linux)
-    needs: code-quality  # Fail-fast: Skip tests if code quality checks fail (saves CI time)
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-      
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential pkg-config cmake \
-            libasound2-dev libfreetype6-dev libfontconfig1-dev libx11-dev \
-            libxrandr-dev libxinerama-dev libxcursor-dev
-      
-      - name: Build tests
-        run: |
-          cmake -B build -DBUILD_TESTS=ON -DCMAKE_BUILD_TYPE=Debug
-          cmake --build build --target ShowMIDI_Tests -j$(nproc)
-      
-      - name: Run unit tests
-        run: |
-          cd build
-          ctest -L unit --output-on-failure --timeout 300
-      
-      - name: Run integration tests
-        run: |
-          cd build
-          ctest -L integration --output-on-failure --timeout 300
-      
-      - name: Run system tests
-        run: |
-          cd build
-          ctest -L system --output-on-failure --timeout 300
-      
-      - name: Upload test results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results-linux-${{ github.run_number }}
+          name: test-results-${{ matrix.os-name }}-${{ github.run_number }}
           retention-days: 90
           path: |
             build/Testing/Temporary/LastTest.log

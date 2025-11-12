@@ -65,18 +65,18 @@
 
 ### GitHub Actions Workflow Updates for User Story 1
 
-- [ ] T018 [US1] Create workflow config loader job in `.github/workflows/ci.yml` to parse testing-governance.yaml
-- [ ] T019 [P] [US1] Update unit-tests job in `.github/workflows/ci.yml` to read time budget from config
-- [ ] T020 [P] [US1] Update integration-tests job in `.github/workflows/ci.yml` to read time budget from config
-- [ ] T021 [US1] Add fail-fast strategy to PR jobs in `.github/workflows/ci.yml` per research.md Decision 5
-- [ ] T022 [US1] Add parallelization matrix to PR jobs in `.github/workflows/ci.yml` (macOS primary platform)
-- [ ] T023 [US1] Implement timeout enforcement in PR jobs using timeout_sec from CheckCategory configs
+- [X] T018 [US1] Create workflow config loader job in `.github/workflows/ci.yml` to parse testing-governance.yaml
+- [X] T019 [P] [US1] Update unit-tests job in `.github/workflows/ci.yml` to read time budget from config
+- [X] T020 [P] [US1] Update integration-tests job in `.github/workflows/ci.yml` to read time budget from config
+- [X] T021 [US1] Add fail-fast strategy to PR jobs in `.github/workflows/ci.yml` per research.md Decision 5
+- [X] T022 [US1] Add parallelization matrix to PR jobs in `.github/workflows/ci.yml` (macOS primary platform)
+- [X] T023 [US1] Implement timeout enforcement in PR jobs using timeout_sec from CheckCategory configs
 
 ### Policies for User Story 1
 
 - [X] T024 [P] [US1] Define retry-on-infrastructure-failure Policy in `.github/testing-governance.yaml` with max_retries: 2
 - [X] T025 [P] [US1] Define caching-strategy Policy in `.github/testing-governance.yaml` for CMake ccache and dependencies
-- [ ] T026 [US1] Implement cache configuration in `.github/workflows/ci.yml` using actions/cache for JUCE builds
+- [X] T026 [US1] Implement cache configuration in `.github/workflows/ci.yml` using actions/cache for JUCE builds
 
 **Checkpoint**: At this point, PR validation should run with deterministic checks completing within 5 min median
 
