@@ -1,6 +1,6 @@
 # Feature Specification: Phase 11 — Testing Cadence & Governance
 
-**Feature Branch**: `001-test-cadence`  
+**Feature Branch**: `005-test-cadence`  
 **Created**: 2025-11-12  
 **Status**: Draft  
 **Input**: User description: "Extend specification with Phase 11: testing cadence and governance. Define when and how to run unit, integration, system, performance, UI/visual regression, static analysis, formatting, linting, security (SCA/SAST), license checks, build verification, packaging, and installer smoke tests. Align with TDD: local dev write-then-run. Define triggers and environments: pre-commit, pre-push, PR, CI (macOS, Windows, Linux), nightly/cron, release, hotfix. Optimize for fast feedback (under 5 min locally/PR), deterministic, parallelizable, and cost-conscious. Provide constitutional rationale for testing and propose explicit amendments to Constitution regarding testing, checks, and builds as a result. Be comprehensive but not excessive; define thresholds, time budgets, flake policies, quarantine workflow, and ownership. Output recommendations to constitution as a deliverable from Phase 11."
