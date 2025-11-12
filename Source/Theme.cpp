@@ -61,7 +61,7 @@ namespace showmidi
 
     Font Theme::fontLabel()
     {
-        return Font(sm::scaled(sm::layout::FONT_SIZE), Font::bold);
+        return Font(juce::FontOptions{}.withHeight(sm::scaled(sm::layout::FONT_SIZE)).withStyle(Font::bold));
     }
 
     int Theme::labelHeight()
@@ -71,7 +71,7 @@ namespace showmidi
     
     Font Theme::fontData()
     {
-        return Font(sm::scaled(sm::layout::FONT_SIZE), Font::italic);
+        return Font(juce::FontOptions{}.withHeight(sm::scaled(sm::layout::FONT_SIZE)).withStyle(Font::italic));
     }
 
     int Theme::dataHeight()
