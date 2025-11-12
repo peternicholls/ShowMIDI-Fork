@@ -91,7 +91,15 @@ if(UNIX AND NOT APPLE)
     
     # Add FreeType2 include directories BEFORE adding JUCE subdirectory
     # This ensures juceaide (built by JUCE) can find ft2build.h
-    include_directories(${FREETYPE_INCLUDE_DIRS})
+    # Use Freetype::Freetype target includes if available, otherwise fall back to FREETYPE_INCLUDE_DIRS
+    if(TARGET Freetype::Freetype)
+        get_target_property(FREETYPE_INCLUDES Freetype::Freetype INTERFACE_INCLUDE_DIRECTORIES)
+        include_directories(${FREETYPE_INCLUDES})
+        message(STATUS "Using Freetype includes from target: ${FREETYPE_INCLUDES}")
+    else()
+        include_directories(${FREETYPE_INCLUDE_DIRS})
+        message(STATUS "Using Freetype includes from variable: ${FREETYPE_INCLUDE_DIRS}")
+    endif()
     
     message(STATUS "All required Linux system libraries found (ALSA, X11, Freetype)")
 endif()

@@ -26,9 +26,10 @@
 //==============================================================================
 int main (int, char**)
 {
-    // Initialize MessageManager for headless CI execution
-    // This allows JUCE GUI components to function without a display server
-    juce::MessageManager::getInstance()->setCurrentThreadAsMessageThread();
+    // Initialize JUCE for headless/console execution
+    // ScopedJuceInitialiser_GUI sets up MessageManager and other JUCE subsystems
+    // Required for unit tests that use JUCE GUI components (even without display server)
+    juce::ScopedJuceInitialiser_GUI juceInitialiser;
     
     juce::UnitTestRunner runner;
     runner.runAllTests();

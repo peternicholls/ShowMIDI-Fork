@@ -107,6 +107,7 @@
   - [X] T033l [P3] Add TODO with tracking issue for timestamp implementation in Tests/Fixtures/MockMidiAdapter.cpp (Copilot review)
   - [X] T033m [P3] Add comment explaining code-quality dependency (fail-fast) in .github/workflows/ci.yml test jobs (Copilot review)
   - [X] T033n [P3] Add reference to tasks.md Phase 5 (T035-T048) in Tests/CMakeLists.txt comments (Copilot review)
+  - [ ] T033o [P3] Implement proper two-stage CLAP build in CI workflow (CMakeLists.txt line 47 TODO)
 - [ ] T034 [US2] Validate median CI feedback time is <15 minutes (awaiting all platforms passing)
 
 **Checkpoint**: CI runs tests on all desktop platforms with clear per-platform status
