@@ -106,22 +106,24 @@ Release/hotfix flows apply expanded validation and packaging checks so that arti
 - Long-running performance test impacts CI capacity (move to scheduled window)
 - Skip directives are abused (justification and approval policy)
 - Security/license finding appears near release (escalation and blocking rules)
+- Multi-feature integration requires coordinated merge (staging workflow and regression validation)
+- Feature breaks existing tests during multi-feature integration (temporary exemption policy and tracking)
 
 ## Requirements *(mandatory)*
 
 ### Functional Requirements
 
 - **FR-001 (Taxonomy)**: Define a clear taxonomy and purpose for checks: unit, integration, system, performance, UI/visual-regression, static analysis, formatting, linting, security scans, license compliance, build verification, packaging, and installer smoke.
-- **FR-002 (Triggers & Cadence)**: Define when each category runs: local (on-demand), pre-commit, pre-push, pull request, on-merge, scheduled (e.g., nightly), release, and hotfix.
+- **FR-002 (Triggers & Cadence)**: Define when each category runs: local on-demand (developer-initiated full suite or filtered), pre-commit (formatting and linting with auto-fix where possible), pre-push (unit tests to catch logic errors before remote push), pull request (unit, integration, static analysis, build verification, code quality per FR-006), on-merge to develop (full required suite re-validation), scheduled nightly (extended suites including system, performance, UI/visual regression), release branches (add packaging and installer smoke), and hotfix (safety-critical subset for fast turnaround).
 - **FR-003 (Time Budgets)**: Establish time budgets: required PR checks median ≤ 5 minutes, 95th percentile ≤ 10 minutes; deeper suites run outside PR unless explicitly required.
 - **FR-004 (Signal Quality)**: Require checks to be deterministic; specify policies for environment isolation and stable inputs (e.g., seeded randomness) to avoid nondeterminism.
-- **FR-005 (Flake Policy)**: Define flake detection thresholds, quarantine workflow, owner assignment, and SLAs for resolution and re-enablement.
-- **FR-006 (Blocking vs Advisory)**: Classify checks as blocking or advisory by risk; critical quality/security failures block merges; advisory items surface but do not block.
-- **FR-007 (Platform Coverage)**: Specify platform coverage expectations for PR vs nightly/release to balance velocity and confidence.
+- **FR-005 (Flake Policy)**: Define flake detection thresholds, quarantine workflow, owner assignment, and SLAs for resolution and re-enablement. A check is flagged as flaky if it exhibits 3 failures in 10 runs OR 20% failure rate over a 7-day rolling window. Upon detection, the check is automatically quarantined (removed from required gates), flagged in reporting, and assigned to a designated owner with remediation SLA. Re-enablement requires sustained pass rate (≥95% over 14 days) and owner sign-off.
+- **FR-006 (Blocking vs Advisory)**: Classify checks as blocking or advisory by risk and branch type. All merges/PRs MUST pass through a release staging gate before acceptance. Default policy for feature PRs: block on unit, integration (core flows), static analysis, formatting/linting, and build verification; advisory for UI/visual regression and SAST/SCA/license except High/Critical severity findings which block; performance/packaging/installer excluded from feature PR. Features MUST NOT break existing code (regression gate). Exception: documented multi-feature integration scenarios requiring coordinated merges. Progressive depth: develop merges require full unit+integration pass; release staging adds system tests and performance baselines; release branches add packaging and installer smoke as blocking; main branch requires all gates green including final smoke tests.
+- **FR-007 (Platform Coverage)**: Specify platform coverage expectations for PR vs nightly/release to balance velocity and confidence. PR checks run on primary platform (macOS) plus platform-specific validation when changes touch platform-conditional code. Nightly scheduled runs execute comprehensive suites on all supported platforms (macOS, Windows, Linux) but skip execution if no code changes detected since last successful run. Release branches require full platform validation regardless of change detection.
 - **FR-008 (Ownership)**: Map checks to accountable owners/areas with contact and escalation paths.
 - **FR-009 (Reporting & Artifacts)**: Provide an aggregated, human-readable summary per run, with links to detailed logs and artifacts where applicable.
 - **FR-010 (Skip/Bypass Governance)**: Require documented justification and approval for bypassing or skipping checks; record and report such events.
-- **FR-011 (Capacity & Cost)**: Define policies to keep the pipeline efficient and cost-conscious (parallelize where sensible; schedule heavy suites appropriately).
+- **FR-011 (Capacity & Cost)**: Define policies to keep the pipeline efficient and cost-conscious (parallelize where sensible; schedule heavy suites appropriately). Leverage change detection: skip nightly runs if no code changes since last successful execution. Public repository benefit: utilize unlimited GitHub Actions minutes for comprehensive coverage. Optimize for determinism and parallelization over runtime constraints where possible.
 - **FR-012 (Release/Hotfix Gates)**: Define expanded gates for release/hotfix including packaging and installer smoke validations before distribution.
 - **FR-013 (Constitutional Rationale)**: State the constitutional rationale for testing: protect user experience, multi-platform reliability, real-time performance, and maintainability; document how the cadence supports these goals.
 - **FR-014 (Constitution Recommendations Output)**: Produce explicit recommendations to update the Constitution regarding testing, checks, and builds as a deliverable of this phase.
@@ -153,9 +155,19 @@ Release/hotfix flows apply expanded validation and packaging checks so that arti
 
 ---
 
+## Clarifications
+
+### Session 2025-11-12
+
+- Q: What is the default PR blocking policy (strict/balanced/minimal) and are there branch-specific overrides? → A: Balanced, but branch specific
+- Q: Must all merges/PRs pass through a staging gate before acceptance? What testing depth is required as code approaches release? → A: All merges/PRs go via release staging before acceptance. Features must pass unit, integration, and code quality (cannot break existing code). Exception: multi-feature integration requiring further work. Testing depth increases closer to release.
+- Q: What threshold triggers flake detection and quarantine? → A: Option B - 3 failures in 10 runs or 20% failure rate over 7 days
+- Q: What checks run pre-commit vs pre-push locally? → A: Option B - Pre-commit: format+lint (auto-fix); pre-push: unit tests
+- Q: What is the nightly performance test platform scope? → A: Mix of comprehensive and balanced - run on all platforms (macOS, Windows, Linux) nightly; skip if no code changes since last run (change detection optimization)
+
 ### Constitutional Rationale (Context)
 
-Testing exists to uphold the product’s core principles: multi-platform reliability, real-time performance, user-centric quality, and maintainability. This cadence prioritizes fast, trustworthy signals for everyday work, deep assurance on a schedule, and strict gates when risk is highest (release), ensuring we are comprehensive without becoming excessive.
+Testing exists to uphold the product's core principles: multi-platform reliability, real-time performance, user-centric quality, and maintainability. This cadence prioritizes fast, trustworthy signals for everyday work, deep assurance on a schedule, and strict gates when risk is highest (release), ensuring we are comprehensive without becoming excessive.
 
 ### Deliverable: Constitution Recommendations (Outcome of Phase 11)
 
