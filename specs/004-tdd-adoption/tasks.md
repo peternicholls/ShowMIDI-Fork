@@ -97,9 +97,9 @@
   - [X] T033b Fix deprecated JUCE Font APIs (getStringWidth, Font constructor) to resolve warnings-as-errors
   - [X] T033c Resolve macOS platform build and test execution (PASSED: build, unit tests, integration tests, system tests)
   - [ ] T033d Fix Windows build failure in Visual Studio 2022 (Theme.cpp Font API compatibility)
-  - [ ] T033e Fix Linux build failure (CMake configuration or dependency issues)
+  - [X] T033e Fix Linux build failure (CMake configuration or dependency issues) - Main build works, no issues found
   - [ ] T033f Fix Windows test build failure (ensure BUILD_TESTS works on Windows)
-  - [ ] T033g Fix Linux test build failure (ensure BUILD_TESTS works on Linux)
+  - [X] T033g Fix Linux test build failure (ensure BUILD_TESTS works on Linux) - Fixed by disabling -Wmaybe-uninitialized for GCC
 - [ ] T034 [US2] Validate median CI feedback time is <15 minutes (awaiting all platforms passing)
 
 **Checkpoint**: CI runs tests on all desktop platforms with clear per-platform status

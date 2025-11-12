@@ -61,9 +61,12 @@ target_link_libraries(ShowMIDI_Tests PRIVATE
 )
 
 # Compiler warnings as errors (consistent with main project)
+# Note: GCC 13+ triggers false-positive -Wmaybe-uninitialized warnings in JUCE library code
+# We disable this specific warning to allow clean builds while maintaining strict checking
 target_compile_options(ShowMIDI_Tests PRIVATE
     $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>
-    $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-Wall -Wextra -Werror>
+    $<$<CXX_COMPILER_ID:GNU>:-Wall -Wextra -Werror -Wno-maybe-uninitialized>
+    $<$<CXX_COMPILER_ID:Clang,AppleClang>:-Wall -Wextra -Werror>
 )
 
 # CTest integration for CI/CD
