@@ -63,7 +63,7 @@ jobs:
           
           # Determine current week
           now = datetime.now(pytz.UTC)
-          if WEEK_INPUT == 'auto':
+          if WEEK_INPUT in (None, '', 'auto'):
               days_since_start = (now - PHASE5_START).days
               current_week = min((days_since_start // 7) + 1, 4)
           else:
